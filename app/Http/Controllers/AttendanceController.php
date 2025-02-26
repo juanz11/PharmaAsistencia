@@ -3,102 +3,58 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Jenssegers\Agent\Agent;
+use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        $today = Carbon::today();
-        
-        // Obtener la asistencia del día actual
-        $attendance = Attendance::where('user_id', $user->id)
-            ->where('date', $today)
-            ->first();
+        $user = auth()->user();
+        $attendances = $user->attendances()
+            ->latest('check_in_time')
+            ->paginate(10);
 
-        return view('attendance.index', compact('attendance'));
-    }
-
-    protected function getDeviceInfo(Request $request)
-    {
-        $agent = new Agent();
-        $device = $agent->device();
-        $platform = $agent->platform();
-        $browser = $agent->browser();
-
-        return [
-            'device' => $device ? "{$device} ({$platform})" : "Desconocido",
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent()
-        ];
+        return view('attendance.index', compact('attendances'));
     }
 
     public function checkIn(Request $request)
     {
-        $user = Auth::user();
-        $now = Carbon::now();
-        $today = $now->toDateString();
-
-        // Verificar si ya existe un registro para hoy
-        $attendance = Attendance::where('user_id', $user->id)
-            ->where('date', $today)
+        $user = auth()->user();
+        
+        // Verificar si ya tiene un registro de asistencia hoy
+        $existingAttendance = $user->attendances()
+            ->whereDate('check_in_time', Carbon::today())
             ->first();
 
-        if ($attendance) {
-            return redirect()->back()->with('error', 'Ya has registrado tu entrada hoy.');
+        if ($existingAttendance) {
+            return back()->with('error', 'Ya has registrado tu entrada hoy.');
         }
 
-        // Determinar si es tarde (después de las 9 AM)
-        $status = $now->hour >= 9 ? 'late' : 'present';
-
-        // Obtener información del dispositivo
-        $deviceInfo = $this->getDeviceInfo($request);
-
-        // Crear nuevo registro de asistencia
-        Attendance::create([
-            'user_id' => $user->id,
-            'date' => $today,
-            'check_in_time' => $now,
-            'status' => $status,
-            'notes' => $request->notes,
-            'check_in_device' => $deviceInfo['device'],
-            'ip_address' => $deviceInfo['ip_address'],
-            'user_agent' => $deviceInfo['user_agent']
+        $attendance = new Attendance([
+            'check_in_time' => now(),
+            'notes' => $request->notes
         ]);
 
-        return redirect()->back()->with('success', 'Entrada registrada correctamente.');
+        $user->attendances()->save($attendance);
+
+        return back()->with('success', 'Entrada registrada exitosamente.');
     }
 
-    public function checkOut(Request $request)
+    public function checkOut(Attendance $attendance)
     {
-        $user = Auth::user();
-        $today = Carbon::today();
-
-        $attendance = Attendance::where('user_id', $user->id)
-            ->where('date', $today)
-            ->first();
-
-        if (!$attendance) {
-            return redirect()->back()->with('error', 'No has registrado tu entrada hoy.');
+        if ($attendance->user_id !== auth()->id()) {
+            return back()->with('error', 'No tienes permiso para realizar esta acción.');
         }
 
-        if ($attendance->check_out_time) {
-            return redirect()->back()->with('error', 'Ya has registrado tu salida hoy.');
+        if ($attendance->check_out) {
+            return back()->with('error', 'Ya has registrado tu salida.');
         }
-
-        // Obtener información del dispositivo
-        $deviceInfo = $this->getDeviceInfo($request);
 
         $attendance->update([
-            'check_out_time' => Carbon::now(),
-            'check_out_device' => $deviceInfo['device'],
-            'notes' => $request->notes ? $attendance->notes . "\n" . $request->notes : $attendance->notes
+            'check_out' => now()
         ]);
 
-        return redirect()->back()->with('success', 'Salida registrada correctamente.');
+        return back()->with('success', 'Salida registrada exitosamente.');
     }
 }
