@@ -49,100 +49,127 @@
                     Registro de Usuario
                 </h2>
                 <p class="mt-2 text-gray-300">
-                    Complete sus datos para crear una cuenta
+                    Complete el formulario para crear su cuenta
                 </p>
             </div>
 
-            <!-- Formulario -->
             <div class="form-card mt-8 p-8 rounded-xl">
                 <form class="space-y-6" method="POST" action="{{ route('register') }}">
                     @csrf
 
                     <!-- Nombre Completo -->
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-300">
+                        <label for="name" class="block text-sm font-medium text-white">
                             Nombre Completo
                         </label>
                         <div class="mt-1">
-                            <input id="name" name="name" type="text" required 
-                                class="form-input appearance-none rounded-lg block w-full px-3 py-2 placeholder-gray-400"
-                                value="{{ old('name') }}"
-                                placeholder="Ingrese su nombre completo">
+                            <input id="name" name="name" type="text" required
+                                class="form-input w-full px-3 py-2 rounded-md @error('name') border-red-500 @enderror"
+                                placeholder="Ingrese su nombre completo"
+                                value="{{ old('name') }}">
+                            @error('name')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
                         </div>
-                        @error('name')
-                            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
                     </div>
 
-                    <!-- Email -->
+                    <!-- Cédula -->
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-300">
+                        <label for="identification" class="block text-sm font-medium text-white">
+                            Cédula de Identidad
+                        </label>
+                        <div class="mt-1">
+                            <input id="identification" name="identification" type="text" required
+                                class="form-input w-full px-3 py-2 rounded-md @error('identification') border-red-500 @enderror"
+                                placeholder="Ingrese su número de cédula"
+                                value="{{ old('identification') }}">
+                            @error('identification')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Fecha de Ingreso -->
+                    <div>
+                        <label for="join_date" class="block text-sm font-medium text-white">
+                            Fecha de Ingreso
+                        </label>
+                        <div class="mt-1">
+                            <input id="join_date" name="join_date" type="date" required
+                                class="form-input w-full px-3 py-2 rounded-md @error('join_date') border-red-500 @enderror"
+                                value="{{ old('join_date') }}">
+                            @error('join_date')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Correo Electrónico -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-white">
                             Correo Electrónico
                         </label>
                         <div class="mt-1">
                             <input id="email" name="email" type="email" required
-                                class="form-input appearance-none rounded-lg block w-full px-3 py-2 placeholder-gray-400"
-                                value="{{ old('email') }}"
-                                placeholder="ejemplo@correo.com">
+                                class="form-input w-full px-3 py-2 rounded-md @error('email') border-red-500 @enderror"
+                                placeholder="ejemplo@correo.com"
+                                value="{{ old('email') }}">
+                            @error('email')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
                         </div>
-                        @error('email')
-                            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <!-- Ubicación -->
                     <div>
-                        <label for="location" class="block text-sm font-medium text-gray-300">
+                        <label for="location" class="block text-sm font-medium text-white">
                             Ubicación
                         </label>
                         <div class="mt-1">
                             <input id="location" name="location" type="text" required
-                                class="form-input appearance-none rounded-lg block w-full px-3 py-2 placeholder-gray-400"
-                                value="{{ old('location') }}"
-                                placeholder="Ciudad, País">
+                                class="form-input w-full px-3 py-2 rounded-md @error('location') border-red-500 @enderror"
+                                placeholder="Ciudad, País"
+                                value="{{ old('location') }}">
+                            @error('location')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
                         </div>
-                        @error('location')
-                            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <!-- Contraseña -->
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-300">
+                        <label for="password" class="block text-sm font-medium text-white">
                             Contraseña
                         </label>
                         <div class="mt-1">
                             <input id="password" name="password" type="password" required
-                                class="form-input appearance-none rounded-lg block w-full px-3 py-2 placeholder-gray-400"
-                                placeholder="Mínimo 8 caracteres">
+                                class="form-input w-full px-3 py-2 rounded-md @error('password') border-red-500 @enderror"
+                                placeholder="••••••••">
+                            @error('password')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
                         </div>
-                        @error('password')
-                            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <!-- Confirmar Contraseña -->
                     <div>
-                        <label for="password_confirmation" class="block text-sm font-medium text-gray-300">
+                        <label for="password_confirmation" class="block text-sm font-medium text-white">
                             Confirmar Contraseña
                         </label>
                         <div class="mt-1">
                             <input id="password_confirmation" name="password_confirmation" type="password" required
-                                class="form-input appearance-none rounded-lg block w-full px-3 py-2 placeholder-gray-400"
-                                placeholder="Confirme su contraseña">
+                                class="form-input w-full px-3 py-2 rounded-md"
+                                placeholder="••••••••">
                         </div>
                     </div>
 
-                    <!-- Botón de Registro -->
                     <div>
-                        <button type="submit" 
-                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition duration-300">
+                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1a4175] hover:bg-[#15345d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a4175]">
                             Crear Cuenta
                         </button>
                     </div>
                 </form>
 
-                <!-- Enlace para Iniciar Sesión -->
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-300">
                         ¿Ya tiene una cuenta?
