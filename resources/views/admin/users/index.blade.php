@@ -4,7 +4,7 @@
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Gestión de Usuarios</h2>
-        <a href="{{ route('admin.users.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <a href="{{ route('admin.users.create') }}" class="bg-[#1a4175] text-gray-100 px-4 py-2 rounded hover:bg-[#15345d]">
             Nuevo Usuario
         </a>
     </div>
@@ -18,7 +18,7 @@
     <div class="bg-white shadow-md rounded my-6">
         <table class="min-w-full table-auto">
             <thead>
-                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <tr class="bg-[#1a4175] text-gray-100 uppercase text-sm leading-normal">
                     <th class="py-3 px-6 text-left">Nombre</th>
                     <th class="py-3 px-6 text-left">Email</th>
                     <th class="py-3 px-6 text-left">Identificación</th>
@@ -37,13 +37,13 @@
                         <td class="py-3 px-6 text-left">{{ $user->join_date ? $user->join_date->format('d/m/Y') : 'No especificada' }}</td>
                         <td class="py-3 px-6 text-center">
                             <div class="flex item-center justify-center">
-                                <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600 hover:text-blue-900 mx-2">
+                                <a href="{{ route('admin.users.edit', $user) }}" class="bg-[#1a4175] text-gray-100 px-3 py-1 rounded hover:bg-[#15345d] mx-1">
                                     Editar
                                 </a>
                                 <form action="{{ route('admin.users.delete', $user) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 mx-2" onclick="return confirm('¿Estás seguro de querer eliminar este usuario?')">
+                                    <button type="submit" class="bg-red-600 text-gray-100 px-3 py-1 rounded hover:bg-red-700 mx-1" onclick="return confirm('¿Estás seguro de querer eliminar este usuario?')">
                                         Eliminar
                                     </button>
                                 </form>

@@ -4,7 +4,7 @@
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Editar Usuario</h2>
-        <a href="{{ route('admin.users.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+        <a href="{{ route('admin.users.index') }}" class="bg-[#1a4175] text-gray-100 px-4 py-2 rounded hover:bg-[#15345d]">
             Volver
         </a>
     </div>
@@ -85,7 +85,7 @@
             </div>
 
             <div class="flex items-center justify-between">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                <button class="bg-[#1a4175] text-gray-100 font-bold py-2 px-4 rounded hover:bg-[#15345d] focus:outline-none focus:shadow-outline" 
                     type="submit">
                     Actualizar Usuario
                 </button>
