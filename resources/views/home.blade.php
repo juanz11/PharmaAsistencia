@@ -1,14 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-2" style="
-    max-width: 336px;>
+<div class="container mx-auto px-4 py-2" style="max-width: 336px;">
     <div class="max-w-[250px] mx-auto">
         <div class="bg-white/95 backdrop-blur-lg rounded-lg shadow overflow-hidden">
             <!-- Encabezado -->
             <div class="bg-[#1a4175] px-2 py-0.5">
                 <div class="text-center">
-                    <p class="text-[9px] text-gray-200 leading-tight">{{ now()->format('l, d \d\e F \d\e Y') }}</p>
+                    <p class="text-[9px] text-gray-200 leading-tight">{{ now()->locale('es')->isoFormat('dddd, D \d\e MMMM \d\e YYYY') }}</p>
                     <div class="text-xs font-medium text-white leading-tight" id="current-time">
                         {{ now()->format('H:i:s') }}
                     </div>
