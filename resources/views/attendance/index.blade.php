@@ -22,7 +22,7 @@
                 <div class="mb-8">
                     <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Estado del día</h3>
-                        @if($attendance)
+                        @if(!empty($attendance))
                             <div class="space-y-4">
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600">Entrada:</span>
@@ -71,7 +71,37 @@
 
                 <!-- Formulario de registro -->
                 <div class="space-y-4">
-                    @if(!$attendance)
+                    @if(!empty($attendance))
+                        @if(!$attendance->check_out_time)
+                            <form action="{{ route('attendance.check-out', $attendance->id) }}" method="POST" class="space-y-4">
+                                @csrf
+                                <div>
+                                    <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Notas (opcional)
+                                    </label>
+                                    <textarea name="notes" id="notes" rows="2" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="Agregar notas..."></textarea>
+                                </div>
+                                <button type="submit" 
+                                    class="w-full flex justify-center py-3 px-4 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-[1.02]">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    Registrar Salida
+                                </button>
+                            </form>
+                        @else
+                            <div class="text-center py-6 bg-gray-50 rounded-lg border border-gray-200">
+                                <svg class="w-12 h-12 text-green-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <p class="text-gray-600 font-medium">
+                                    Has completado tu registro de asistencia para hoy
+                                </p>
+                            </div>
+                        @endif
+                    @else
                         <form action="{{ route('attendance.check-in') }}" method="POST" class="space-y-4">
                             @csrf
                             <div>
@@ -90,38 +120,10 @@
                                 Registrar Entrada
                             </button>
                         </form>
-                    @elseif(!$attendance->check_out_time)
-                        <form action="{{ route('attendance.check-out') }}" method="POST" class="space-y-4">
-                            @csrf
-                            <div>
-                                <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Notas (opcional)
-                                </label>
-                                <textarea name="notes" id="notes" rows="2" 
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="Agregar notas..."></textarea>
-                            </div>
-                            <button type="submit" 
-                                class="w-full flex justify-center py-3 px-4 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-[1.02]">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                                </svg>
-                                Registrar Salida
-                            </button>
-                        </form>
-                    @else
-                        <div class="text-center py-6 bg-gray-50 rounded-lg border border-gray-200">
-                            <svg class="w-12 h-12 text-green-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <p class="text-gray-600 font-medium">
-                                Has completado tu registro de asistencia para hoy
-                            </p>
-                        </div>
                     @endif
                 </div>
 
-                @if($attendance && $attendance->notes)
+                @if(!empty($attendance) && $attendance->notes)
                     <div class="mt-8">
                         <h4 class="text-lg font-medium text-gray-900 mb-3">Notas del día</h4>
                         <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">

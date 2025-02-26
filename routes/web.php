@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,15 +50,13 @@ Route::middleware('auth')->group(function () {
     });
 
     // Rutas de administrador
-    Route::prefix('admin')->group(function () {
-        Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => [\App\Http\Middleware\AdminMiddleware::class]], function () {
+        Route::get('/', [AdminController::class, 'index'])->name('dashboard');
         
         // Rutas de usuarios
-        Route::get('/users', [AdminController::class, 'users'])->name('admin.users.index');
-        Route::get('/users/create', [AdminController::class, 'createUser'])->name('admin.users.create');
-        Route::post('/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
-        Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
-        Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
-        Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
+        Route::resource('users', UserController::class);
+        
+        // Rutas de asistencias
+        Route::get('/attendances', [AdminController::class, 'attendances'])->name('attendances.index');
     });
 });

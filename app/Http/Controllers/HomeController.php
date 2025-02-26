@@ -26,9 +26,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $attendance = Attendance::where('user_id', Auth::id())
-            ->where('date', Carbon::today())
-            ->first();
+        // Inicializar $attendance como null por defecto
+        $attendance = null;
+
+        if (Auth::check()) {
+            $attendance = Attendance::where('user_id', Auth::id())
+                ->where('date', Carbon::today()->toDateString())
+                ->first();
+        }
 
         return view('home', compact('attendance'));
     }

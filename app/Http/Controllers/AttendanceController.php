@@ -11,11 +11,18 @@ class AttendanceController extends Controller
     public function index()
     {
         $user = auth()->user();
+        
+        // Obtener la asistencia del día actual
+        $attendance = $user->attendances()
+            ->where('date', Carbon::today()->toDateString())
+            ->first();
+
+        // Obtener el historial de asistencias
         $attendances = $user->attendances()
             ->latest('check_in_time')
             ->paginate(10);
 
-        return view('attendance.index', compact('attendances'));
+        return view('attendance.index', compact('attendance', 'attendances'));
     }
 
     public function checkIn(Request $request)
@@ -24,15 +31,17 @@ class AttendanceController extends Controller
         
         // Verificar si ya tiene un registro de asistencia hoy
         $existingAttendance = $user->attendances()
-            ->whereDate('check_in_time', Carbon::today())
+            ->where('date', Carbon::today()->toDateString())
             ->first();
 
         if ($existingAttendance) {
             return back()->with('error', 'Ya has registrado tu entrada hoy.');
         }
 
+        $now = now();
         $attendance = new Attendance([
-            'check_in_time' => now(),
+            'date' => $now->toDateString(),
+            'check_in_time' => $now,
             'notes' => $request->notes
         ]);
 
@@ -47,12 +56,14 @@ class AttendanceController extends Controller
             return back()->with('error', 'No tienes permiso para realizar esta acción.');
         }
 
-        if ($attendance->check_out) {
+        if ($attendance->check_out_time) {
             return back()->with('error', 'Ya has registrado tu salida.');
         }
 
+        $now = now();
         $attendance->update([
-            'check_out' => now()
+            'check_out_time' => $now,
+            'notes' => request('notes')
         ]);
 
         return back()->with('success', 'Salida registrada exitosamente.');

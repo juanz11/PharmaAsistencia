@@ -12,7 +12,7 @@
 
         <!-- Contenido -->
         <div class="p-2">
-            @if(!isset($attendance) || !$attendance)
+            @if(empty($attendance))
                 <div class="flex items-center justify-between mb-1.5">
                     <h3 class="text-[11px] font-medium text-gray-700">Registro de Asistencia</h3>
                     <span class="px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-blue-50 text-[#1a4175]">
@@ -62,7 +62,7 @@
                 @endif
 
                 @if(!$attendance->check_out)
-                    <form action="{{ route('attendance.check-out', $attendance) }}" method="POST" class="mt-3">
+                    <form action="{{ route('attendance.check-out', $attendance->id) }}" method="POST" class="mt-3">
                         @csrf
                         <button type="submit"
                             class="w-full flex justify-center items-center py-1 px-3 rounded text-[11px] font-medium text-white bg-[#1a4175] hover:bg-[#15345d] focus:outline-none focus:ring-2 focus:ring-[#1a4175] focus:ring-offset-1 transition-all duration-200">

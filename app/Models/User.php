@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Attendance;
 
 class User extends Authenticatable
 {
@@ -46,6 +47,14 @@ class User extends Authenticatable
         'password' => 'hashed',
         'join_date' => 'date',
     ];
+
+    /**
+     * Get the attendances for the user.
+     */
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 
     /**
      * Check if the user is an admin.

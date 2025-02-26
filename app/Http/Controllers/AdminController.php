@@ -30,6 +30,15 @@ class AdminController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    public function attendances()
+    {
+        $attendances = \App\Models\Attendance::with('user')
+            ->latest('check_in_time')
+            ->paginate(15);
+        
+        return view('admin.attendances.index', compact('attendances'));
+    }
+
     public function createUser()
     {
         return view('admin.users.create');

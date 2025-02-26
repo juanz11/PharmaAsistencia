@@ -40,7 +40,7 @@
                                 <a href="{{ route('admin.users.edit', $user) }}" class="bg-[#1a4175] text-gray-100 px-3 py-1 rounded hover:bg-[#15345d] mx-1">
                                     Editar
                                 </a>
-                                <form action="{{ route('admin.users.delete', $user) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="bg-red-600 text-gray-100 px-3 py-1 rounded hover:bg-red-700 mx-1" onclick="return confirm('¿Estás seguro de querer eliminar este usuario?')">
