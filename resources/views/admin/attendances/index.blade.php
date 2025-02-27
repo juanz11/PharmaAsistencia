@@ -5,7 +5,7 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Encabezado -->
         <div class="bg-gradient-to-r from-gray-800 to-gray-700 rounded-t-lg shadow-lg p-6">
-            <h2 class="text-2xl font-bold text-white mb-2">Control de Asistencias</h2>
+            <h2 class="text-2xl font-bold  mb-2">Control de Asistencias</h2>
             <p class="text-gray-300">Gestión y monitoreo de asistencias de empleados</p>
         </div>
 
@@ -15,16 +15,16 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Fecha Inicio</label>
                     <input type="date" name="start_date" value="{{ request('start_date') }}" 
-                           class="bg-gray-700 text-white rounded-lg border-gray-600 w-full focus:ring-yellow-500 focus:border-yellow-500">
+                           class="bg-gray-700  rounded-lg border-gray-600 w-full focus:ring-yellow-500 focus:border-yellow-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Fecha Fin</label>
                     <input type="date" name="end_date" value="{{ request('end_date') }}" 
-                           class="bg-gray-700 text-white rounded-lg border-gray-600 w-full focus:ring-yellow-500 focus:border-yellow-500">
+                           class="bg-gray-700  rounded-lg border-gray-600 w-full focus:ring-yellow-500 focus:border-yellow-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Empleado</label>
-                    <select name="user_id" class="bg-gray-700 text-white rounded-lg border-gray-600 w-full focus:ring-yellow-500 focus:border-yellow-500">
+                    <select name="user_id" class="bg-gray-700  rounded-lg border-gray-600 w-full focus:ring-yellow-500 focus:border-yellow-500">
                         <option value="">Todos los empleados</option>
                         @foreach($users as $user)
                             <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="flex items-end">
                     <button type="submit" 
-                            class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                            class="w-full bg-yellow-600 hover:bg-yellow-700 font-bold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
                         Filtrar
                     </button>
                 </div>

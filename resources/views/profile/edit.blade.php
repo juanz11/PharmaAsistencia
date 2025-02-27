@@ -5,7 +5,7 @@
     <div class="max-w-2xl mx-auto">
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="bg-[#1a4175] px-6 py-4">
-                <h2 class="text-xl font-semibold text-white">Mi Perfil</h2>
+                <h2 class="text-xl font-semibold ">Mi Perfil</h2>
             </div>
 
             @if(session('success'))
@@ -111,7 +111,7 @@
 
                 <div class="flex justify-end pt-6">
                     <button type="submit"
-                        class="px-4 py-2 bg-[#1a4175] text-white rounded-md hover:bg-[#15345d] focus:outline-none focus:ring-2 focus:ring-[#1a4175] focus:ring-offset-2">
+                        class="px-4 py-2 bg-[#1a4175] rounded-md hover:bg-[#15345d] focus:outline-none focus:ring-2 focus:ring-[#1a4175] focus:ring-offset-2">
                         Guardar Cambios
                     </button>
                 </div>

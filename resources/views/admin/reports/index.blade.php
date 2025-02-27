@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="bg-gradient-to-r from-[#1a4175] to-[#1F4591] rounded-lg px-6 py-4 mb-6">
-        <h1 class="text-2xl font-bold text-white">Reportes de Asistencia</h1>
+        <h1 class="text-2xl font-bold ">Reportes de Asistencia</h1>
     </div>
 
     <!-- Filtros de fecha -->
@@ -33,7 +33,7 @@
                     @endforeach
                 </select>
             </div>
-            <button type="submit" class="bg-[#1F4591] text-white px-4 py-2 rounded-md hover:bg-[#163670] flex items-center">
+            <button type="submit" class="bg-[#1F4591]  px-4 py-2 rounded-md hover:bg-[#163670] flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                 </svg>
