@@ -15,7 +15,7 @@
 
     <!-- Contenido Principal -->
     <div class="max-w-4xl mx-auto mt-8">
-        @if($todayAttendance)
+        @if($attendance)
             <!-- Si ya hay registro de asistencia -->
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="text-center mb-4">
@@ -25,13 +25,41 @@
                         </svg>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-800">¡Asistencia Registrada!</h3>
-                    <p class="text-gray-600 mt-1">Has registrado tu asistencia hoy a las {{ $todayAttendance->check_in_time->format('h:i A') }}</p>
+                    <p class="text-gray-600 mt-1">Has registrado tu asistencia hoy a las {{ $attendance->check_in_time->format('h:i A') }}</p>
                 </div>
 
-                @if($todayAttendance->notes)
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <h4 class="text-sm font-medium text-gray-700 mb-1">Estado:</h4>
+                        <p class="text-gray-800">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                {{ ucfirst($attendance->status) }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <h4 class="text-sm font-medium text-gray-700 mb-1">Dispositivo:</h4>
+                        <p class="text-gray-800 text-sm">
+                            <span class="inline-flex items-center">
+                                @if($attendance->check_in_device == 'Mobile')
+                                    <svg class="w-4 h-4 mr-1 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                @else
+                                    <svg class="w-4 h-4 mr-1 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                @endif
+                                {{ $attendance->check_in_device }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                @if($attendance->notes)
                     <div class="mt-4">
                         <h4 class="text-sm font-medium text-gray-700 mb-1">Notas:</h4>
-                        <p class="text-gray-600 text-sm">{{ $todayAttendance->notes }}</p>
+                        <p class="text-gray-600 text-sm">{{ $attendance->notes }}</p>
                     </div>
                 @endif
             </div>

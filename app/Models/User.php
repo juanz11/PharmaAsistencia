@@ -25,6 +25,10 @@ class User extends Authenticatable
         'role',
         'identification',
         'join_date',
+        'phone',
+        'address',
+        'emergency_contact',
+        'emergency_phone',
     ];
 
     /**

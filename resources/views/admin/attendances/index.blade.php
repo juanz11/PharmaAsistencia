@@ -32,6 +32,9 @@
                                 Estado
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Dispositivo
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Notas
                             </th>
                         </tr>
@@ -45,9 +48,6 @@
                                             <div class="text-sm font-medium text-gray-900">
                                                 {{ $attendance->user->name }}
                                             </div>
-                                            <div class="text-sm text-gray-500">
-                                                {{ $attendance->user->identification }}
-                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -58,34 +58,44 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">
-                                        {{ $attendance->check_in_time->format('h:i A') }}
+                                        {{ $attendance->check_in_time ? $attendance->check_in_time->format('H:i:s') : '-' }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">
-                                        {{ $attendance->check_out_time ? $attendance->check_out_time->format('h:i A') : '-' }}
+                                        {{ $attendance->check_out_time ? $attendance->check_out_time->format('H:i:s') : '-' }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($attendance->check_out_time)
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Completado
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        {{ ucfirst($attendance->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">
+                                        <span class="inline-flex items-center">
+                                            @if($attendance->check_in_device == 'Mobile')
+                                                <svg class="w-4 h-4 mr-1 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4 mr-1 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                                </svg>
+                                            @endif
+                                            {{ $attendance->check_in_device }}
                                         </span>
-                                    @else
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            En curso
-                                        </span>
-                                    @endif
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900 max-w-xs truncate">
-                                        {{ $attendance->notes ?? '-' }}
+                                        {{ $attendance->notes ?: '-' }}
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
                                     No hay registros de asistencia disponibles
                                 </td>
                             </tr>

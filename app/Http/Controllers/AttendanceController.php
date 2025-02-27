@@ -42,12 +42,30 @@ class AttendanceController extends Controller
         $attendance = new Attendance([
             'date' => $now->toDateString(),
             'check_in_time' => $now,
-            'notes' => $request->notes
+            'notes' => $request->notes,
+            'status' => 'present',
+            'check_in_device' => $this->getDeviceInfo($request),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent()
         ]);
 
         $user->attendances()->save($attendance);
 
         return back()->with('success', 'Entrada registrada exitosamente.');
+    }
+
+    private function getDeviceInfo(Request $request)
+    {
+        $agent = $request->userAgent();
+        $device = 'Unknown';
+
+        if (preg_match('/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i', $agent)) {
+            $device = 'Mobile';
+        } elseif (preg_match('/(linux|mac|windows)/i', $agent)) {
+            $device = 'Desktop';
+        }
+
+        return $device;
     }
 
     public function checkOut(Attendance $attendance)
@@ -67,5 +85,16 @@ class AttendanceController extends Controller
         ]);
 
         return back()->with('success', 'Salida registrada exitosamente.');
+    }
+
+    public function adminIndex()
+    {
+        // Obtener todas las asistencias con información del usuario
+        $attendances = Attendance::with('user')
+            ->orderBy('date', 'desc')
+            ->orderBy('check_in_time', 'desc')
+            ->paginate(15);
+
+        return view('admin.attendances.index', compact('attendances'));
     }
 }

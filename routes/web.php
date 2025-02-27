@@ -7,6 +7,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\UserInformationController;
+use App\Http\Controllers\Admin\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +51,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/check-out/{attendance}', [AttendanceController::class, 'checkOut'])->name('check-out');
     });
 
+    // Rutas de información de usuario
+    Route::get('/user/edit', [UserInformationController::class, 'edit'])->name('user.edit');
+    Route::put('/user/update', [UserInformationController::class, 'update'])->name('user.update');
+
     // Rutas de administrador
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => [\App\Http\Middleware\AdminMiddleware::class]], function () {
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
@@ -57,6 +63,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', UserController::class);
         
         // Rutas de asistencias
-        Route::get('/attendances', [AdminController::class, 'attendances'])->name('attendances.index');
+        Route::get('/attendances', [AttendanceController::class, 'adminIndex'])->name('attendances.index');
+        
+        // Rutas de reportes
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     });
 });

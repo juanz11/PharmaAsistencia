@@ -43,6 +43,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin.attendances.index') }}">{{ __('Asistencias') }}</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.reports.index') }}">{{ __('Reportes') }}</a>
+                                </li>
                             @endif
                         @endauth
                     </ul>
@@ -73,6 +76,10 @@
                                         {{ __('Perfil') }}
                                     </a>
                                     
+                                    <a class="dropdown-item" href="{{ route('user.edit') }}">
+                                        {{ __('Actualizar Información') }}
+                                    </a>
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -95,7 +102,6 @@
         </main>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
 </body>
