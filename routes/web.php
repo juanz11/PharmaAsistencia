@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\UserInformationController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +64,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', UserController::class);
         
         // Rutas de asistencias
-        Route::get('/attendances', [AttendanceController::class, 'adminIndex'])->name('attendances.index');
+        Route::get('/attendances', [AdminAttendanceController::class, 'index'])->name('attendances.index');
         
         // Rutas de reportes
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

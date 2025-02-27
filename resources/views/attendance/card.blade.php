@@ -63,6 +63,27 @@
                             <p class="text-gray-700 text-xs line-clamp-2">{{ $attendance->notes }}</p>
                         </div>
                     @endif
+                @else
+                    <!-- No hay registro, mostrar botón de entrada -->
+                    <div class="text-center space-y-2">
+                        <div class="inline-block">
+                            <div class="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full p-2 shadow shadow-blue-200 flex items-center justify-center border border-blue-300">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-2">No has registrado tu entrada hoy</p>
+                        </div>
+                        <form action="{{ route('attendance.check-in') }}" method="POST" class="mt-2">
+                            @csrf
+                            <button type="submit" class="w-full bg-gradient-to-r from-[#1a4175] to-[#2563eb] text-white font-semibold py-2 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2">
+                                <span>Registrar Entrada</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
                 @endif
             </div>
 

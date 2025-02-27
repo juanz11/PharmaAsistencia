@@ -88,7 +88,7 @@
                     @foreach($attendances as $attendance)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $attendance->user->name }}
+                            {{ $attendance->user ? $attendance->user->name : 'Usuario Eliminado' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             {{ $attendance->date->format('d/m/Y') }}

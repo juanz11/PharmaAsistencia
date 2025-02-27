@@ -38,7 +38,10 @@ class ReportController extends Controller
             )
             ->groupBy('user_id')
             ->with('user:id,name')
-            ->get();
+            ->get()
+            ->filter(function ($stat) {
+                return $stat->user !== null;
+            });
 
         // Obtener datos para la gráfica
         $dailyAttendance = $query->select(
@@ -51,7 +54,11 @@ class ReportController extends Controller
             ->get();
 
         // Obtener lista detallada de asistencias
-        $attendances = $query->with('user')
+        $attendances = Attendance::with('user')
+            ->when($selectedUserId, function($q) use ($selectedUserId) {
+                return $q->where('user_id', $selectedUserId);
+            })
+            ->whereBetween('date', [$startDate, $endDate])
             ->latest('date')
             ->paginate(15)
             ->appends($request->except('page'));
