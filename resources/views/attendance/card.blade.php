@@ -43,7 +43,7 @@
                 <div class="flex items-center gap-1.5">
                     <div class="shrink-0">
                         <div class="inline-flex items-center justify-center bg-green-50 rounded-full p-0.5">
-                            <svg class="w-2.5 h-2.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-2.5 h-2.5 text-green-600" width="100" height="100" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                         </div>
@@ -60,37 +60,6 @@
                 @if($attendance->notes)
                     <div class="mt-1.5 p-1 bg-gray-50 rounded text-[9px] border border-gray-100">
                         <p class="text-gray-600 whitespace-pre-line leading-tight">{{ $attendance->notes }}</p>
-                    </div>
-                @endif
-
-                @if(!$attendance->check_out)
-                    <form action="{{ route('attendance.check-out', $attendance->id) }}" method="POST" class="mt-3">
-                        @csrf
-                        <button type="submit"
-                            class="w-full flex justify-center items-center py-1 px-3 rounded text-[11px] font-medium text-white bg-[#1a4175] hover:bg-[#15345d] focus:outline-none focus:ring-2 focus:ring-[#1a4175] focus:ring-offset-1 transition-all duration-200">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                            </svg>
-                            Registrar Salida
-                        </button>
-                    </form>
-                @else
-                    <div class="mt-3 flex items-center gap-1.5">
-                        <div class="shrink-0">
-                            <div class="inline-flex items-center justify-center bg-blue-50 rounded-full p-0.5">
-                                <svg class="w-2.5 h-2.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="min-w-0">
-                            <p class="text-[10px] text-gray-700 font-medium leading-tight">
-                                Salida Registrada
-                            </p>
-                            <p class="text-[9px] text-gray-500 leading-tight">
-                                {{ $attendance->check_out->format('h:i A') }}
-                            </p>
-                        </div>
                     </div>
                 @endif
             @endif
@@ -110,13 +79,14 @@
     </div>
 </div>
 
-@push('scripts')
 <script>
     function updateClock() {
         const clockElement = document.getElementById('current-time');
         const now = new Date();
         clockElement.textContent = now.toLocaleTimeString();
     }
+
+    // Actualizar cada segundo
     setInterval(updateClock, 1000);
+    updateClock(); // Actualización inicial
 </script>
-@endpush
