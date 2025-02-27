@@ -8,9 +8,9 @@
             <!-- Encabezado con gradiente -->
             <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-8 py-6">
                 <div class="text-center">
-                    <h2 class="text-2xl font-bold text-white mb-2">Registro de Asistencia</h2>
+                    <h2 class="text-2xl font-bold  mb-2">Registro de Asistencia</h2>
                     <p class="text-blue-100">{{ now()->format('l, d \d\e F \d\e Y') }}</p>
-                    <div class="mt-4 text-3xl font-bold text-white" id="current-time">
+                    <div class="mt-4 text-3xl font-bold " id="current-time">
                         {{ now()->format('H:i:s') }}
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                                         placeholder="Agregar notas..."></textarea>
                                 </div>
                                 <button type="submit" 
-                                    class="w-full flex justify-center py-3 px-4 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-[1.02]">
+                                    class="w-full flex justify-center py-3 px-4 rounded-lg text-sm font-medium  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-[1.02]">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                                     </svg>
