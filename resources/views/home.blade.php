@@ -32,38 +32,36 @@
                         <p class="text-sm text-gray-500">Gestiona usuarios y asistencias con un solo clic</p>
                     </div>
                     
-                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <a href="{{ route('admin.users.index') }}" 
-                           class="group bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 p-6 transition-all duration-300 hover:shadow-lg hover:border-blue-200 hover:from-blue-50 hover:to-blue-50">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 bg-gradient-to-br from-[#1a4175] to-[#2563eb] rounded-lg p-3 group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="h-[300px] w-[300px]" width="240" height="240" fill="none" stroke="currentColor" viewBox="0 0 300 300">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="12" 
-                                              d="M150 54.45a49.95 49.95 0 110 66.15M187.5 262.5H37.5v-12.45a75 75 0 01150 0v12.45zm0 0h75v-12.45a75 75 0 00-112.5-64.95M162.45 87.45a49.95 49.95 0 11-99.9 0 49.95 49.95 0 0199.9 0z"/>
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h4 class="text-lg font-semibold text-gray-900 group-hover:text-[#1a4175]">Gestionar Empleados</h4>
-                                    <p class="mt-1 text-sm text-gray-500">Administrar usuarios y permisos del sistema</p>
-                                </div>
-                            </div>
-                        </a>
-                        
-                        <a href="{{ route('attendance.index') }}" 
-                           class="group bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 p-6 transition-all duration-300 hover:shadow-lg hover:border-blue-200 hover:from-blue-50 hover:to-blue-50">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 bg-gradient-to-br from-[#1a4175] to-[#2563eb] rounded-lg p-3 group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="h-[300px] w-[300px]" width="240" height="240" fill="none" stroke="currentColor" viewBox="0 0 300 300">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="12" 
-                                              d="M112.5 62.55H87.45a25.05 25.05 0 00-24.9 24.9v150a25.05 25.05 0 0024.9 25.05h125.1a25.05 25.05 0 0025.05-25.05v-150a25.05 25.05 0 00-25.05-24.9H187.5M112.5 62.55a25.05 25.05 0 0025.05 24.9h24.9a25.05 25.05 0 0025.05-24.9M112.5 62.55a25.05 25.05 0 0125.05-25.05h24.9a25.05 25.05 0 0125.05 25.05"/>
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h4 class="text-lg font-semibold text-gray-900 group-hover:text-[#1a4175]">Control de Asistencia</h4>
-                                    <p class="mt-1 text-sm text-gray-500">Monitorear registros y horarios del personal</p>
+                    <div class="p-6">
+                        <div class="flex justify-center">
+                            <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-4xl">
+                                <div class="flex justify-center space-x-8">
+                                    <a href="{{ route('admin.users.index') }}" class="w-64 text-center">
+                                        <div class="bg-gradient-to-br from-[#1a4175] to-[#2563eb] rounded-lg p-3 mb-4 hover:scale-105 transition-transform">
+                                            <svg class="h-[150px] w-[150px] mx-auto" width="150" height="150" fill="none" stroke="currentColor" viewBox="0 0 300 300">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="12" 
+                                                      d="M150 54.45a49.95 49.95 0 110 66.15M187.5 262.5H37.5v-12.45a75 75 0 01150 0v12.45zm0 0h75v-12.45a75 75 0 00-112.5-64.95M162.45 87.45a49.95 49.95 0 11-99.9 0 49.95 49.95 0 0199.9 0z"/>
+                                            </svg>
+                                        </div>
+                                        <h4 class="text-lg font-semibold text-gray-900">Gestionar Empleados</h4>
+                                        <p class="mt-1 text-sm text-gray-500">Administrar usuarios y permisos del sistema</p>
+                                    </a>
+                                    
+                                    <div class="h-[150px] w-px bg-gray-200 self-center"></div>
+                                    
+                                    <a href="{{ route('attendance.index') }}" class="w-64 text-center">
+                                        <div class="bg-gradient-to-br from-[#1a4175] to-[#2563eb] rounded-lg p-3 mb-4 hover:scale-105 transition-transform">
+                                            <svg class="h-[150px] w-[150px] mx-auto" width="150" height="150" fill="none" stroke="currentColor" viewBox="0 0 300 300">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="12" 
+                                                      d="M112.5 62.55H87.45a25.05 25.05 0 00-24.9 24.9v150a25.05 25.05 0 0024.9 25.05h125.1a25.05 25.05 0 0025.05-25.05v-150a25.05 25.05 0 00-25.05-24.9H187.5M112.5 62.55a25.05 25.05 0 0025.05 24.9h24.9a25.05 25.05 0 0025.05-24.9M112.5 62.55a25.05 25.05 0 0125.05-25.05h24.9a25.05 25.05 0 0125.05 25.05"/>
+                                            </svg>
+                                        </div>
+                                        <h4 class="text-lg font-semibold text-gray-900">Control de Asistencia</h4>
+                                        <p class="mt-1 text-sm text-gray-500">Monitorear registros y horarios del personal</p>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
