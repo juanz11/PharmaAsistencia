@@ -1,33 +1,33 @@
 <!-- Ticket de Asistencia -->
-<div class="max-w-[280px] mx-auto">
-    <div class="bg-gradient-to-b from-white to-blue-50 rounded-lg shadow-lg overflow-hidden border-t-8 border-[#1F4591] hover:shadow-xl transition-shadow duration-300">
-        <!-- Encabezado del Ticket con diseño festivo -->
-        <div class="relative bg-gradient-to-r from-[#1F4591] to-[#163670] p-4 text-center">
+<div class="w-[300px] h-[700px] mx-auto">
+    <div class="h-full bg-white rounded-lg shadow-lg overflow-hidden border-2 border-[#1F4591] hover:shadow-xl transition-shadow duration-300">
+        <!-- Encabezado del Ticket -->
+        <div class="relative bg-white p-2 text-center">
             <!-- Círculos decorativos del ticket -->
-            <div class="absolute -left-3 -bottom-3 w-6 h-6 bg-white rounded-full"></div>
-            <div class="absolute -right-3 -bottom-3 w-6 h-6 bg-white rounded-full"></div>
+            <div class="absolute -left-2 -bottom-2 w-4 h-4 bg-white rounded-full border border-[#1F4591]"></div>
+            <div class="absolute -right-2 -bottom-2 w-4 h-4 bg-white rounded-full border border-[#1F4591]"></div>
             
-            <h3 class="text-white text-lg font-bold mb-1">Registro de Asistencia</h3>
-            <span class="text-blue-100 text-sm bg-blue-800/30 px-3 py-1 rounded-full inline-block">
+            <h3 class="text-[#1F4591] text-sm font-bold">Registro de Asistencia</h3>
+            <span class="text-[#1F4591] text-xs bg-blue-50 px-2 py-0.5 rounded-full inline-block border border-[#1F4591]/20">
                 {{ now()->format('d/m/Y') }}
             </span>
         </div>
 
         <!-- Contenido del Ticket -->
-        <div class="p-4 bg-white">
+        <div class="p-2 bg-white">
             <!-- Línea decorativa estilo ticket -->
-            <div class="border-b-2 border-dashed border-blue-200 -mx-4 mb-4"></div>
+            <div class="border-b border-dashed border-[#1F4591] -mx-2 mb-2"></div>
 
             <!-- Información del Registro -->
-            <div class="space-y-4">
+            <div class="space-y-2">
                 @if($attendance)
-                    <!-- Estado del Registro con diseño mejorado -->
+                    <!-- Estado del Registro -->
                     <div class="text-center">
                         <div class="inline-block">
-                            <div class="w-16 h-16 mx-auto mb-2 bg-gradient-to-br from-green-400 to-green-600 rounded-full p-4 shadow-lg shadow-green-200 flex items-center justify-center">
-                                <svg class="w-10 h-10" viewBox="0 0 24 24">
+                            <div class="w-5 h-5 mx-auto mb-1 bg-gradient-to-br from-green-400 to-green-600 rounded-full p-1 shadow-sm shadow-green-200 flex items-center justify-center">
+                                <svg class="w-3 h-3" viewBox="0 0 24 24">
                                     <path 
-                                        stroke="#22c55e" 
+                                        stroke="#ffffff" 
                                         stroke-width="3"
                                         fill="none"
                                         stroke-linecap="round" 
@@ -36,43 +36,43 @@
                                     ></path>
                                 </svg>
                             </div>
-                            <div class="space-y-1">
-                                <h4 class="text-green-700 font-bold text-sm">Entrada Registrada</h4>
-                                <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full inline-block">
+                            <div>
+                                <h4 class="text-green-700 font-bold text-xs">Entrada Registrada</h4>
+                                <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full inline-block">
                                     {{ $attendance->check_in_time->format('h:i A') }}
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Detalles con diseño mejorado -->
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-3 rounded-xl text-center border border-blue-100">
-                            <span class="text-blue-500 text-xs block mb-1">Estado</span>
-                            <span class="text-[#1F4591] font-bold text-sm">{{ ucfirst($attendance->status) }}</span>
+                    <!-- Detalles -->
+                    <div class="grid grid-cols-2 gap-1">
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-1.5 rounded text-center border border-[#1F4591]/20">
+                            <span class="text-blue-500 text-[10px] block">Estado</span>
+                            <span class="text-[#1F4591] font-bold text-xs">{{ ucfirst($attendance->status) }}</span>
                         </div>
-                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-3 rounded-xl text-center border border-blue-100">
-                            <span class="text-blue-500 text-xs block mb-1">Dispositivo</span>
-                            <span class="text-[#1F4591] font-bold text-sm">{{ $attendance->check_in_device }}</span>
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-1.5 rounded text-center border border-[#1F4591]/20">
+                            <span class="text-blue-500 text-[10px] block">Dispositivo</span>
+                            <span class="text-[#1F4591] font-bold text-xs">{{ $attendance->check_in_device }}</span>
                         </div>
                     </div>
 
                     @if($attendance->notes)
-                        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-3 rounded-xl text-center border border-yellow-100">
-                            <span class="text-yellow-600 text-xs font-medium block mb-1">Notas:</span>
-                            <p class="text-gray-700 text-sm">{{ $attendance->notes }}</p>
+                        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-1.5 rounded text-center border border-yellow-200">
+                            <span class="text-yellow-600 text-[10px] block">Notas:</span>
+                            <p class="text-gray-700 text-xs">{{ $attendance->notes }}</p>
                         </div>
                     @endif
                 @endif
             </div>
 
             <!-- Línea decorativa final -->
-            <div class="border-b-2 border-dashed border-blue-200 -mx-4 mt-4"></div>
+            <div class="border-b border-dashed border-[#1F4591] -mx-2 mt-2"></div>
         </div>
 
-        <!-- Pie del ticket con diseño festivo -->
-        <div class="bg-gradient-to-b from-blue-50 to-white px-4 py-2 text-center">
-            <span class="text-blue-600 text-xs font-medium">¡Que tengas un excelente día!</span>
+        <!-- Pie del ticket -->
+        <div class="bg-gradient-to-b from-blue-50 to-white px-2 py-1 text-center">
+            <span class="text-blue-600 text-[10px] font-medium">¡Que tengas un excelente día!</span>
         </div>
     </div>
 </div>
