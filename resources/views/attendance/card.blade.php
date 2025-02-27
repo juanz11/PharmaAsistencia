@@ -1,92 +1,78 @@
-<div class="max-w-[250px] mx-auto">
-    <div class="bg-white/95 backdrop-blur-lg rounded-lg shadow overflow-hidden">
-        <!-- Encabezado -->
-        <div class="bg-[#1a4175] px-2 py-0.5">
-            <div class="text-center">
-                <p class="text-[9px] text-gray-200 leading-tight">{{ now()->locale('es')->isoFormat('dddd, D \d\e MMMM \d\e YYYY') }}</p>
-                <div class="text-xs font-medium text-white leading-tight" id="current-time">
-                    {{ now()->format('H:i:s') }}
-                </div>
-            </div>
+<!-- Ticket de Asistencia -->
+<div class="max-w-[280px] mx-auto">
+    <div class="bg-gradient-to-b from-white to-blue-50 rounded-lg shadow-lg overflow-hidden border-t-8 border-[#1F4591] hover:shadow-xl transition-shadow duration-300">
+        <!-- Encabezado del Ticket con diseño festivo -->
+        <div class="relative bg-gradient-to-r from-[#1F4591] to-[#163670] p-4 text-center">
+            <!-- Círculos decorativos del ticket -->
+            <div class="absolute -left-3 -bottom-3 w-6 h-6 bg-white rounded-full"></div>
+            <div class="absolute -right-3 -bottom-3 w-6 h-6 bg-white rounded-full"></div>
+            
+            <h3 class="text-white text-lg font-bold mb-1">Registro de Asistencia</h3>
+            <span class="text-blue-100 text-sm bg-blue-800/30 px-3 py-1 rounded-full inline-block">
+                {{ now()->format('d/m/Y') }}
+            </span>
         </div>
 
-        <!-- Contenido -->
-        <div class="p-2">
-            @if(empty($attendance))
-                <div class="flex items-center justify-between mb-1.5">
-                    <h3 class="text-[11px] font-medium text-gray-700">Registro de Asistencia</h3>
-                    <span class="px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-blue-50 text-[#1a4175]">
-                        Pendiente
-                    </span>
-                </div>
-                <form action="{{ route('attendance.check-in') }}" method="POST" class="space-y-1.5">
-                    @csrf
-                    <div>
-                        <label for="notes" class="block text-[9px] font-medium text-gray-500 mb-0.5">
-                            Notas (opcional)
-                        </label>
-                        <textarea name="notes" id="notes" rows="1" 
-                            class="w-full px-2 py-0.5 border border-gray-200 rounded text-[11px] text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#1a4175] focus:border-[#1a4175] transition-colors"
-                            placeholder="Agregar notas..."></textarea>
-                    </div>
-                    <button type="submit"
-                    style="
-    background-color: #1F4591;
-" class="w-full flex justify-center items-center py-1 px-3 rounded text-[11px] font-medium text-white bg-[#1F4591] hover:bg-[#163670] focus:outline-none focus:ring-2 focus:ring-[#1F4591] focus:ring-offset-1 transition-all duration-200" >
-                        <svg class="w-3 h-3 mr-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                        </svg>
-                        <span class="text-white">Registrar Entrada</span>
-                    </button>
-                </form>
-            @else
-                <div class="flex items-center gap-1.5">
-                    <div class="shrink-0">
-                        <div class="inline-flex items-center justify-center bg-green-50 rounded-full p-0.5">
-                            <svg class="w-2.5 h-2.5 text-green-600" width="100" height="100" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
+        <!-- Contenido del Ticket -->
+        <div class="p-4 bg-white">
+            <!-- Línea decorativa estilo ticket -->
+            <div class="border-b-2 border-dashed border-blue-200 -mx-4 mb-4"></div>
+
+            <!-- Información del Registro -->
+            <div class="space-y-4">
+                @if($attendance)
+                    <!-- Estado del Registro con diseño mejorado -->
+                    <div class="text-center">
+                        <div class="inline-block">
+                            <div class="w-16 h-16 mx-auto mb-2 bg-gradient-to-br from-green-400 to-green-600 rounded-full p-4 shadow-lg shadow-green-200 flex items-center justify-center">
+                                <svg class="w-10 h-10" viewBox="0 0 24 24">
+                                    <path 
+                                        stroke="#22c55e" 
+                                        stroke-width="3"
+                                        fill="none"
+                                        stroke-linecap="round" 
+                                        stroke-linejoin="round" 
+                                        d="M5 13l4 4L19 7"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <div class="space-y-1">
+                                <h4 class="text-green-700 font-bold text-sm">Entrada Registrada</h4>
+                                <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full inline-block">
+                                    {{ $attendance->check_in_time->format('h:i A') }}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="min-w-0">
-                        <p class="text-[10px] text-gray-700 font-medium leading-tight">
-                            Asistencia Registrada
-                        </p>
-                        <p class="text-[9px] text-gray-500 leading-tight">
-                            {{ $attendance->check_in_time->format('h:i A') }}
-                        </p>
+
+                    <!-- Detalles con diseño mejorado -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-3 rounded-xl text-center border border-blue-100">
+                            <span class="text-blue-500 text-xs block mb-1">Estado</span>
+                            <span class="text-[#1F4591] font-bold text-sm">{{ ucfirst($attendance->status) }}</span>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-3 rounded-xl text-center border border-blue-100">
+                            <span class="text-blue-500 text-xs block mb-1">Dispositivo</span>
+                            <span class="text-[#1F4591] font-bold text-sm">{{ $attendance->check_in_device }}</span>
+                        </div>
                     </div>
-                </div>
-                @if($attendance->notes)
-                    <div class="mt-1.5 p-1 bg-gray-50 rounded text-[9px] border border-gray-100">
-                        <p class="text-gray-600 whitespace-pre-line leading-tight">{{ $attendance->notes }}</p>
-                    </div>
+
+                    @if($attendance->notes)
+                        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-3 rounded-xl text-center border border-yellow-100">
+                            <span class="text-yellow-600 text-xs font-medium block mb-1">Notas:</span>
+                            <p class="text-gray-700 text-sm">{{ $attendance->notes }}</p>
+                        </div>
+                    @endif
                 @endif
-            @endif
+            </div>
 
-            @if(session('success'))
-                <div class="mt-1.5 p-1 rounded bg-green-50 border border-green-100">
-                    <p class="text-[9px] text-green-700 leading-tight">{{ session('success') }}</p>
-                </div>
-            @endif
+            <!-- Línea decorativa final -->
+            <div class="border-b-2 border-dashed border-blue-200 -mx-4 mt-4"></div>
+        </div>
 
-            @if(session('error'))
-                <div class="mt-1.5 p-1 rounded bg-red-50 border border-red-100">
-                    <p class="text-[9px] text-red-700 leading-tight">{{ session('error') }}</p>
-                </div>
-            @endif
+        <!-- Pie del ticket con diseño festivo -->
+        <div class="bg-gradient-to-b from-blue-50 to-white px-4 py-2 text-center">
+            <span class="text-blue-600 text-xs font-medium">¡Que tengas un excelente día!</span>
         </div>
     </div>
 </div>
-
-<script>
-    function updateClock() {
-        const clockElement = document.getElementById('current-time');
-        const now = new Date();
-        clockElement.textContent = now.toLocaleTimeString();
-    }
-
-    // Actualizar cada segundo
-    setInterval(updateClock, 1000);
-    updateClock(); // Actualización inicial
-</script>
