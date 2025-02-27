@@ -83,7 +83,7 @@
                 <!-- Botón de Login -->
                 <div>
                     <button type="submit"
-                        class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                        class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-[#1F4591] hover:bg-[#163670] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1F4591] transition-colors duration-200">
                         Iniciar Sesión
                     </button>
                 </div>

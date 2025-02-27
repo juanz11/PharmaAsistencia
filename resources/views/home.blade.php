@@ -31,8 +31,8 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-3">Acciones Rápidas</h3>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                     <a href="{{ route('admin.users.index') }}" class="bg-white rounded-lg shadow p-3 hover:shadow-lg transition-shadow flex items-center">
-                        <div class="bg-[#1a4175] rounded-full p-2 mr-3">
-                            <svg class="w-4 h-4" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <div class="bg-white rounded-full p-2 mr-3">
+                            <svg class="w-4 h-4 text-[#1F4591]" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                             </svg>
                         </div>
@@ -43,8 +43,8 @@
                     </a>
                     
                     <a href="{{ route('attendance.index') }}" class="bg-white rounded-lg shadow p-3 hover:shadow-lg transition-shadow flex items-center">
-                        <div class="bg-[#1a4175] rounded-full p-2 mr-3">
-                            <svg class="w-4 h-4" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <div class="bg-white rounded-full p-2 mr-3">
+                            <svg class="w-4 h-4 text-[#1F4591]" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                             </svg>
                         </div>
@@ -95,7 +95,7 @@
                 <div class="mt-4 text-right">
                     <a href="{{ route('profile.edit') }}" class="inline-flex items-center text-sm text-[#1a4175] hover:text-[#15345d]">
                         Actualizar información
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 ml-1" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </a>

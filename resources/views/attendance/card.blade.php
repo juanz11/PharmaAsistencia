@@ -30,11 +30,13 @@
                             placeholder="Agregar notas..."></textarea>
                     </div>
                     <button type="submit"
-                        class="w-full flex justify-center items-center py-1 px-3 rounded text-[11px] font-medium text-white bg-[#1a4175] hover:bg-[#15345d] focus:outline-none focus:ring-2 focus:ring-[#1a4175] focus:ring-offset-1 transition-all duration-200">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    style="
+    background-color: #1F4591;
+" class="w-full flex justify-center items-center py-1 px-3 rounded text-[11px] font-medium text-white bg-[#1F4591] hover:bg-[#163670] focus:outline-none focus:ring-2 focus:ring-[#1F4591] focus:ring-offset-1 transition-all duration-200" >
+                        <svg class="w-3 h-3 mr-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                         </svg>
-                        Registrar Entrada
+                        <span class="text-white">Registrar Entrada</span>
                     </button>
                 </form>
             @else
