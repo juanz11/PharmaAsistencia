@@ -13,7 +13,7 @@ class AttendanceController extends Controller
         $user = auth()->user();
         
         // Obtener la asistencia del día actual
-        $attendance = $user->attendances()
+        $todayAttendance = $user->attendances()
             ->where('date', Carbon::today()->toDateString())
             ->first();
 
@@ -22,7 +22,7 @@ class AttendanceController extends Controller
             ->latest('check_in_time')
             ->paginate(10);
 
-        return view('attendance.index', compact('attendance', 'attendances'));
+        return view('attendance.index', compact('todayAttendance', 'attendances'));
     }
 
     public function checkIn(Request $request)
