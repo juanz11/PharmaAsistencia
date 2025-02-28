@@ -23,7 +23,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand fw-bold text-[#1a4175]" href="{{ url('/') }}">
-                    SncPharma
+                    <img src="{{ asset('images/logo/logo.png') }}" alt="SncPharma Logo" class="h-8 w-auto" style="max-width: 120px; object-fit: contain;">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
