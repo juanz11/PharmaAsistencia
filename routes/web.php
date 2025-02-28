@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
         Route::get('/list', [AttendanceController::class, 'list'])->name('list');
         Route::post('/check-in', [AttendanceController::class, 'checkIn'])->name('check-in');
-        Route::post('/check-out/{attendance}', [AttendanceController::class, 'checkOut'])->name('check-out');
+        Route::post('/check-out', [AttendanceController::class, 'checkOut'])->name('check-out');
     });
 
     // Rutas de información de usuario

@@ -26,15 +26,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Inicializar $attendance como null por defecto
-        $attendance = null;
+        // Inicializar la asistencia del día como null por defecto
+        $todayAttendance = null;
 
         if (Auth::check()) {
-            $attendance = Attendance::where('user_id', Auth::id())
+            $todayAttendance = Attendance::where('user_id', Auth::id())
                 ->where('date', Carbon::today()->toDateString())
                 ->first();
         }
 
-        return view('home', compact('attendance'));
+        return view('home', compact('todayAttendance'));
     }
 }

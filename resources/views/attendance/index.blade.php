@@ -49,12 +49,12 @@
                         </svg>
                         Salida
                     </h3>
-                    @if($todayAttendance && $todayAttendance->check_in && !$todayAttendance->check_out)
+                    @if($todayAttendance && $todayAttendance->check_in && !$todayAttendance->check_out_time)
                         <form action="{{ route('attendance.check-out') }}" method="POST">
                             @csrf
                             <button type="submit" 
                                     class="w-full bg-indigo-600 hover:bg-indigo-700  font-bold py-3 px-4 rounded-lg transition duration-150 ease-in-out flex items-center justify-center shadow-md hover:shadow-lg">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="240" height="240">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                                 </svg>
                                 Registrar Salida

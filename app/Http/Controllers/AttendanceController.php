@@ -68,10 +68,17 @@ class AttendanceController extends Controller
         return $device;
     }
 
-    public function checkOut(Attendance $attendance)
+    public function checkOut(Request $request)
     {
-        if ($attendance->user_id !== auth()->id()) {
-            return back()->with('error', 'No tienes permiso para realizar esta acción.');
+        $user = auth()->user();
+        
+        // Obtener la asistencia del día actual
+        $attendance = $user->attendances()
+            ->where('date', Carbon::today()->toDateString())
+            ->first();
+
+        if (!$attendance) {
+            return back()->with('error', 'No has registrado tu entrada hoy.');
         }
 
         if ($attendance->check_out_time) {
@@ -81,7 +88,8 @@ class AttendanceController extends Controller
         $now = now();
         $attendance->update([
             'check_out_time' => $now,
-            'notes' => request('notes')
+            'check_out_device' => $this->getDeviceInfo($request),
+            'notes' => $request->notes
         ]);
 
         return back()->with('success', 'Salida registrada exitosamente.');
