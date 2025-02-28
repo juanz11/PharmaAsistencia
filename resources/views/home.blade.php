@@ -7,13 +7,16 @@
             <!-- Panel de Administrador -->
             <div class="space-y-6">
                 <!-- Encabezado con efecto de gradiente y textura -->
-                <div class="relative overflow-hidden bg-gradient-to-r from-[#1a4175] to-[#2563eb] rounded-xl shadow-2xl p-8">
+                <div class="relative overflow-hidden bg-gradient-to-r from-[#1a4175] to-[#2563eb] rounded-xl shadow-2xl p-8 text-center">
                     <div class="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
                     <div class="relative">
-                        <h2 class="text-3xl font-bold  mb-2">¡Bienvenido al Panel de Administración!</h2>
+                        <h2 class="text-3xl font-bold text-white mb-2">¡Bienvenido al Panel de Administración!</h2>
                         <p class="text-blue-100 text-lg">Gestiona y supervisa la asistencia del personal desde aquí</p>
-                        <div class="absolute bottom-0 right-0 transform translate-y-1/4 translate-x-1/4">
-                            <svg class="h-[300px] w-[300px] /10" width="240" height="240" fill="currentColor" viewBox="0 0 300 300">
+                        <div class="flex justify-center mt-4 text-center">
+                            <svg class="h-[200px] w-[200px] text-white/30 text-center" width="240" height="240" fill="currentColor" viewBox="0 0 300 300" style="
+    text-align: center!important;!importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
+    display: inline;
+">
                                 <path d="M150 180l112.5-62.55L150 55.05l-112.5 62.4L150 180z"/>
                                 <path d="M150 180l77-42.75c3 26.25 1.5 53.25-8.25 81A149.4 149.4 0 01150 250.65a149.4 149.4 0 01-85.35-37.5 151.05 151.05 0 01-8.25-81L150 180z"/>
                             </svg>
@@ -27,7 +30,7 @@
                     
                 <!-- Acciones Rápidas -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="border-b border-gray-100 px-6 py-4">
+                    <div class="border-b border-gray-100 px-6 py-4 text-center">
                         <h3 class="text-lg font-semibold text-gray-900">Acciones Rápidas</h3>
                         <p class="text-sm text-gray-500">Gestiona usuarios y asistencias con un solo clic</p>
                     </div>
