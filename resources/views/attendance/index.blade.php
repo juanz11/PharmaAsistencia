@@ -37,7 +37,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             <span class="text-green-600 font-semibold block">Entrada registrada</span>
-                            <span class="text-green-500 text-sm">{{ $todayAttendance->check_in->format('H:i:s') }}</span>
+                            <span class="text-green-500 text-sm">{{ $todayAttendance->check_in->format('g:i:s A') }}</span>
                         </div>
                     @endif
                 </div>
@@ -67,7 +67,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             <span class="text-indigo-600 font-semibold block">Salida registrada</span>
-                            <span class="text-indigo-500 text-sm">{{ $todayAttendance->check_out->format('H:i:s') }}</span>
+                            <span class="text-indigo-500 text-sm">{{ $todayAttendance->check_out->format('g:i:s A') }}</span>
                         </div>
                     @else
                         <div class="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -107,10 +107,10 @@
                                 {{ $attendance->date->format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $attendance->check_in ? $attendance->check_in->format('H:i:s') : '-' }}
+                                {{ $attendance->check_in ? $attendance->check_in->format('g:i:s A') : '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $attendance->check_out ? $attendance->check_out->format('H:i:s') : '-' }}
+                                {{ $attendance->check_out ? $attendance->check_out->format('g:i:s A') : '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full

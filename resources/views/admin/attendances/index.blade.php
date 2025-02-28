@@ -66,10 +66,10 @@
                                 {{ $attendance->date->format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                                {{ $attendance->check_in ? $attendance->check_in->format('H:i:s') : '-' }}
+                                {{ $attendance->check_in ? $attendance->check_in->format('g:i:s A') : '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                                {{ $attendance->check_out ? $attendance->check_out->format('H:i:s') : '-' }}
+                                {{ $attendance->check_out ? $attendance->check_out->format('g:i:s A') : '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 

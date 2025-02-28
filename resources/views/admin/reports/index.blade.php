@@ -56,7 +56,7 @@
                 </p>
                 <p class="text-sm text-gray-600">
                     <span class="font-medium">Promedio Hora Entrada:</span>
-                    {{ gmdate('H:i', $stat->avg_check_in_seconds) }}
+                    {{ date('g:i A', $stat->avg_check_in_seconds) }}
                 </p>
             </div>
         </div>
@@ -70,51 +70,65 @@
     </div>
 
     <!-- Tabla Detallada -->
-    <div class="bg-white rounded-lg shadow-sm p-6">
-        <h2 class="text-lg font-semibold text-gray-800 mb-4">Registro Detallado</h2>
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-800">Registro Detallado</h2>
+        </div>
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empleado</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entrada</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Salida</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dispositivo</th>
+            <table class="w-full table-auto">
+                <thead>
+                    <tr class="bg-gray-100 border-b border-gray-200">
+                        <th class="text-left text-sm font-semibold text-gray-600 uppercase px-6 py-3">Empleado</th>
+                        <th class="text-left text-sm font-semibold text-gray-600 uppercase px-6 py-3">Fecha</th>
+                        <th class="text-left text-sm font-semibold text-gray-600 uppercase px-6 py-3 pr-12">Entrada</th>
+                        <th class="text-left text-sm font-semibold text-gray-600 uppercase px-6 py-3 pl-12">Salida</th>
+                        <th class="text-left text-sm font-semibold text-gray-600 uppercase px-6 py-3">Estado</th>
+                        <th class="text-left text-sm font-semibold text-gray-600 uppercase px-6 py-3">Dispositivo</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody>
                     @foreach($attendances as $attendance)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="px-6 py-4 text-sm text-gray-800 font-medium">
                             {{ $attendance->user ? $attendance->user->name : 'Usuario Eliminado' }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td class="px-6 py-4 text-sm text-gray-600">
                             {{ $attendance->date->format('d/m/Y') }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $attendance->check_in_time ? $attendance->check_in_time->format('H:i:s') : '-' }}
+                        <td class="px-6 py-4 text-sm text-gray-600 pr-12">
+                            {{ $attendance->check_in_time ? $attendance->check_in_time->format('g:i:s A') : '-' }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $attendance->check_out_time ? $attendance->check_out_time->format('H:i:s') : '-' }}
+                        <td class="px-6 py-4 text-sm text-gray-600 pl-12">
+                            {{ $attendance->check_out_time ? $attendance->check_out_time->format('g:i:s A') : '-' }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                {{ ucfirst($attendance->status) }}
-                            </span>
+                        <td class="px-6 py-4">
+                            @if($attendance->status === 'present')
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Presente
+                                </span>
+                            @elseif($attendance->status === 'absent')
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    Ausente
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    {{ ucfirst($attendance->status) }}
+                                </span>
+                            @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $attendance->check_in_device }}
+                        <td class="px-6 py-4 text-sm text-gray-600">
+                            {{ $attendance->check_in_device ?: 'N/A' }}
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <div class="mt-4">
-            {{ $attendances->links() }}
+        @if($attendances->isEmpty())
+        <div class="text-center py-8">
+            <p class="text-gray-500">No se encontraron registros para el período seleccionado.</p>
         </div>
+        @endif
     </div>
 </div>
 
