@@ -46,6 +46,13 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin.reports.index') }}">{{ __('Reportes') }}</a>
                                 </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('attendance.index') }}">{{ __('Registrar Asistencia') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('attendance.list') }}">{{ __('Mi Historial') }}</a>
+                                </li>
                             @endif
                         @endauth
                     </ul>

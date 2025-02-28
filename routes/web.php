@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     // Rutas de asistencia para empleados
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
+        Route::get('/list', [AttendanceController::class, 'list'])->name('list');
         Route::post('/check-in', [AttendanceController::class, 'checkIn'])->name('check-in');
         Route::post('/check-out/{attendance}', [AttendanceController::class, 'checkOut'])->name('check-out');
     });

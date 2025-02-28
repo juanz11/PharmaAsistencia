@@ -97,4 +97,30 @@ class AttendanceController extends Controller
 
         return view('admin.attendances.index', compact('attendances'));
     }
+
+    public function list(Request $request)
+    {
+        $user = auth()->user();
+        
+        $query = $user->attendances()->latest('date');
+
+        // Aplicar filtros de fecha si están presentes
+        if ($request->filled('start_date')) {
+            $query->where('date', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->where('date', '<=', $request->end_date);
+        }
+
+        // Paginar los resultados
+        $attendances = $query->paginate(10);
+
+        // Si es una solicitud AJAX, devolver solo la vista parcial
+        if ($request->ajax()) {
+            return view('attendance.list-partial', compact('attendances'));
+        }
+
+        return view('attendance.list', compact('attendances'));
+    }
 }
