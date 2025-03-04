@@ -70,89 +70,92 @@
             </div>
         @else
             <!-- Panel de Empleado -->
-            <div class="space-y-6">
-                <!-- Encabezado -->
-                <div class="bg-gradient-to-r from-[#1a4175] to-[#1F4591] rounded-t-lg shadow-lg p-6">
-                    <h2 class="text-2xl font-bold text-white mb-2">Mi Registro de Asistencia</h2>
-                    <p class="text-blue-100">Registro y control de tus horarios</p>
+            <div class="max-w-3xl mx-auto">
+                <!-- Encabezado Simple -->
+                <div class="text-center mb-8">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-16 mx-auto mb-4">
+                    <h2 class="text-2xl font-semibold text-gray-800">Registro de Asistencia</h2>
+                    <p class="text-gray-600 mt-2">{{ now()->format('l, d \d\e F Y') }}</p>
                 </div>
 
-                <!-- Panel de Check-in/Check-out -->
-                <div class="bg-white border-x border-gray-200 p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Tarjeta de Entrada -->
-                        <div class="bg-gradient-to-br from-blue-50 to-white rounded-lg p-6 shadow-md border border-gray-100">
-                            <h3 class="text-lg font-semibold text-[#1a4175] mb-4 flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="300" height="300">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                                </svg>
-                                Entrada
-                            </h3>
+                <!-- Panel de Marcación -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- Botón de Entrada -->
+                        <div class="text-center">
                             @if(!$todayAttendance)
-                                <form action="{{ route('attendance.check-in') }}" method="POST">
+                                <form action="{{ route('attendance.check-in') }}" method="POST" class="relative">
                                     @csrf
-                                    <button type="submit" class="w-full bg-[#1F4591] hover:bg-[#1a4175] text-white font-bold py-3 px-4 rounded-lg transition duration-150 ease-in-out flex items-center justify-center shadow-md hover:shadow-lg">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="300" height="300">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                                        </svg>
-                                        Registrar Entrada
+                                    <button type="submit" class="w-full bg-white hover:bg-gray-50 text-blue-500 py-4 px-6 rounded-lg transition-all duration-200 group border-2 border-blue-500">
+                                        <div class="flex flex-col items-center">
+                                            <svg class="w-8 h-8 mb-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                            </svg>
+                                            <span class="text-lg font-medium">Marcar Entrada</span>
+                                        </div>
                                     </button>
                                 </form>
                             @else
-                                <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-                                    <svg class="w-8 h-8 text-green-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="300" height="300">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span class="text-green-600 font-semibold block">Entrada registrada</span>
-                                    <span class="text-green-500 text-sm">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('g:i:s A') }}</span>
+                                <div class="relative">
+                                    <div class="bg-green-50 rounded-lg p-4 border-2 border-green-200">
+                                        <div class="flex flex-col items-center">
+                                            <div class="bg-green-100 p-2 rounded-full mb-2">
+                                                <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                            </div>
+                                            <span class="text-green-800 font-medium">Entrada Registrada</span>
+                                            <span class="text-green-600 text-sm mt-1">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('g:i A') }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             @endif
                         </div>
 
-                        <!-- Tarjeta de Salida -->
-                        <div class="bg-gradient-to-br from-indigo-50 to-white rounded-lg p-6 shadow-md border border-gray-100">
-                            <h3 class="text-lg font-semibold text-indigo-900 mb-4 flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="300" height="300">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                                </svg>
-                                Salida
-                            </h3>
+                        <!-- Botón de Salida -->
+                        <div class="text-center">
                             @if($todayAttendance && !$todayAttendance->check_out_time)
-                                <form action="{{ route('attendance.check-out') }}" method="POST">
+                                <form action="{{ route('attendance.check-out') }}" method="POST" class="relative">
                                     @csrf
-                                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-150 ease-in-out flex items-center justify-center shadow-md hover:shadow-lg">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="300" height="300">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                                        </svg>
-                                        Registrar Salida
+                                    <button type="submit" class="w-full bg-white hover:bg-gray-50 text-indigo-500 py-4 px-6 rounded-lg transition-all duration-200 group border-2 border-indigo-500">
+                                        <div class="flex flex-col items-center">
+                                            <svg class="w-8 h-8 mb-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                            </svg>
+                                            <span class="text-lg font-medium">Marcar Salida</span>
+                                        </div>
                                     </button>
                                 </form>
                             @elseif($todayAttendance && $todayAttendance->check_out_time)
-                                <div class="text-center p-4 bg-indigo-50 rounded-lg border border-indigo-200">
-                                    <svg class="w-8 h-8 text-indigo-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="300" height="300">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span class="text-indigo-600 font-semibold block">Salida registrada</span>
-                                    <span class="text-indigo-500 text-sm">{{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->format('g:i:s A') }}</span>
+                                <div class="relative">
+                                    <div class="bg-indigo-50 rounded-lg p-4 border-2 border-indigo-200">
+                                        <div class="flex flex-col items-center">
+                                            <div class="bg-indigo-100 p-2 rounded-full mb-2">
+                                                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                            </div>
+                                            <span class="text-indigo-800 font-medium">Salida Registrada</span>
+                                            <span class="text-indigo-600 text-sm mt-1">{{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->format('g:i A') }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             @else
-                                <div class="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
-                                    <span class="text-gray-600">Primero debes registrar tu entrada</span>
+                                <div class="bg-gray-100 rounded-lg p-4 border-2 border-gray-200">
+                                    <div class="flex flex-col items-center">
+                                        <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                        </svg>
+                                        <span class="text-gray-500 font-medium">Marque entrada primero</span>
+                                    </div>
                                 </div>
                             @endif
                         </div>
                     </div>
-                </div>
 
-                <!-- Historial -->
-                <div class="bg-white rounded-b-lg shadow-lg overflow-hidden border-x border-b border-gray-200">
-                    <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
-                        <a href="{{ route('attendance.list') }}" class="flex items-center justify-center text-[#1a4175] hover:text-[#2563eb] transition-colors">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="300" height="300">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            Ver mi historial de asistencias
-                        </a>
+                    <!-- Mensaje del día -->
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">¡Que tengas un excelente día!</p>
                     </div>
                 </div>
             </div>
