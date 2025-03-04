@@ -142,10 +142,12 @@
                                 </div>
                             @else
                                 <div class="bg-gray-100 rounded-lg p-4 border-2 border-gray-200">
-                                    <div class="flex flex-col items-center">
-                                        <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                                        </svg>
+                                    <div class="flex flex-col items-center justify-center">
+                                        <div class="flex justify-center items-center w-full">
+                                            <svg class="w-24 h-24 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 300 300" width="300" height="300">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="8" d="M150 187.5v25m-75 50h150a25 25 0 0025-25v-75a25 25 0 00-25-25H75a25 25 0 00-25 25v75a25 25 0 0025 25zm125-125V87.5a50 50 0 00-100 0v50h100z"></path>
+                                            </svg>
+                                        </div>
                                         <span class="text-gray-500 font-medium">Marque entrada primero</span>
                                     </div>
                                 </div>
