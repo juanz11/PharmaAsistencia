@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\UserInformationController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
+use App\Http\Controllers\Admin\StatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,9 +61,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/user/update', [UserInformationController::class, 'update'])->name('user.update');
 
     // Rutas de administrador
-    Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => [\App\Http\Middleware\AdminMiddleware::class]], function () {
+    Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
         
+        // Rutas de estadísticas
+        Route::get('/statistics', [\App\Http\Controllers\Admin\StatisticsController::class, 'index'])->name('statistics');
+        Route::get('/statistics/data', [\App\Http\Controllers\Admin\StatisticsController::class, 'getAttendanceData'])->name('statistics.data');
+
         // Rutas de usuarios
         Route::resource('users', UserController::class);
         

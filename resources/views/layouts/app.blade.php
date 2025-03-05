@@ -41,6 +41,9 @@
                                     <a class="nav-link" href="{{ route('admin.users.index') }}">{{ __('Usuarios') }}</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.statistics') }}">{{ __('Estadísticas') }}</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin.reports.index') }}">{{ __('Reportes') }}</a>
                                 </li>
                             @else
