@@ -116,15 +116,15 @@
                         <!-- Entrada -->
                         <div class="flex items-center">
                             @if(!$todayAttendance)
-                                <form action="{{ route('attendance.check-in') }}" method="POST">
+                                <form onsubmit="return handleAttendance(event, 'check-in')" class="flex items-center">
                                     @csrf
-                                    <button type="submit" class="flex items-center gap-2 bg-white hover:bg-blue-50 rounded-lg p-2">
-                                        <div class="bg-blue-100 rounded-full p-2">
-                                            <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                    <button type="submit" class="flex items-center gap-2 bg-white hover:bg-green-50 rounded-lg p-2">
+                                        <div class="bg-green-100 rounded-full p-2">
+                                            <svg class="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                             </svg>
                                         </div>
-                                        <span class="text-blue-600 font-medium">Entrada</span>
+                                        <span class="text-green-600 font-medium">Marcar Entrada</span>
                                     </button>
                                 </form>
                             @else
@@ -142,15 +142,15 @@
                         <!-- Salida -->
                         <div class="flex items-center">
                             @if($todayAttendance && !$todayAttendance->check_out_time)
-                                <form action="{{ route('attendance.check-out') }}" method="POST">
+                                <form onsubmit="return handleAttendance(event, 'check-out')" class="flex items-center">
                                     @csrf
-                                    <button type="submit" class="flex items-center gap-2 bg-white hover:bg-indigo-50 rounded-lg p-2">
-                                        <div class="bg-indigo-100 rounded-full p-2">
-                                            <svg class="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <button type="submit" class="flex items-center gap-2 bg-white hover:bg-red-50 rounded-lg p-2">
+                                        <div class="bg-red-100 rounded-full p-2">
+                                            <svg class="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                             </svg>
                                         </div>
-                                        <span class="text-indigo-600 font-medium">Salida</span>
+                                        <span class="text-red-600 font-medium">Marcar Salida</span>
                                     </button>
                                 </form>
                                 <!-- Almuerzo -->
@@ -210,6 +210,34 @@
                     </div>
 
                     <script>
+                        function handleAttendance(event, type) {
+                            event.preventDefault();
+                            const route = type === 'check-in' ? '{{ route("attendance.check-in") }}' : '{{ route("attendance.check-out") }}';
+                            const token = document.querySelector('input[name="_token"]').value;
+
+                            fetch(route, {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': token
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                alert(data.message);
+                                if (data.success) {
+                                    location.reload();
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Hubo un error al procesar tu solicitud');
+                            });
+
+                            return false;
+                        }
+
                         function handleBreak(event, type) {
                             event.preventDefault();
                             const route = type === 'start' ? '{{ route("attendance.break-start") }}' : '{{ route("attendance.break-end") }}';
@@ -218,6 +246,7 @@
                             fetch(route, {
                                 method: 'POST',
                                 headers: {
+                                    'Accept': 'application/json',
                                     'Content-Type': 'application/json',
                                     'X-CSRF-TOKEN': token
                                 }
@@ -241,43 +270,37 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                         <!-- Hora de Entrada -->
                         <div class="bg-white rounded-lg shadow-sm p-4">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Hora de Entrada</h3>
-                            <p class="text-2xl font-bold text-blue-600">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Hora de Entrada</h3>
+                            <p class="text-2xl font-bold text-gray-900">
                                 {{ $todayAttendance && $todayAttendance->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->format('h:i A') : '-- : --' }}
                             </p>
                         </div>
 
                         <!-- Tiempo de Almuerzo -->
                         <div class="bg-white rounded-lg shadow-sm p-4">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Tiempo de Almuerzo</h3>
-                            <div class="space-y-2">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-600">Inicio:</span>
-                                    <span class="text-lg font-semibold text-indigo-600">
-                                        {{ $todayAttendance && $todayAttendance->break_start ? \Carbon\Carbon::parse($todayAttendance->break_start)->format('h:i A') : '-- : --' }}
-                                    </span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-600">Fin:</span>
-                                    <span class="text-lg font-semibold text-indigo-600">
-                                        {{ $todayAttendance && $todayAttendance->break_end ? \Carbon\Carbon::parse($todayAttendance->break_end)->format('h:i A') : '-- : --' }}
-                                    </span>
-                                </div>
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Tiempo de Almuerzo</h3>
+                            <div class="space-y-1">
+                                <p class="text-sm text-gray-600">
+                                    <span class="font-medium">Inicio:</span>
+                                    {{ $todayAttendance && $todayAttendance->break_start ? \Carbon\Carbon::parse($todayAttendance->break_start)->format('h:i A') : '-- : --' }}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    <span class="font-medium">Fin:</span>
+                                    {{ $todayAttendance && $todayAttendance->break_end ? \Carbon\Carbon::parse($todayAttendance->break_end)->format('h:i A') : '-- : --' }}
+                                </p>
                                 @if($todayAttendance && $todayAttendance->break_start && $todayAttendance->break_end)
-                                <div class="flex justify-between items-center pt-2 border-t">
-                                    <span class="text-gray-600">Duración:</span>
-                                    <span class="text-lg font-bold text-indigo-600">
-                                        {{ \Carbon\Carbon::parse($todayAttendance->break_start)->diffInMinutes($todayAttendance->break_end) }} min
-                                    </span>
-                                </div>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="font-medium">Duración:</span>
+                                        {{ number_format(\Carbon\Carbon::parse($todayAttendance->break_start)->diffInMinutes($todayAttendance->break_end), 2) }} min
+                                    </p>
                                 @endif
                             </div>
                         </div>
 
                         <!-- Hora de Salida -->
                         <div class="bg-white rounded-lg shadow-sm p-4">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Hora de Salida</h3>
-                            <p class="text-2xl font-bold text-blue-600">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Hora de Salida</h3>
+                            <p class="text-2xl font-bold text-gray-900">
                                 {{ $todayAttendance && $todayAttendance->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->format('h:i A') : '-- : --' }}
                             </p>
                         </div>

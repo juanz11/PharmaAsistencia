@@ -89,35 +89,35 @@
                 <tbody>
                     @foreach($attendances as $attendance)
                     <tr class="border-b border-gray-100 hover:bg-gray-50">
-                        <td class="px-6 py-4 text-sm text-gray-800 font-medium">
-                            {{ $attendance->user ? $attendance->user->name : 'Usuario Eliminado' }}
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                            {{ $attendance->user->name }}
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ $attendance->date->format('d/m/Y') }}
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                            {{ optional($attendance->created_at)->format('d/m/Y') }}
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-600 pr-12">
-                            {{ $attendance->check_in_time ? $attendance->check_in_time->format('g:i:s A') : '-' }}
+                        <td class="px-6 py-4 text-sm text-gray-900 pr-12">
+                            {{ optional($attendance->check_in)->format('g:i:s A') ?: '-' }}
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-600 pl-12">
-                            {{ $attendance->check_out_time ? $attendance->check_out_time->format('g:i:s A') : '-' }}
+                        <td class="px-6 py-4 text-sm text-gray-900 pl-12">
+                            {{ optional($attendance->check_out)->format('g:i:s A') ?: '-' }}
                         </td>
                         <td class="px-6 py-4">
                             @if($attendance->status === 'present')
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                     Presente
                                 </span>
                             @elseif($attendance->status === 'absent')
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                                     Ausente
                                 </span>
                             @else
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    {{ ucfirst($attendance->status) }}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    Pendiente
                                 </span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ $attendance->check_in_device ?: 'N/A' }}
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                            {{ $attendance->device ?? 'No registrado' }}
                         </td>
                     </tr>
                     @endforeach
@@ -137,23 +137,30 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('attendanceChart').getContext('2d');
-    const data = @json($dailyAttendance);
-    
+    const dates = @json($dailyAttendance->pluck('date'));
+    const totalAttendance = @json($dailyAttendance->pluck('total_attendance'));
+    const presentCount = @json($dailyAttendance->pluck('present_count'));
+
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: data.map(item => item.date),
-            datasets: [{
-                label: 'Total Asistencias',
-                data: data.map(item => item.total_attendance),
-                borderColor: '#1F4591',
-                tension: 0.1
-            }, {
-                label: 'Presentes',
-                data: data.map(item => item.present_count),
-                borderColor: '#34D399',
-                tension: 0.1
-            }]
+            labels: dates,
+            datasets: [
+                {
+                    label: 'Total Asistencias',
+                    data: totalAttendance,
+                    borderColor: '#1F4591',
+                    backgroundColor: 'rgba(31, 69, 145, 0.1)',
+                    fill: true
+                },
+                {
+                    label: 'Presentes',
+                    data: presentCount,
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true
+                }
+            ]
         },
         options: {
             responsive: true,

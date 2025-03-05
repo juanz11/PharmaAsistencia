@@ -57,54 +57,52 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-700">
-                        @foreach($attendances as $attendance)
+                        @forelse($attendances as $attendance)
                         <tr class="hover:bg-gray-700 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                                 {{ $attendance->user->name }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                                {{ $attendance->date->format('d/m/Y') }}
+                                {{ optional($attendance->created_at)->format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                                {{ $attendance->check_in ? $attendance->check_in->format('g:i:s A') : '-' }}
+                                {{ optional($attendance->check_in_at)->format('g:i:s A') ?: '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                                {{ $attendance->check_out ? $attendance->check_out->format('g:i:s A') : '-' }}
+                                {{ optional($attendance->check_out_at)->format('g:i:s A') ?: '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $attendance->status === 'present' ? 'bg-green-800 text-green-100' : 
-                                       ($attendance->status === 'late' ? 'bg-yellow-800 text-yellow-100' : 'bg-red-800 text-red-100') }}">
-                                    {{ ucfirst($attendance->status) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                                @if($attendance->device === 'Mobile')
-                                    <span class="flex items-center">
-                                        <svg class="h-4 w-4 text-blue-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                  d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                        </svg>
-                                        Móvil
+                                @if($attendance->status === 'present')
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-800 text-green-100">
+                                        Presente
+                                    </span>
+                                @elseif($attendance->status === 'absent')
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-800 text-red-100">
+                                        Ausente
                                     </span>
                                 @else
-                                    <span class="flex items-center">
-                                        <svg class="h-4 w-4 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                        </svg>
-                                        Escritorio
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-800 text-yellow-100">
+                                        Pendiente
                                     </span>
                                 @endif
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
+                                {{ $attendance->device ?? 'No registrado' }}
+                            </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-400">
+                                No hay registros de asistencia para mostrar
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
-
+            
             <!-- Paginación -->
-            <div class="bg-gray-800 px-4 py-3 border-t border-gray-700 sm:px-6">
+            <div class="px-6 py-4 bg-gray-800">
                 {{ $attendances->links() }}
             </div>
         </div>

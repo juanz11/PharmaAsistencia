@@ -47,13 +47,13 @@
                     @forelse($attendances as $attendance)
                     <tr class="border-b border-gray-100 hover:bg-gray-50">
                         <td class="px-6 py-4 text-sm text-gray-800">
-                            {{ $attendance->date->format('d/m/Y') }}
+                            {{ optional($attendance->created_at)->format('d/m/Y') }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600 pr-12">
-                            {{ $attendance->check_in_time ? $attendance->check_in_time->format('g:i:s A') : '-' }}
+                            {{ optional($attendance->check_in)->format('g:i:s A') ?: '-' }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600 pl-12">
-                            {{ $attendance->check_out_time ? $attendance->check_out_time->format('g:i:s A') : '-' }}
+                            {{ optional($attendance->check_out)->format('g:i:s A') ?: '-' }}
                         </td>
                         <td class="px-6 py-4">
                             @if($attendance->status === 'present')
@@ -66,18 +66,18 @@
                                 </span>
                             @else
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    {{ ucfirst($attendance->status) }}
+                                    Pendiente
                                 </span>
                             @endif
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ $attendance->check_in_device ?: 'N/A' }}
+                            {{ $attendance->device ?? 'No registrado' }}
                         </td>
                     </tr>
                     @empty
                     <tr>
                         <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                            No se encontraron registros para el período seleccionado.
+                            No hay registros de asistencia para mostrar
                         </td>
                     </tr>
                     @endforelse

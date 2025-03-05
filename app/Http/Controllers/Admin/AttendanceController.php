@@ -11,15 +11,15 @@ class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Attendance::with('user')->latest('check_in_time');
+        $query = Attendance::with('user')->latest('check_in');
 
         // Aplicar filtros si existen
         if ($request->filled('start_date')) {
-            $query->whereDate('check_in_time', '>=', $request->start_date);
+            $query->whereDate('created_at', '>=', $request->start_date);
         }
 
         if ($request->filled('end_date')) {
-            $query->whereDate('check_in_time', '<=', $request->end_date);
+            $query->whereDate('created_at', '<=', $request->end_date);
         }
 
         if ($request->filled('user_id')) {

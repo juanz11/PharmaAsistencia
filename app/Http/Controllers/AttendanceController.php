@@ -11,47 +11,72 @@ class AttendanceController extends Controller
     public function index()
     {
         $user = auth()->user();
-        
-        // Obtener la asistencia del día actual
-        $todayAttendance = $user->attendances()
-            ->where('date', Carbon::today()->toDateString())
+        $todayAttendance = Attendance::where('user_id', $user->id)
+            ->whereDate('created_at', Carbon::today())
             ->first();
 
-        // Obtener el historial de asistencias
-        $attendances = $user->attendances()
-            ->latest('check_in_time')
-            ->paginate(10);
+        $attendances = Attendance::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
 
         return view('attendance.index', compact('todayAttendance', 'attendances'));
     }
 
-    public function checkIn(Request $request)
+    public function checkIn()
     {
-        $user = auth()->user();
-        
-        // Verificar si ya tiene un registro de asistencia hoy
-        $existingAttendance = $user->attendances()
-            ->where('date', Carbon::today()->toDateString())
+        $today = Carbon::today();
+        $attendance = Attendance::where('user_id', auth()->id())
+            ->whereDate('created_at', $today)
             ->first();
 
-        if ($existingAttendance) {
-            return back()->with('error', 'Ya has registrado tu entrada hoy.');
+        if ($attendance) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ya has registrado tu entrada hoy'
+            ]);
         }
 
-        $now = now();
-        $attendance = new Attendance([
-            'date' => $now->toDateString(),
-            'check_in_time' => $now,
-            'notes' => $request->notes,
-            'status' => 'present',
-            'check_in_device' => $this->getDeviceInfo($request),
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent()
+        $attendance = Attendance::create([
+            'user_id' => auth()->id(),
+            'check_in' => now(),
+            'status' => 'present'
         ]);
 
-        $user->attendances()->save($attendance);
+        return response()->json([
+            'success' => true,
+            'message' => 'Entrada registrada exitosamente'
+        ]);
+    }
 
-        return back()->with('success', 'Entrada registrada exitosamente.');
+    public function checkOut()
+    {
+        $today = Carbon::today();
+        $attendance = Attendance::where('user_id', auth()->id())
+            ->whereDate('created_at', $today)
+            ->first();
+
+        if (!$attendance) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No has registrado tu entrada hoy'
+            ]);
+        }
+
+        if ($attendance->check_out) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ya has registrado tu salida'
+            ]);
+        }
+
+        $attendance->check_out = now();
+        $attendance->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Salida registrada exitosamente'
+        ]);
     }
 
     private function getDeviceInfo(Request $request)
@@ -68,39 +93,10 @@ class AttendanceController extends Controller
         return $device;
     }
 
-    public function checkOut(Request $request)
-    {
-        $user = auth()->user();
-        
-        // Obtener la asistencia del día actual
-        $attendance = $user->attendances()
-            ->where('date', Carbon::today()->toDateString())
-            ->first();
-
-        if (!$attendance) {
-            return back()->with('error', 'No has registrado tu entrada hoy.');
-        }
-
-        if ($attendance->check_out_time) {
-            return back()->with('error', 'Ya has registrado tu salida.');
-        }
-
-        $now = now();
-        $attendance->update([
-            'check_out_time' => $now,
-            'check_out_device' => $this->getDeviceInfo($request),
-            'notes' => $request->notes
-        ]);
-
-        return back()->with('success', 'Salida registrada exitosamente.');
-    }
-
     public function adminIndex()
     {
-        // Obtener todas las asistencias con información del usuario
         $attendances = Attendance::with('user')
-            ->orderBy('date', 'desc')
-            ->orderBy('check_in_time', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(15);
 
         return view('admin.attendances.index', compact('attendances'));
@@ -109,32 +105,29 @@ class AttendanceController extends Controller
     public function list(Request $request)
     {
         $user = auth()->user();
-        
-        $query = $user->attendances()->latest('date');
+        $query = Attendance::where('user_id', $user->id);
 
         // Aplicar filtros de fecha si están presentes
         if ($request->filled('start_date')) {
-            $query->where('date', '>=', $request->start_date);
+            $query->whereDate('created_at', '>=', $request->start_date);
         }
 
         if ($request->filled('end_date')) {
-            $query->where('date', '<=', $request->end_date);
+            $query->whereDate('created_at', '<=', $request->end_date);
         }
+
+        // Ordenar por fecha más reciente
+        $query->orderBy('created_at', 'desc');
 
         // Paginar los resultados
         $attendances = $query->paginate(10);
-
-        // Si es una solicitud AJAX, devolver solo la vista parcial
-        if ($request->ajax()) {
-            return view('attendance.list-partial', compact('attendances'));
-        }
 
         return view('attendance.list', compact('attendances'));
     }
 
     public function breakStart(Request $request)
     {
-        $today = Carbon::now()->toDateString();
+        $today = Carbon::today();
         $attendance = Attendance::where('user_id', auth()->id())
             ->whereDate('created_at', $today)
             ->first();
@@ -164,7 +157,7 @@ class AttendanceController extends Controller
 
     public function breakEnd(Request $request)
     {
-        $today = Carbon::now()->toDateString();
+        $today = Carbon::today();
         $attendance = Attendance::where('user_id', auth()->id())
             ->whereDate('created_at', $today)
             ->first();

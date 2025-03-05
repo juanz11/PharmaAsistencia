@@ -31,7 +31,7 @@ class HomeController extends Controller
 
         if (Auth::check()) {
             $todayAttendance = Attendance::where('user_id', Auth::id())
-                ->where('date', Carbon::today()->toDateString())
+                ->whereDate('created_at', Carbon::today())
                 ->first();
         }
 

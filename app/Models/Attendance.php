@@ -11,21 +11,22 @@ class Attendance extends Model
 
     protected $fillable = [
         'user_id',
-        'date',
-        'check_in_time',
-        'check_out_time',
+        'check_in',
+        'check_out',
+        'break_start',
+        'break_end',
         'status',
         'notes',
-        'check_in_device',
-        'check_out_device',
-        'ip_address',
-        'user_agent'
+        'device'
     ];
 
     protected $casts = [
-        'date' => 'date',
-        'check_in_time' => 'datetime',
-        'check_out_time' => 'datetime'
+        'check_in' => 'datetime',
+        'check_out' => 'datetime',
+        'break_start' => 'datetime',
+        'break_end' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
     public function user()
