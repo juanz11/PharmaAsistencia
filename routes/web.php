@@ -11,6 +11,7 @@ use App\Http\Controllers\UserInformationController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\StatisticsController;
+use App\Http\Controllers\Admin\AttendanceManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
         
+        // Control de Asistencia
+        Route::get('/attendance', [AttendanceManagementController::class, 'index'])->name('attendance.index');
+        Route::get('/attendance/user/{id}', [AttendanceManagementController::class, 'userAttendance'])->name('attendance.user');
+        Route::put('/attendance/{id}', [AttendanceManagementController::class, 'update'])->name('attendance.update');
+        Route::delete('/attendance/{id}', [AttendanceManagementController::class, 'destroy'])->name('attendance.destroy');
+
         // Rutas de estadísticas
         Route::get('/statistics', [\App\Http\Controllers\Admin\StatisticsController::class, 'index'])->name('statistics');
         Route::get('/statistics/data', [\App\Http\Controllers\Admin\StatisticsController::class, 'getAttendanceData'])->name('statistics.data');
