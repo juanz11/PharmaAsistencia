@@ -75,7 +75,9 @@
             <h2 class="text-xl font-bold text-gray-800">Registro Detallado</h2>
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full table-auto">
+            <table class="w-full table-auto" style="
+            width: 100%;
+        ">
                 <thead>
                     <tr class="bg-gray-100 border-b border-gray-200">
                         <th class="text-left text-sm font-semibold text-gray-600 uppercase px-6 py-3">Empleado</th>

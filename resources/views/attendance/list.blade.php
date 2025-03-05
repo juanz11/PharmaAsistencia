@@ -22,7 +22,7 @@
                         value="{{ request('end_date', now()->format('Y-m-d')) }}"
                         class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
-                <button type="submit" class="bg-[#1F4591] text-white px-4 py-2 rounded-md hover:bg-[#163670] flex items-center">
+                <button type="submit" class="bg-[#1F4591]   px-4 py-2 rounded-md hover:bg-[#163670] flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
@@ -33,7 +33,9 @@
 
         <!-- Tabla de Asistencias -->
         <div class="overflow-x-auto">
-            <table class="w-full">
+            <table class="w-full" style="
+    width: 100%;
+">
                 <thead>
                     <tr class="bg-gray-100 border-b border-gray-200">
                         <th class="text-left text-sm font-semibold text-gray-600 uppercase px-6 py-3">Fecha</th>
