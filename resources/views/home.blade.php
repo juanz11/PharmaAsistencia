@@ -163,7 +163,7 @@
                     </div>
 
                     <div class="mt-4 text-center text-sm text-gray-600">
-                        <span class="font-medium">Tip:</span> Recuerda marcar tu entrada y salida diariamente
+                        <span class="font-medium"><strong>Tip:</strong></span><strong> Recuerda marcar tu entrada y salida diariamente </strong>
                     </div>
                 </div>
             </div>
