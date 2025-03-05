@@ -23,7 +23,7 @@ class AttendanceController extends Controller
         return view('attendance.index', compact('todayAttendance', 'attendances'));
     }
 
-    public function checkIn()
+    public function checkIn(Request $request)
     {
         $today = Carbon::today();
         $attendance = Attendance::where('user_id', auth()->id())
@@ -40,7 +40,8 @@ class AttendanceController extends Controller
         $attendance = Attendance::create([
             'user_id' => auth()->id(),
             'check_in' => now(),
-            'status' => 'present'
+            'status' => 'present',
+            'device' => $this->getDeviceInfo($request)
         ]);
 
         return response()->json([
@@ -49,7 +50,7 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function checkOut()
+    public function checkOut(Request $request)
     {
         $today = Carbon::today();
         $attendance = Attendance::where('user_id', auth()->id())
@@ -71,6 +72,7 @@ class AttendanceController extends Controller
         }
 
         $attendance->check_out = now();
+        $attendance->device = $this->getDeviceInfo($request);
         $attendance->save();
 
         return response()->json([

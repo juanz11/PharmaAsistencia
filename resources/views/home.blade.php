@@ -221,7 +221,10 @@
                                     'Accept': 'application/json',
                                     'Content-Type': 'application/json',
                                     'X-CSRF-TOKEN': token
-                                }
+                                },
+                                body: JSON.stringify({
+                                    device: navigator.userAgent
+                                })
                             })
                             .then(response => response.json())
                             .then(data => {
