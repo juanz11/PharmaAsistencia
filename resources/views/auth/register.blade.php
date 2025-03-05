@@ -89,21 +89,6 @@
                         </div>
                     </div>
 
-                    <!-- Fecha de Ingreso -->
-                    <div>
-                        <label for="join_date" class="block text-sm font-medium text-white">
-                            Fecha de Ingreso
-                        </label>
-                        <div class="mt-1">
-                            <input id="join_date" name="join_date" type="date" required
-                                class="form-input w-full px-3 py-2 rounded-md @error('join_date') border-red-500 @enderror"
-                                value="{{ old('join_date') }}">
-                            @error('join_date')
-                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
                     <!-- Correo Electrónico -->
                     <div>
                         <label for="email" class="block text-sm font-medium text-white">

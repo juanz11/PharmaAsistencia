@@ -54,7 +54,6 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'location' => ['required', 'string', 'max:255'],
             'identification' => ['required', 'string', 'max:20', 'unique:users'],
-            'join_date' => ['required', 'date'],
         ]);
     }
 
@@ -72,7 +71,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'location' => $data['location'],
             'identification' => $data['identification'],
-            'join_date' => $data['join_date'],
+            'join_date' => now(),
             'role' => 'employee',
         ]);
     }
