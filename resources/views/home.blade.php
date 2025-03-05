@@ -11,10 +11,10 @@
                     <div class="absolute inset-0 bg-grid-white/[0.05]"></div>
                     <div class="relative flex items-center justify-between">
                         <div>
-                            <h2 class="text-2xl font-bold text-white mb-2">Panel de Administración</h2>
+                            <h2 class="text-2xl font-bold  mb-2">Panel de Administración</h2>
                             <p class="text-blue-100">Gestión y control de asistencia del personal</p>
                         </div>
-                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-16 w-auto">
+                       
                     </div>
                 </div>
 
