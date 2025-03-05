@@ -141,6 +141,41 @@
                                         <span class="text-indigo-600 font-medium">Salida</span>
                                     </button>
                                 </form>
+                                <!-- Almuerzo -->
+                                @if(!$todayAttendance->break_start)
+                                <form action="{{ route('attendance.break-start') }}" method="POST" class="flex items-center">
+                                    @csrf
+                                    <button type="submit" class="flex items-center gap-2 bg-white hover:bg-indigo-50 rounded-lg p-2">
+                                        <div class="bg-indigo-100 rounded-full p-2">
+                                            <svg class="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <span class="text-indigo-600 font-medium">Iniciar Almuerzo</span>
+                                    </button>
+                                </form>
+                                @elseif(!$todayAttendance->break_end)
+                                <form action="{{ route('attendance.break-end') }}" method="POST" class="flex items-center">
+                                    @csrf
+                                    <button type="submit" class="flex items-center gap-2 bg-white hover:bg-indigo-50 rounded-lg p-2">
+                                        <div class="bg-indigo-100 rounded-full p-2">
+                                            <svg class="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <span class="text-indigo-600 font-medium">Finalizar Almuerzo</span>
+                                    </button>
+                                </form>
+                                @else
+                                <div class="flex items-center gap-2">
+                                    <div class="bg-green-100 rounded-full p-2">
+                                        <svg class="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-green-600 font-medium">Almuerzo Completado</span>
+                                </div>
+                                @endif
                             @elseif($todayAttendance && $todayAttendance->check_out_time)
                                 <div class="flex items-center gap-2">
                                     <div class="bg-indigo-100 rounded-full p-2">
@@ -160,6 +195,51 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                        <!-- Hora de Entrada -->
+                        <div class="bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Hora de Entrada</h3>
+                            <p class="text-2xl font-bold text-blue-600">
+                                {{ $todayAttendance && $todayAttendance->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->format('h:i A') : '-- : --' }}
+                            </p>
+                        </div>
+
+                        <!-- Tiempo de Almuerzo -->
+                        <div class="bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Tiempo de Almuerzo</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Inicio:</span>
+                                    <span class="text-lg font-semibold text-indigo-600">
+                                        {{ $todayAttendance && $todayAttendance->break_start ? \Carbon\Carbon::parse($todayAttendance->break_start)->format('h:i A') : '-- : --' }}
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Fin:</span>
+                                    <span class="text-lg font-semibold text-indigo-600">
+                                        {{ $todayAttendance && $todayAttendance->break_end ? \Carbon\Carbon::parse($todayAttendance->break_end)->format('h:i A') : '-- : --' }}
+                                    </span>
+                                </div>
+                                @if($todayAttendance && $todayAttendance->break_start && $todayAttendance->break_end)
+                                <div class="flex justify-between items-center pt-2 border-t">
+                                    <span class="text-gray-600">Duración:</span>
+                                    <span class="text-lg font-bold text-indigo-600">
+                                        {{ \Carbon\Carbon::parse($todayAttendance->break_start)->diffInMinutes($todayAttendance->break_end) }} min
+                                    </span>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Hora de Salida -->
+                        <div class="bg-white rounded-lg shadow-sm p-4">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Hora de Salida</h3>
+                            <p class="text-2xl font-bold text-blue-600">
+                                {{ $todayAttendance && $todayAttendance->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->format('h:i A') : '-- : --' }}
+                            </p>
+                        </div>
                     </div>
 
                     <div class="mt-4 text-center text-sm text-gray-600">

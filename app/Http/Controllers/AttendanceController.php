@@ -131,4 +131,64 @@ class AttendanceController extends Controller
 
         return view('attendance.list', compact('attendances'));
     }
+
+    public function breakStart(Request $request)
+    {
+        $today = Carbon::now()->toDateString();
+        $attendance = Attendance::where('user_id', auth()->id())
+            ->whereDate('created_at', $today)
+            ->first();
+
+        if (!$attendance) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Debes marcar entrada primero'
+            ], 400);
+        }
+
+        if ($attendance->break_start) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ya has iniciado tu almuerzo'
+            ], 400);
+        }
+
+        $attendance->break_start = now();
+        $attendance->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Almuerzo iniciado correctamente'
+        ]);
+    }
+
+    public function breakEnd(Request $request)
+    {
+        $today = Carbon::now()->toDateString();
+        $attendance = Attendance::where('user_id', auth()->id())
+            ->whereDate('created_at', $today)
+            ->first();
+
+        if (!$attendance || !$attendance->break_start) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No has iniciado tu almuerzo'
+            ], 400);
+        }
+
+        if ($attendance->break_end) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ya has finalizado tu almuerzo'
+            ], 400);
+        }
+
+        $attendance->break_end = now();
+        $attendance->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Almuerzo finalizado correctamente'
+        ]);
+    }
 }
