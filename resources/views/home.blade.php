@@ -5,7 +5,9 @@
     <div class="container mx-auto px-4 max-w-5xl">
         @if(auth()->user()->role === 'admin')
             <!-- Panel de Administrador -->
-            <div class="space-y-6">
+            <div class="space-y-6" style="
+                                display: inline-table;
+                            ">
                 <!-- Encabezado con efecto de gradiente -->
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-6 relative overflow-hidden">
                     <div class="absolute inset-0 bg-grid-white/[0.05]"></div>
@@ -24,7 +26,9 @@
                         <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100">
                             <div class="flex items-center space-x-4">
                                 <div class="bg-blue-100 rounded-lg p-2">
-                                    <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <svg class="w-[300px] h-[300px] text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="
+    width: 300px;
+">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                     </svg>
                                 </div>
@@ -40,7 +44,9 @@
                         <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100">
                             <div class="flex items-center space-x-4">
                                 <div class="bg-indigo-100 rounded-lg p-2">
-                                    <svg class="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <svg class="w-[300px] h-[300px] text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="
+    width: 300px;
+">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
