@@ -6,58 +6,72 @@
         @if(auth()->user()->role === 'admin')
             <!-- Panel de Administrador -->
             <div class="space-y-6" style="
-                                display: inline-table;
+                                display: flex;
                             ">
                 <!-- Encabezado con efecto de gradiente -->
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-6 relative overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-6 relative overflow-hidden" style="
+    display: contents;
+">
                     <div class="absolute inset-0 bg-grid-white/[0.05]"></div>
                     <div class="relative flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-bold  mb-2">Panel de Administración</h2>
                             <p class="text-blue-100">Gestión y control de asistencia del personal</p>
                         </div>
-                       
+                        <img src="https://sncpharma.com/wp-content/uploads/2024/11/lightbulb-1.png" alt="Logo" class="h-12 w-auto">
+
                     </div>
                 </div>
 
                 <!-- Acciones Rápidas -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <a href="{{ route('admin.users.index') }}" class="transform transition-all duration-200 hover:scale-[1.02]">
-                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100">
-                            <div class="flex items-center space-x-4">
-                                <div class="bg-blue-100 rounded-lg p-2">
-                                    <svg class="w-[300px] h-[300px] text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="
-    width: 300px;
-">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-semibold text-gray-900">Empleados</h3>
-                                    <p class="text-gray-600">Gestionar personal</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                <div class="space-y-6" style="display: inline-table;">
+    <!-- Encabezado con efecto de gradiente -->
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-6 relative overflow-hidden">
+        <div class="absolute inset-0 bg-grid-white/[0.05]"></div>
+        <div class="relative flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold mb-2">Gestion de Asistencia</h2>
+            </div>
+        </div>
+    </div>
 
-                    <a href="{{ route('attendance.index') }}" class="transform transition-all duration-200 hover:scale-[1.02]">
-                        <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100">
-                            <div class="flex items-center space-x-4">
-                                <div class="bg-indigo-100 rounded-lg p-2">
-                                    <svg class="w-[300px] h-[300px] text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="
-    width: 300px;
+    <!-- Acciones Rápidas -->
+    <div class="flex flex-row justify-center gap-6" style="
+    height: 437px;
 ">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-semibold text-gray-900">Asistencias</h3>
-                                    <p class="text-gray-600">Control de marcaciones</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+        <a href="/admin/users" class="transform transition-all duration-200 hover:scale-[1.02] flex-1">
+            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-100 rounded-lg p-2">
+                        <svg class="w-12 h-12 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Empleados</h3>
+                        <p class="text-gray-600">Gestionar personal</p>
+                    </div>
                 </div>
+            </div>
+        </a>
+
+        <a href="/admin/reports" class="transform transition-all duration-200 hover:scale-[1.02] flex-1">
+            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-indigo-100 rounded-lg p-2">
+                        <svg class="w-12 h-12 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Asistencias</h3>
+                        <p class="text-gray-600">Control de marcaciones</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
             </div>
         @else
             <!-- Panel de Empleado -->
@@ -72,7 +86,8 @@
                             <h2 class="text-2xl font-bold text-gray-900">Registro de Asistencia</h2>
                             <p class="text-gray-600 mt-1">{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM [del] YYYY') }}</p>
                         </div>
-                        <img src="{{ asset('images/logo/logo.png') }}" alt="Logo" class="h-12 w-auto">
+                        <img src="https://sncpharma.com/wp-content/uploads/2024/11/lightbulb-1.png" alt="Logo" class="h-12 w-auto">
+
                     </div>
 
                     <div class="flex flex-row justify-center items-center gap-12 mt-6 bg-white rounded-lg shadow-sm p-4 mx-auto" style="max-width: 800px;">
