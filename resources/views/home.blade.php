@@ -90,6 +90,18 @@
 
                     </div>
 
+                    @if(session('success'))
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                            <span class="block sm:inline">{{ session('success') }}</span>
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                            <span class="block sm:inline">{{ session('error') }}</span>
+                        </div>
+                    @endif
+
                     <div class="flex flex-row justify-center items-center gap-12 mt-6 bg-white rounded-lg shadow-sm p-4 mx-auto" style="max-width: 800px;">
                         <!-- Hora -->
                         <div class="flex items-center gap-2">
@@ -143,7 +155,7 @@
                                 </form>
                                 <!-- Almuerzo -->
                                 @if(!$todayAttendance->break_start)
-                                <form action="{{ route('attendance.break-start') }}" method="POST" class="flex items-center">
+                                <form onsubmit="return handleBreak(event, 'start')" class="flex items-center">
                                     @csrf
                                     <button type="submit" class="flex items-center gap-2 bg-white hover:bg-indigo-50 rounded-lg p-2">
                                         <div class="bg-indigo-100 rounded-full p-2">
@@ -155,7 +167,7 @@
                                     </button>
                                 </form>
                                 @elseif(!$todayAttendance->break_end)
-                                <form action="{{ route('attendance.break-end') }}" method="POST" class="flex items-center">
+                                <form onsubmit="return handleBreak(event, 'end')" class="flex items-center">
                                     @csrf
                                     <button type="submit" class="flex items-center gap-2 bg-white hover:bg-indigo-50 rounded-lg p-2">
                                         <div class="bg-indigo-100 rounded-full p-2">
@@ -196,6 +208,35 @@
                             </svg>
                         </a>
                     </div>
+
+                    <script>
+                        function handleBreak(event, type) {
+                            event.preventDefault();
+                            const route = type === 'start' ? '{{ route("attendance.break-start") }}' : '{{ route("attendance.break-end") }}';
+                            const token = document.querySelector('input[name="_token"]').value;
+
+                            fetch(route, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': token
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                alert(data.message);
+                                if (data.success) {
+                                    location.reload();
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Hubo un error al procesar tu solicitud');
+                            });
+
+                            return false;
+                        }
+                    </script>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                         <!-- Hora de Entrada -->

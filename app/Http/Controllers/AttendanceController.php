@@ -143,14 +143,14 @@ class AttendanceController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Debes marcar entrada primero'
-            ], 400);
+            ]);
         }
 
         if ($attendance->break_start) {
             return response()->json([
                 'success' => false,
                 'message' => 'Ya has iniciado tu almuerzo'
-            ], 400);
+            ]);
         }
 
         $attendance->break_start = now();
@@ -173,14 +173,14 @@ class AttendanceController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'No has iniciado tu almuerzo'
-            ], 400);
+            ]);
         }
 
         if ($attendance->break_end) {
             return response()->json([
                 'success' => false,
                 'message' => 'Ya has finalizado tu almuerzo'
-            ], 400);
+            ]);
         }
 
         $attendance->break_end = now();
