@@ -40,7 +40,10 @@
     height: 437px;
 ">
         <a href="/admin/users" class="transform transition-all duration-200 hover:scale-[1.02] flex-1">
-            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100">
+            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100" style="
+    !importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
+    border: transparent!important;!importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
+">
                 <div class="flex items-center space-x-4">
                     <div class="bg-blue-100 rounded-lg p-2">
                         <svg class="w-12 h-12 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -56,7 +59,10 @@
         </a>
 
         <a href="/admin/reports" class="transform transition-all duration-200 hover:scale-[1.02] flex-1">
-            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100">
+            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100" style="
+    !importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
+    border: transparent!important;!importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
+">
                 <div class="flex items-center space-x-4">
                     <div class="bg-indigo-100 rounded-lg p-2">
                         <svg class="w-12 h-12 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
