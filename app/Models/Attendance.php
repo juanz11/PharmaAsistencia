@@ -17,7 +17,8 @@ class Attendance extends Model
         'break_end',
         'status',
         'notes',
-        'device'
+        'device',
+        'ip_address'
     ];
 
     protected $casts = [

@@ -41,7 +41,8 @@ class AttendanceController extends Controller
             'user_id' => auth()->id(),
             'check_in' => now(),
             'status' => 'present',
-            'device' => $this->getDeviceInfo($request)
+            'device' => $this->getDeviceInfo($request),
+            'ip_address' => $this->getIpAddress($request)
         ]);
 
         return response()->json([
@@ -83,16 +84,46 @@ class AttendanceController extends Controller
 
     private function getDeviceInfo(Request $request)
     {
-        $agent = $request->userAgent();
-        $device = 'Unknown';
+        $userAgent = $request->header('User-Agent');
+        $device = 'Desconocido';
+        
+        if (strpos($userAgent, 'Mobile') !== false) {
+            $device = 'Móvil';
+        } elseif (strpos($userAgent, 'Tablet') !== false) {
+            $device = 'Tablet';
+        } else {
+            $device = 'Computadora';
+        }
+        
+        return $device;
+    }
 
-        if (preg_match('/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i', $agent)) {
-            $device = 'Mobile';
-        } elseif (preg_match('/(linux|mac|windows)/i', $agent)) {
-            $device = 'Desktop';
+    private function getIpAddress(Request $request)
+    {
+        // Intentamos obtener la IP real del cliente revisando varios headers
+        foreach ([
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_X_CLUSTER_CLIENT_IP',
+            'HTTP_FORWARDED_FOR',
+            'HTTP_FORWARDED',
+            'REMOTE_ADDR'
+        ] as $key) {
+            if ($request->server($key)) {
+                $ips = explode(',', $request->server($key));
+                $ip = trim(end($ips)); // Tomamos la última IP en caso de que haya varias
+                
+                // Validamos que sea una IP válida y no sea una IP privada
+                if (filter_var($ip, FILTER_VALIDATE_IP, 
+                    FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                    return $ip;
+                }
+            }
         }
 
-        return $device;
+        // Si no encontramos una IP válida en los headers, usamos el método ip()
+        return $request->ip();
     }
 
     public function adminIndex()
