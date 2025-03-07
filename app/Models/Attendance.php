@@ -2,33 +2,54 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Attendance extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
+        'date',
         'check_in',
         'check_out',
         'break_start',
         'break_end',
         'status',
-        'notes',
         'device',
         'ip_address'
     ];
 
-    protected $casts = [
-        'check_in' => 'datetime',
-        'check_out' => 'datetime',
-        'break_start' => 'datetime',
-        'break_end' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+    protected $dates = [
+        'date',
+        'check_in',
+        'check_out',
+        'break_start',
+        'break_end'
     ];
+
+    public function getCheckInAttribute($value)
+    {
+        if (!$value) return null;
+        return Carbon::parse($value)->setTimezone('America/Caracas');
+    }
+
+    public function getCheckOutAttribute($value)
+    {
+        if (!$value) return null;
+        return Carbon::parse($value)->setTimezone('America/Caracas');
+    }
+
+    public function getBreakStartAttribute($value)
+    {
+        if (!$value) return null;
+        return Carbon::parse($value)->setTimezone('America/Caracas');
+    }
+
+    public function getBreakEndAttribute($value)
+    {
+        if (!$value) return null;
+        return Carbon::parse($value)->setTimezone('America/Caracas');
+    }
 
     public function user()
     {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class AttendanceManagementController extends Controller
 {
@@ -19,7 +20,8 @@ class AttendanceManagementController extends Controller
     {
         $user = User::findOrFail($userId);
         $attendances = Attendance::where('user_id', $userId)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('date', 'desc')
+            ->orderBy('check_in', 'desc')
             ->get();
         
         return view('admin.attendance.user', compact('user', 'attendances'));
@@ -30,16 +32,25 @@ class AttendanceManagementController extends Controller
         $attendance = Attendance::findOrFail($id);
         
         $request->validate([
-            'check_in' => 'required|date',
-            'check_out' => 'required|date|after:check_in',
+            'check_in' => 'required',
+            'check_out' => 'required|after:check_in',
         ]);
 
-        $attendance->update([
-            'check_in' => $request->check_in,
-            'check_out' => $request->check_out,
-        ]);
+        try {
+            // Convertir las fechas a la zona horaria de Venezuela
+            $checkIn = Carbon::parse($request->check_in)->setTimezone('America/Caracas');
+            $checkOut = Carbon::parse($request->check_out)->setTimezone('America/Caracas');
 
-        return redirect()->back()->with('success', 'Asistencia actualizada correctamente');
+            $attendance->update([
+                'date' => $checkIn->toDateString(),
+                'check_in' => $checkIn,
+                'check_out' => $checkOut,
+            ]);
+
+            return redirect()->back()->with('success', 'Asistencia actualizada correctamente');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al actualizar la asistencia: ' . $e->getMessage());
+        }
     }
 
     public function destroy($id)

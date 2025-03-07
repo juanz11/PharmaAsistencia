@@ -116,7 +116,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <span class="text-blue-800 font-medium">{{ now()->format('g:i A') }}</span>
+                            <span class="text-blue-800 font-medium">{{ now()->venezuelaFormat() }}</span>
                         </div>
 
                         <!-- Entrada -->
@@ -140,7 +140,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
-                                    <span class="text-green-600 font-medium">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('g:i A') }}</span>
+                                    <span class="text-green-600 font-medium">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->venezuelaFormat() }}</span>
                                 </div>
                             @endif
                         </div>
@@ -201,7 +201,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
-                                    <span class="text-indigo-600 font-medium">{{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->format('g:i A') }}</span>
+                                    <span class="text-indigo-600 font-medium">{{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->venezuelaFormat() }}</span>
                                 </div>
                             @endif
                         </div>
@@ -281,7 +281,7 @@
                         <div class="bg-white rounded-lg shadow-sm p-4">
                             <h3 class="text-lg font-semibold text-gray-700 mb-2">Hora de Entrada</h3>
                             <p class="text-2xl font-bold text-gray-900">
-                                {{ $todayAttendance && $todayAttendance->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->format('h:i A') : '-- : --' }}
+                                {{ $todayAttendance && $todayAttendance->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->venezuelaFormat() : '-- : --' }}
                             </p>
                         </div>
 
@@ -291,11 +291,11 @@
                             <div class="space-y-1">
                                 <p class="text-sm text-gray-600">
                                     <span class="font-medium">Inicio:</span>
-                                    {{ $todayAttendance && $todayAttendance->break_start ? \Carbon\Carbon::parse($todayAttendance->break_start)->format('h:i A') : '-- : --' }}
+                                    {{ $todayAttendance && $todayAttendance->break_start ? \Carbon\Carbon::parse($todayAttendance->break_start)->venezuelaFormat() : '-- : --' }}
                                 </p>
                                 <p class="text-sm text-gray-600">
                                     <span class="font-medium">Fin:</span>
-                                    {{ $todayAttendance && $todayAttendance->break_end ? \Carbon\Carbon::parse($todayAttendance->break_end)->format('h:i A') : '-- : --' }}
+                                    {{ $todayAttendance && $todayAttendance->break_end ? \Carbon\Carbon::parse($todayAttendance->break_end)->venezuelaFormat() : '-- : --' }}
                                 </p>
                                 @if($todayAttendance && $todayAttendance->break_start && $todayAttendance->break_end)
                                     <p class="text-sm text-gray-600">
@@ -310,7 +310,7 @@
                         <div class="bg-white rounded-lg shadow-sm p-4">
                             <h3 class="text-lg font-semibold text-gray-700 mb-2">Hora de Salida</h3>
                             <p class="text-2xl font-bold text-gray-900">
-                                {{ $todayAttendance && $todayAttendance->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->format('h:i A') : '-- : --' }}
+                                {{ $todayAttendance && $todayAttendance->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->venezuelaFormat() : '-- : --' }}
                             </p>
                         </div>
                     </div>

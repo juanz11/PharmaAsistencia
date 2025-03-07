@@ -39,7 +39,7 @@
                             <div>
                                 <h4 class="text-green-700 font-bold text-xs truncate">Entrada Registrada</h4>
                                 <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full inline-block border border-green-200">
-                                    {{ $attendance->check_in_time->format('h:i A') }}
+                                    {{ $attendance->check_in_time->venezuelaFormat() }}
                                 </span>
                             </div>
                         </div>

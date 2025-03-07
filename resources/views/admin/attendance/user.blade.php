@@ -33,19 +33,19 @@
                     @foreach($attendances as $attendance)
                     <tr>
                         <td class="px-6 py-4  text-sm text-gray-500">
-                            {{ $attendance->created_at->format('Y-m-d') }}
+                            {{ $attendance->date ? \Carbon\Carbon::parse($attendance->date)->format('d/m/Y') : $attendance->created_at->format('d/m/Y') }}
                         </td>
                         <td class="px-6 py-4  text-sm text-gray-500">
                             <input type="datetime-local" 
                                    class="form-input rounded-md shadow-sm mt-1 block w-full"
-                                   value="{{ $attendance->check_in ? date('Y-m-d\TH:i', strtotime($attendance->check_in)) : '' }}"
+                                   value="{{ $attendance->check_in ? \Carbon\Carbon::parse($attendance->check_in)->format('Y-m-d\TH:i') : '' }}"
                                    form="update-form-{{ $attendance->id }}"
                                    name="check_in">
                         </td>
                         <td class="px-6 py-4  text-sm text-gray-500">
                             <input type="datetime-local" 
                                    class="form-input rounded-md shadow-sm mt-1 block w-full"
-                                   value="{{ $attendance->check_out ? date('Y-m-d\TH:i', strtotime($attendance->check_out)) : '' }}"
+                                   value="{{ $attendance->check_out ? \Carbon\Carbon::parse($attendance->check_out)->format('Y-m-d\TH:i') : '' }}"
                                    form="update-form-{{ $attendance->id }}"
                                    name="check_out">
                         </td>

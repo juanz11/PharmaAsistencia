@@ -49,13 +49,13 @@
                     @forelse($attendances as $attendance)
                     <tr class="border-b border-gray-100 hover:bg-gray-50">
                         <td class="px-6 py-4 text-sm text-gray-800">
-                            {{ optional($attendance->created_at)->format('d/m/Y') }}
+                            {{ $attendance->date ? \Carbon\Carbon::parse($attendance->date)->format('d/m/Y') : $attendance->created_at->format('d/m/Y') }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600 pr-12">
-                            {{ optional($attendance->check_in)->format('g:i:s A') ?: '-' }}
+                            {{ optional($attendance->check_in)->venezuelaFormat() ?: '-' }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600 pl-12">
-                            {{ optional($attendance->check_out)->format('g:i:s A') ?: '-' }}
+                            {{ optional($attendance->check_out)->venezuelaFormat() ?: '-' }}
                         </td>
                         <td class="px-6 py-4">
                             @if($attendance->status === 'present')

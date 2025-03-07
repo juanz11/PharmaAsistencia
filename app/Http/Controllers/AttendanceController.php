@@ -25,9 +25,12 @@ class AttendanceController extends Controller
 
     public function checkIn(Request $request)
     {
-        $today = Carbon::today();
-        $attendance = Attendance::where('user_id', auth()->id())
-            ->whereDate('created_at', $today)
+        $today = now();
+        $user = auth()->user();
+
+        // Verificar si ya existe un registro para hoy
+        $attendance = Attendance::where('user_id', $user->id)
+            ->whereDate('date', $today)
             ->first();
 
         if ($attendance) {
@@ -37,17 +40,22 @@ class AttendanceController extends Controller
             ]);
         }
 
-        $attendance = Attendance::create([
-            'user_id' => auth()->id(),
-            'check_in' => now(),
+        // Crear nuevo registro de asistencia
+        $attendance = new Attendance([
+            'user_id' => $user->id,
+            'date' => $today->toDateString(),
+            'check_in' => $today,
             'status' => 'present',
-            'device' => $this->getDeviceInfo($request),
-            'ip_address' => $this->getIpAddress($request)
+            'device' => $request->input('device', 'Unknown'),
+            'ip_address' => $request->ip()
         ]);
+
+        $attendance->save();
 
         return response()->json([
             'success' => true,
-            'message' => 'Entrada registrada exitosamente'
+            'message' => 'Entrada registrada exitosamente',
+            'time' => $today->format('g:i A')
         ]);
     }
 
@@ -137,20 +145,20 @@ class AttendanceController extends Controller
 
     public function list(Request $request)
     {
-        $user = auth()->user();
-        $query = Attendance::where('user_id', $user->id);
+        $query = Attendance::query()->where('user_id', auth()->id());
 
-        // Aplicar filtros de fecha si están presentes
+        // Filtrar por rango de fechas si se proporcionan
         if ($request->filled('start_date')) {
-            $query->whereDate('created_at', '>=', $request->start_date);
+            $query->whereDate('date', '>=', $request->start_date);
         }
 
         if ($request->filled('end_date')) {
-            $query->whereDate('created_at', '<=', $request->end_date);
+            $query->whereDate('date', '<=', $request->end_date);
         }
 
         // Ordenar por fecha más reciente
-        $query->orderBy('created_at', 'desc');
+        $query->orderBy('date', 'desc')
+              ->orderBy('check_in', 'desc');
 
         // Paginar los resultados
         $attendances = $query->paginate(10);

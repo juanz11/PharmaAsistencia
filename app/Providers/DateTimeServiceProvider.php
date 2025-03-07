@@ -1,24 +1,13 @@
 <?php
 
 namespace App\Providers;
+
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\Paginator;
 
-class AppServiceProvider extends ServiceProvider
+class DateTimeServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    public function boot()
     {
         // Configurar la zona horaria predeterminada para Venezuela
         date_default_timezone_set('America/Caracas');
@@ -36,7 +25,10 @@ class AppServiceProvider extends ServiceProvider
         Carbon::macro('venezuelaDate', function () {
             return $this->format('d/m/Y');
         });
-        
-        Paginator::useBootstrapFive();
+    }
+
+    public function register()
+    {
+        //
     }
 }
