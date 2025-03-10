@@ -75,7 +75,7 @@ class StatisticsController extends Controller
 
             foreach ($attendances as $attendance) {
                 if ($type === 'entrada') {
-                    $time = Carbon::parse($attendance->check_in)->format('H:i:s');
+                    $time = Carbon::parse($attendance->check_in)->format('g:i A');
                     $minutes = Carbon::parse($attendance->check_in)->diffInMinutes(Carbon::parse('08:00:00'));
                     
                     // Considera a tiempo si llega antes de las 8:00 AM
@@ -84,13 +84,13 @@ class StatisticsController extends Controller
                     }
 
                     // El mejor tiempo es el más temprano
-                    if (!$bestTime || Carbon::parse($time) < Carbon::parse($bestTime)) {
+                    if (!$bestTime || Carbon::parse($attendance->check_in)->format('H:i:s') < Carbon::parse($bestTime)->format('H:i:s')) {
                         $bestTime = $time;
                     }
                 } else {
                     if (!$attendance->check_out) continue;
                     
-                    $time = Carbon::parse($attendance->check_out)->format('H:i:s');
+                    $time = Carbon::parse($attendance->check_out)->format('g:i A');
                     $minutes = Carbon::parse($attendance->check_out)->diffInMinutes(Carbon::parse('17:00:00'));
                     
                     // Considera a tiempo si sale después de las 5:00 PM
@@ -99,7 +99,7 @@ class StatisticsController extends Controller
                     }
 
                     // El mejor tiempo es el más tarde
-                    if (!$bestTime || Carbon::parse($time) > Carbon::parse($bestTime)) {
+                    if (!$bestTime || Carbon::parse($attendance->check_out)->format('H:i:s') > Carbon::parse($bestTime)->format('H:i:s')) {
                         $bestTime = $time;
                     }
                 }
@@ -108,11 +108,11 @@ class StatisticsController extends Controller
             }
 
             $averageTime = $totalMinutes / $attendances->count();
-            $averageTimeFormatted = sprintf(
-                '%02d:%02d',
-                floor($averageTime / 60),
-                $averageTime % 60
-            );
+            $averageHour = floor($averageTime / 60);
+            $averageMinute = $averageTime % 60;
+            
+            // Convertir el promedio a formato 12 horas con AM/PM
+            $averageTimeFormatted = Carbon::createFromTime($averageHour, $averageMinute)->format('g:i A');
 
             $rankings[] = [
                 'name' => $user->name,
@@ -127,12 +127,14 @@ class StatisticsController extends Controller
         if ($type === 'entrada') {
             // Para entradas, ordenar por más temprano (menor tiempo)
             usort($rankings, function($a, $b) {
-                return strcmp($a['best_time'], $b['best_time']);
+                return Carbon::createFromFormat('g:i A', $a['best_time'])->timestamp - 
+                       Carbon::createFromFormat('g:i A', $b['best_time'])->timestamp;
             });
         } else {
             // Para salidas, ordenar por más tarde (mayor tiempo)
             usort($rankings, function($a, $b) {
-                return strcmp($b['best_time'], $a['best_time']);
+                return Carbon::createFromFormat('g:i A', $b['best_time'])->timestamp - 
+                       Carbon::createFromFormat('g:i A', $a['best_time'])->timestamp;
             });
         }
 
