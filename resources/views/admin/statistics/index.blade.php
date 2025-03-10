@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="bg-white rounded-lg shadow-lg p-6" style="
+    width: 100%;
+">
         <h2 class="text-2xl font-bold mb-6 text-gray-800">Ranking de Asistencia</h2>
         
         <!-- Selectores de fecha -->
@@ -47,7 +49,9 @@
 
         <!-- Tabla de Rankings -->
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-white rounded-lg overflow-hidden">
+            <table class="min-w-full bg-white rounded-lg overflow-hidden" style="
+    width: 100%;
+">
                 <thead class="bg-gray-100">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posición</th>
