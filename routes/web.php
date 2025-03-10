@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
         // Rutas de estadísticas
         Route::get('/statistics', [\App\Http\Controllers\Admin\StatisticsController::class, 'index'])->name('statistics');
         Route::get('/statistics/data', [\App\Http\Controllers\Admin\StatisticsController::class, 'getAttendanceData'])->name('statistics.data');
+        Route::get('/statistics/rankings', [\App\Http\Controllers\Admin\StatisticsController::class, 'getRankings'])->name('statistics.rankings');
 
         // Rutas de usuarios
         Route::resource('users', UserController::class);
