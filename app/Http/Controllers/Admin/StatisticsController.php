@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
 class StatisticsController extends Controller
 {
@@ -16,128 +18,172 @@ class StatisticsController extends Controller
         return view('admin.statistics.index');
     }
 
-    public function getAttendanceData()
-    {
-        $users = User::where('role', 'employee')->get();
-        $attendanceData = [];
-
-        foreach ($users as $user) {
-            // Calculate attendance percentage for the last 30 days
-            $totalDays = 30;
-            $attendedDays = Attendance::where('user_id', $user->id)
-                ->where('created_at', '>=', now()->subDays($totalDays))
-                ->whereNotNull('check_in')
-                ->whereNotNull('check_out')
-                ->count();
-
-            $percentage = ($attendedDays / $totalDays) * 100;
-
-            $attendanceData[] = [
-                'name' => $user->name,
-                'attendance' => round($percentage, 2),
-                'attended_days' => $attendedDays,
-                'total_days' => $totalDays
-            ];
-        }
-
-        return response()->json($attendanceData);
-    }
-
     public function getRankings(Request $request)
     {
-        $month = $request->query('month');
-        $year = $request->query('year');
-        $type = $request->query('type', 'entrada');
+        try {
+            Log::info('Iniciando getRankings', [
+                'request_params' => $request->all()
+            ]);
 
-        // Crear fecha de inicio y fin del mes
-        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
-        $endDate = Carbon::createFromDate($year, $month, 1)->endOfMonth();
-
-        $users = User::where('role', 'employee')->get();
-        $rankings = [];
-
-        foreach ($users as $user) {
-            $attendances = Attendance::where('user_id', $user->id)
-                ->whereBetween('created_at', [$startDate, $endDate])
-                ->whereNotNull('check_in')
-                ->when($type === 'salida', function ($query) {
-                    return $query->whereNotNull('check_out');
-                })
-                ->get();
-
-            if ($attendances->isEmpty()) {
-                continue;
+            // Validar que los parámetros requeridos estén presentes
+            if (!$request->has(['start_date', 'end_date', 'type'])) {
+                Log::warning('Parámetros faltantes', [
+                    'params' => $request->all()
+                ]);
+                return response()->json(['error' => 'Parámetros incompletos'], 400);
             }
 
-            $onTimeDays = 0;
-            $bestTime = null;
-            $totalMinutes = 0;
+            $startDate = Carbon::parse($request->start_date)->startOfDay();
+            $endDate = Carbon::parse($request->end_date)->endOfDay();
+            $type = $request->type;
+            $now = now();
 
-            foreach ($attendances as $attendance) {
-                if ($type === 'entrada') {
-                    $time = Carbon::parse($attendance->check_in)->format('g:i A');
-                    $minutes = Carbon::parse($attendance->check_in)->diffInMinutes(Carbon::parse('08:00:00'));
-                    
-                    // Considera a tiempo si llega antes de las 8:00 AM
-                    if (Carbon::parse($attendance->check_in) <= Carbon::parse('08:00:00')) {
-                        $onTimeDays++;
-                    }
+            Log::info('Fechas procesadas', [
+                'start_date' => $startDate->toDateTimeString(),
+                'end_date' => $endDate->toDateTimeString(),
+                'now' => $now->toDateTimeString(),
+                'type' => $type
+            ]);
 
-                    // El mejor tiempo es el más temprano
-                    if (!$bestTime || Carbon::parse($attendance->check_in)->format('H:i:s') < Carbon::parse($bestTime)->format('H:i:s')) {
-                        $bestTime = $time;
-                    }
-                } else {
-                    if (!$attendance->check_out) continue;
-                    
-                    $time = Carbon::parse($attendance->check_out)->format('g:i A');
-                    $minutes = Carbon::parse($attendance->check_out)->diffInMinutes(Carbon::parse('17:00:00'));
-                    
-                    // Considera a tiempo si sale después de las 5:00 PM
-                    if (Carbon::parse($attendance->check_out) >= Carbon::parse('17:00:00')) {
-                        $onTimeDays++;
-                    }
-
-                    // El mejor tiempo es el más tarde
-                    if (!$bestTime || Carbon::parse($attendance->check_out)->format('H:i:s') > Carbon::parse($bestTime)->format('H:i:s')) {
-                        $bestTime = $time;
-                    }
-                }
-
-                $totalMinutes += $minutes;
+            // Si la fecha de inicio es futura, retornar array vacío
+            if ($startDate->isAfter($now)) {
+                Log::info('Fecha inicio es futura');
+                return response()->json([]);
             }
 
-            $averageTime = $totalMinutes / $attendances->count();
-            $averageHour = floor($averageTime / 60);
-            $averageMinute = $averageTime % 60;
+            // Si la fecha de fin es futura, ajustarla a ahora
+            if ($endDate->isAfter($now)) {
+                Log::info('Ajustando fecha fin a ahora');
+                $endDate = $now;
+            }
+
+            // Obtener todos los usuarios empleados
+            $users = User::where('role', 'employee')->get();
             
-            // Convertir el promedio a formato 12 horas con AM/PM
-            $averageTimeFormatted = Carbon::createFromTime($averageHour, $averageMinute)->format('g:i A');
+            Log::info('Usuarios encontrados', [
+                'count' => $users->count()
+            ]);
 
-            $rankings[] = [
-                'name' => $user->name,
-                'average_time' => $averageTimeFormatted,
-                'best_time' => $bestTime,
-                'on_time_days' => $onTimeDays,
-                'total_days' => $attendances->count()
-            ];
+            if ($users->isEmpty()) {
+                Log::warning('No se encontraron empleados');
+                return response()->json([]);
+            }
+
+            $rankings = [];
+
+            foreach ($users as $user) {
+                try {
+                    // Construir la consulta base
+                    $query = Attendance::query()
+                        ->where('user_id', $user->id)
+                        ->whereBetween('created_at', [$startDate, $endDate]);
+
+                    if ($type === 'entrada') {
+                        $query->whereNotNull('check_in');
+                    } else {
+                        $query->whereNotNull('check_out');
+                    }
+
+                    $attendances = $query->get();
+
+                    if ($attendances->isEmpty()) {
+                        continue;
+                    }
+
+                    $onTimeDays = 0;
+                    $totalMinutes = 0;
+                    $attendanceDays = 0;
+                    $bestTimeValue = null;
+                    $bestTimeFormatted = null;
+
+                    foreach ($attendances as $attendance) {
+                        $currentDate = Carbon::parse($attendance->created_at);
+                        
+                        if ($currentDate->isAfter($now)) {
+                            continue;
+                        }
+
+                        $attendanceDays++;
+
+                        if ($type === 'entrada') {
+                            $checkInTime = Carbon::parse($attendance->check_in);
+                            $timeFormatted = $checkInTime->format('g:i A');
+                            
+                            if ($checkInTime->format('H:i:s') <= '08:00:00') {
+                                $onTimeDays++;
+                            }
+
+                            if (!$bestTimeValue || $checkInTime->format('H:i:s') < $bestTimeValue->format('H:i:s')) {
+                                $bestTimeValue = $checkInTime;
+                                $bestTimeFormatted = $timeFormatted;
+                            }
+
+                            $totalMinutes += $checkInTime->diffInMinutes(Carbon::parse($checkInTime->format('Y-m-d') . ' 08:00:00'));
+                        } else {
+                            if (!$attendance->check_out) continue;
+                            
+                            $checkOutTime = Carbon::parse($attendance->check_out);
+                            $timeFormatted = $checkOutTime->format('g:i A');
+                            
+                            if ($checkOutTime->format('H:i:s') >= '17:00:00') {
+                                $onTimeDays++;
+                            }
+
+                            if (!$bestTimeValue || $checkOutTime->format('H:i:s') > $bestTimeValue->format('H:i:s')) {
+                                $bestTimeValue = $checkOutTime;
+                                $bestTimeFormatted = $timeFormatted;
+                            }
+
+                            $totalMinutes += $checkOutTime->diffInMinutes(Carbon::parse($checkOutTime->format('Y-m-d') . ' 17:00:00'));
+                        }
+                    }
+
+                    if ($bestTimeFormatted !== null && $attendanceDays > 0) {
+                        $averageTime = $totalMinutes / $attendanceDays;
+                        $averageHour = floor($averageTime / 60);
+                        $averageMinute = $averageTime % 60;
+                        $averageTimeFormatted = Carbon::createFromTime($averageHour, $averageMinute)->format('g:i A');
+
+                        $rankings[] = [
+                            'name' => $user->name,
+                            'average_time' => $averageTimeFormatted,
+                            'best_time' => $bestTimeFormatted,
+                            'on_time_days' => $onTimeDays,
+                            'total_days' => $attendanceDays
+                        ];
+                    }
+                } catch (Exception $e) {
+                    Log::error('Error procesando usuario', [
+                        'user_id' => $user->id,
+                        'error' => $e->getMessage()
+                    ]);
+                    continue;
+                }
+            }
+
+            if (!empty($rankings)) {
+                usort($rankings, function($a, $b) use ($type) {
+                    $timeA = Carbon::createFromFormat('g:i A', $a['best_time'])->timestamp;
+                    $timeB = Carbon::createFromFormat('g:i A', $b['best_time'])->timestamp;
+                    return $type === 'entrada' ? $timeA - $timeB : $timeB - $timeA;
+                });
+            }
+
+            Log::info('Rankings generados exitosamente', [
+                'count' => count($rankings)
+            ]);
+
+            return response()->json($rankings);
+
+        } catch (Exception $e) {
+            Log::error('Error en getRankings', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'error' => 'Error al procesar los rankings: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Ordenar rankings
-        if ($type === 'entrada') {
-            // Para entradas, ordenar por más temprano (menor tiempo)
-            usort($rankings, function($a, $b) {
-                return Carbon::createFromFormat('g:i A', $a['best_time'])->timestamp - 
-                       Carbon::createFromFormat('g:i A', $b['best_time'])->timestamp;
-            });
-        } else {
-            // Para salidas, ordenar por más tarde (mayor tiempo)
-            usort($rankings, function($a, $b) {
-                return Carbon::createFromFormat('g:i A', $b['best_time'])->timestamp - 
-                       Carbon::createFromFormat('g:i A', $a['best_time'])->timestamp;
-            });
-        }
-
-        return response()->json($rankings);
     }
 }

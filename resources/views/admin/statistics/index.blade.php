@@ -1,124 +1,199 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="bg-white rounded-lg shadow-lg p-6" style="
-    width: 100%;
-">
-        <h2 class="text-2xl font-bold mb-6 text-gray-800">Ranking de Asistencia</h2>
-        
-        <!-- Selectores de fecha -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Mes</label>
-                <select id="monthSelect" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    <option value="1">Enero</option>
-                    <option value="2">Febrero</option>
-                    <option value="3">Marzo</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Mayo</option>
-                    <option value="6">Junio</option>
-                    <option value="7">Julio</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Septiembre</option>
-                    <option value="10">Octubre</option>
-                    <option value="11">Noviembre</option>
-                    <option value="12">Diciembre</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Año</label>
-                <select id="yearSelect" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    @for($i = date('Y'); $i >= 2024; $i--)
-                        <option value="{{ $i }}">{{ $i }}</option>
-                    @endfor
-                </select>
-            </div>
-            <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por</label>
-                <div class="flex gap-2">
-                    <button onclick="loadRankings('entrada')" class="flex-1 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2 rounded-md">
-                        Mejores Entradas
-                    </button>
-                    <button onclick="loadRankings('salida')" class="flex-1 bg-green-100 text-green-600 hover:bg-green-200 px-4 py-2 rounded-md">
-                        Mejores Salidas
-                    </button>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Estadísticas de Asistencia</h1>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Rankings de Asistencia</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="year" class="form-label">Año:</label>
+                                <select id="year" class="form-select">
+                                    @php
+                                        $currentYear = date('Y');
+                                        $startYear = 2023;
+                                    @endphp
+                                    @for($year = $startYear; $year <= $currentYear + 2; $year++)
+                                        <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="month" class="form-label">Mes:</label>
+                                <select id="month" class="form-select">
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="day" class="form-label">Día:</label>
+                                <select id="day" class="form-select">
+                                    <option value="all">Todos los días</option>
+                                    @for($day = 1; $day <= 31; $day++)
+                                        <option value="{{ $day }}">{{ $day }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="type" class="form-label">Tipo:</label>
+                                <select id="type" class="form-select">
+                                    <option value="entrada">Entrada</option>
+                                    <option value="salida">Salida</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Posición</th>
+                                    <th>Nombre</th>
+                                    <th>Mejor Tiempo</th>
+                                    <th>Tiempo Promedio</th>
+                                    <th>Días a Tiempo</th>
+                                    <th>Total de Días</th>
+                                    <th>Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rankings-body">
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <i class="fas fa-spinner fa-spin"></i> Cargando datos...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Tabla de Rankings -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white rounded-lg overflow-hidden" style="
-    width: 100%;
-">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posición</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empleado</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Promedio</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mejor Marca</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Días a Tiempo</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Días</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200" id="rankingTableBody">
-                    <!-- Los datos se cargarán dinámicamente -->
-                </tbody>
-            </table>
-        </div>
     </div>
 </div>
+@endsection
 
 @push('scripts')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Establecer mes y año actual
-    const currentDate = new Date();
-    document.getElementById('monthSelect').value = currentDate.getMonth() + 1;
-    document.getElementById('yearSelect').value = currentDate.getFullYear();
-    
-    // Cargar rankings iniciales (entradas por defecto)
-    loadRankings('entrada');
+    // Establecer mes actual
+    const currentMonth = new Date().getMonth() + 1;
+    document.getElementById('month').value = currentMonth;
 
-    // Agregar event listeners para los selectores
-    document.getElementById('monthSelect').addEventListener('change', () => loadRankings(currentType));
-    document.getElementById('yearSelect').addEventListener('change', () => loadRankings(currentType));
+    // Cargar rankings iniciales
+    loadRankings();
+
+    // Agregar event listeners
+    ['year', 'month', 'day', 'type'].forEach(id => {
+        document.getElementById(id).addEventListener('change', loadRankings);
+    });
 });
 
-let currentType = 'entrada';
+function loadRankings() {
+    const year = document.getElementById('year').value;
+    const month = document.getElementById('month').value;
+    const day = document.getElementById('day').value;
+    const type = document.getElementById('type').value;
 
-function loadRankings(type) {
-    currentType = type;
-    const month = document.getElementById('monthSelect').value;
-    const year = document.getElementById('yearSelect').value;
+    // Mostrar mensaje de carga
+    document.getElementById('rankings-body').innerHTML = `
+        <tr>
+            <td colspan="7" class="text-center">
+                <i class="fas fa-spinner fa-spin"></i> Cargando...
+            </td>
+        </tr>
+    `;
 
-    fetch(`/admin/statistics/rankings?type=${type}&month=${month}&year=${year}`)
-        .then(response => response.json())
+    // Calcular fechas de inicio y fin
+    let startDate, endDate;
+    if (day === 'all') {
+        startDate = new Date(year, month - 1, 1);
+        endDate = new Date(year, month, 0); // Último día del mes
+    } else {
+        startDate = new Date(year, month - 1, day);
+        endDate = new Date(year, month - 1, day, 23, 59, 59);
+    }
+
+    // Formatear fechas para la API
+    const formatDate = (date) => {
+        return date.toISOString().split('T')[0];
+    };
+
+    fetch(`/admin/statistics/rankings?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}&type=${type}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+            return response.json();
+        })
         .then(data => {
-            const tableBody = document.getElementById('rankingTableBody');
-            tableBody.innerHTML = '';
+            const tbody = document.getElementById('rankings-body');
+            tbody.innerHTML = '';
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <i class="fas fa-info-circle"></i> No hay datos disponibles para el período seleccionado
+                        </td>
+                    </tr>`;
+                return;
+            }
 
             data.forEach((item, index) => {
-                const row = document.createElement('tr');
-                const positionClass = index < 3 ? 'text-green-600 font-bold' : 'text-gray-900';
-                
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm ${positionClass}">#${index + 1}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.average_time}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.best_time}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.on_time_days}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.total_days}</td>
-                `;
-                tableBody.appendChild(row);
+                const percentage = ((item.on_time_days / item.total_days) * 100).toFixed(1);
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.name}</td>
+                        <td>${item.best_time}</td>
+                        <td>${item.average_time}</td>
+                        <td>${item.on_time_days}</td>
+                        <td>${item.total_days}</td>
+                        <td>${percentage}%</td>
+                    </tr>`;
+                tbody.innerHTML += row;
             });
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error al cargar los rankings');
+            document.getElementById('rankings-body').innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-danger">
+                        <i class="fas fa-exclamation-circle"></i> Error al cargar los datos: ${error.message}
+                    </td>
+                </tr>`;
         });
 }
 </script>
 @endpush
-@endsection
