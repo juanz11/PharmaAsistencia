@@ -142,7 +142,23 @@ class StatisticsController extends Controller
                         $averageTime = $totalMinutes / $attendanceDays;
                         $averageHour = floor($averageTime / 60);
                         $averageMinute = $averageTime % 60;
-                        $averageTimeFormatted = Carbon::createFromTime($averageHour, $averageMinute)->format('g:i A');
+
+                        if ($type === 'entrada') {
+                            $baseTime = Carbon::parse('08:00:00');
+                            $averageTimeFormatted = $baseTime->copy()->addMinutes($averageTime)->format('g:i A');
+                        } else {
+                            $baseTime = Carbon::parse('17:00:00');
+                            $averageTimeFormatted = $baseTime->copy()->addMinutes($averageTime)->format('g:i A');
+                        }
+
+                        Log::info('Procesando usuario para rankings', [
+                            'user' => $user->name,
+                            'type' => $type,
+                            'best_time' => $bestTimeFormatted,
+                            'average_time' => $averageTimeFormatted,
+                            'on_time_days' => $onTimeDays,
+                            'total_days' => $attendanceDays
+                        ]);
 
                         $rankings[] = [
                             'name' => $user->name,
@@ -165,8 +181,22 @@ class StatisticsController extends Controller
                 usort($rankings, function($a, $b) use ($type) {
                     $timeA = Carbon::createFromFormat('g:i A', $a['best_time'])->timestamp;
                     $timeB = Carbon::createFromFormat('g:i A', $b['best_time'])->timestamp;
-                    return $type === 'entrada' ? $timeA - $timeB : $timeB - $timeA;
+                    
+                    // Para entrada, el mejor tiempo es el más temprano
+                    // Para salida, el mejor tiempo es el más tardío
+                    if ($type === 'entrada') {
+                        return $timeA - $timeB;
+                    } else {
+                        return $timeB - $timeA;
+                    }
                 });
+
+                Log::info('Rankings ordenados', [
+                    'type' => $type,
+                    'count' => count($rankings),
+                    'first_ranking' => $rankings[0] ?? null,
+                    'last_ranking' => end($rankings) ?? null
+                ]);
             }
 
             Log::info('Rankings generados exitosamente', [
