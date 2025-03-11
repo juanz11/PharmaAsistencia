@@ -110,35 +110,24 @@
 
                     <div class="flex flex-row justify-center items-center gap-12 mt-6 bg-white rounded-lg shadow-sm p-4 mx-auto" style="max-width: 800px;">
                         <!-- Hora -->
-                        <div class="flex items-center gap-2">
-                            <div class="bg-blue-100 rounded-full p-2">
-                                <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <span class="text-blue-800 font-medium">{{ now()->venezuelaFormat() }}</span>
-                        </div>
+                       
 
                         <!-- Entrada -->
                         <div class="flex items-center">
                             @if(!$todayAttendance)
                                 <form onsubmit="return handleAttendance(event, 'check-in')" class="flex items-center">
                                     @csrf
-                                    <button type="submit" class="flex items-center gap-2 bg-white hover:bg-green-50 rounded-lg p-2">
-                                        <div class="bg-green-100 rounded-full p-1">
-                                            <img src="{{ asset('images/boton.png') }}" alt="Botón de entrada" class="w-6 h-6" style="
-    width: 90px;
-">
+                                    <button type="submit" class="flex items-center gap-4 bg-white hover:bg-green-50 rounded-lg p-2">
+                                        <div class="bg-green-100 rounded-full p-0">
+                                            <img src="{{ asset('images/boton.png') }}" alt="Botón de entrada" class="w-6 h-6" style="width: 90px;">
                                         </div>
                                         <span class="text-green-600 font-medium">Marcar Entrada</span>
                                     </button>
                                 </form>
                             @else
-                                <div class="flex items-center gap-2">
-                                    <div class="bg-green-100 rounded-full p-2">
-                                        <svg class="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
+                                <div class="flex items-center gap-4">
+                                    <div class="bg-green-100 rounded-full p-0">
+                                        <img src="{{ asset('images/comprobado.png') }}" alt="Entrada marcada" class="w-6 h-6" style="width: 90px;">
                                     </div>
                                     <span class="text-green-600 font-medium">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->venezuelaFormat() }}</span>
                                 </div>
