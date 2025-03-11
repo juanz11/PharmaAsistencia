@@ -144,25 +144,28 @@ class StatisticsController extends Controller
                     }
 
                     if ($bestTimeFormatted !== null && $attendanceDays > 0) {
-                        // Obtener el dispositivo más común para este usuario
+                        // Obtener el dispositivo más común para este usuario, excluyendo info del navegador
                         $commonDevice = Attendance::where('user_id', $user->id)
                             ->whereNotNull($type === 'entrada' ? 'check_in' : 'check_out')
-                            ->select('device', DB::raw('count(*) as count'))
-                            ->groupBy('device')
+                            ->select(DB::raw('SUBSTRING_INDEX(device, " - ", 1) as base_device'), DB::raw('count(*) as count'))
+                            ->groupBy('base_device')
                             ->orderByDesc('count')
                             ->first();
 
-                        // Obtener el dispositivo actual
-                        $currentDevice = $attendances->last()->device;
+                        // Obtener el dispositivo actual, excluyendo info del navegador
+                        $currentDeviceFull = $attendances->last()->device;
+                        $currentDevice = explode(' - ', $currentDeviceFull)[0];
                         
-                        // Verificar si el dispositivo actual es diferente al común
-                        $isUnusualDevice = $commonDevice && $currentDevice !== $commonDevice->device;
+                        // Verificar si el equipo actual es diferente al común
+                        $isUnusualDevice = $commonDevice && $currentDevice !== $commonDevice->base_device;
 
                         Log::info('Procesando usuario para rankings', [
                             'user' => $user->name,
                             'type' => $type,
                             'best_time' => $bestTimeFormatted,
-                            'device' => $currentDevice,
+                            'device' => $currentDeviceFull,
+                            'base_device' => $currentDevice,
+                            'common_device' => $commonDevice ? $commonDevice->base_device : null,
                             'is_unusual_device' => $isUnusualDevice,
                             'on_time_days' => $onTimeDays,
                             'total_days' => $attendanceDays
@@ -171,7 +174,7 @@ class StatisticsController extends Controller
                         $rankings[] = [
                             'name' => $user->name,
                             'best_time' => $bestTimeFormatted,
-                            'device' => $currentDevice,
+                            'device' => $currentDeviceFull,
                             'is_unusual_device' => $isUnusualDevice,
                             'on_time_days' => $onTimeDays,
                             'total_days' => $attendanceDays
