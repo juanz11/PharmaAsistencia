@@ -1,306 +1,190 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6">
-    <div class="container mx-auto px-4 max-w-5xl">
-        @if(auth()->user()->role === 'admin')
-            <!-- Panel de Administrador -->
-            <div class="space-y-6" style="
-                                display: flex;
-                            ">
-                <!-- Encabezado con efecto de gradiente -->
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-6 relative overflow-hidden" style="
-    display: contents;
-">
-                    <div class="absolute inset-0 bg-grid-white/[0.05]"></div>
-                    <div class="relative flex items-center justify-between">
-                        <div>
-                            <h2 class="text-2xl font-bold  mb-2">Panel de Administración</h2>
-                            <p class="text-blue-100">Gestión y control de asistencia del personal</p>
-                        </div>
-                        <img src="https://sncpharma.com/wp-content/uploads/2024/11/lightbulb-1.png" alt="Logo" class="h-12 w-auto">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
 
+            @if(auth()->user()->role === 'admin')
+                <div class="card">
+                    <div class="card-header">{{ __('Dashboard') }}</div>
+
+                    <div class="card-body">
+                        {{ __('¡Bienvenido Administrador!') }}
                     </div>
                 </div>
+            @else
+                <div class="card shadow-sm">
+                    <div class="card-body p-0">
+                        <!-- Contenedor principal con flexbox -->
+                        <div class="d-flex flex-column flex-md-row align-items-center">
+                            <!-- Columna de la imagen - ajusta automáticamente su tamaño -->
+                            <div class="col-12 col-md-6 p-4">
+                                <img src="{{ asset('img/logo.png') }}" alt="Logo" class="img-fluid rounded-3 shadow-sm" style="max-width: 100%; height: auto;">
+                            </div>
 
-                <!-- Acciones Rápidas -->
-                <div class="space-y-6" style="display: inline-table;">
-    <!-- Encabezado con efecto de gradiente -->
-    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-6 relative overflow-hidden">
-        <div class="absolute inset-0 bg-grid-white/[0.05]"></div>
-        <div class="relative flex items-center justify-between">
-            <div>
-                <h2 class="text-2xl font-bold mb-2">Gestion de Asistencia</h2>
-            </div>
-        </div>
-    </div>
+                            <!-- Columna del contenido - se ajusta al espacio restante -->
+                            <div class="col-12 col-md-6 p-4">
+                                <div class="text-center mb-4">
+                                    <h2 class="mb-1">{{ auth()->user()->name }}</h2>
+                                    <p class="text-muted mb-4">{{ now()->format('d/m/Y') }}</p>
 
-    <!-- Acciones Rápidas -->
-    <div class="flex flex-row justify-center gap-6" style="
-    height: 437px;
-">
-        <a href="/admin/users" class="transform transition-all duration-200 hover:scale-[1.02] flex-1">
-            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100" style="
-    !importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
-    border: transparent!important;!importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
-">
-                <div class="flex items-center space-x-4">
-                    <div class="bg-blue-100 rounded-lg p-2">
-                        <svg class="w-12 h-12 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Empleados</h3>
-                        <p class="text-gray-600">Gestionar personal</p>
-                    </div>
-                </div>
-            </div>
-        </a>
+                                    <div id="clock" class="display-4 mb-4">00:00:00</div>
 
-        <a href="/admin/reports" class="transform transition-all duration-200 hover:scale-[1.02] flex-1">
-            <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md border border-gray-100" style="
-    !importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
-    border: transparent!important;!importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
-">
-                <div class="flex items-center space-x-4">
-                    <div class="bg-indigo-100 rounded-lg p-2">
-                        <svg class="w-12 h-12 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Asistencias</h3>
-                        <p class="text-gray-600">Control de marcaciones</p>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-</div>
-            </div>
-        @else
-            <!-- Panel de Empleado -->
-            <div class="max-w-2xl mx-auto">
-                <!-- Encabezado -->
-                <div class="bg-white rounded-t-xl shadow-sm border border-gray-200 p-6" style="
-    width: 615px;
-    display: -webkit-box;
-">
-                    <div class="flex items-center justify-between mb-6">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-900">Registro de Asistencia</h2>
-                            <p class="text-gray-600 mt-1">{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM [del] YYYY') }}</p>
-                        </div>
-                        <img src="https://sncpharma.com/wp-content/uploads/2024/11/lightbulb-1.png" alt="Logo" class="h-12 w-auto">
-
-                    </div>
-
-                    @if(session('success'))
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                            <span class="block sm:inline">{{ session('success') }}</span>
-                        </div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                            <span class="block sm:inline">{{ session('error') }}</span>
-                        </div>
-                    @endif
-
-                    <div class="flex flex-row justify-center items-center gap-12 mt-6 bg-white rounded-lg shadow-sm p-4 mx-auto" style="max-width: 800px;">
-                        <!-- Hora -->
-                       
-
-                        <!-- Entrada -->
-                        <div class="flex items-center">
-                            @if(!$todayAttendance)
-                                <form onsubmit="return handleAttendance(event, 'check-in')" class="flex items-center">
-                                    @csrf
-                                    <button type="submit" class="flex items-center gap-4 bg-white hover:bg-green-50 rounded-lg p-2">
-                                        <div class="bg-green-100 rounded-full p-0">
-                                            <img src="{{ asset('images/boton.png') }}" alt="Botón de entrada" class="w-6 h-6" style="width: 90px;">
-                                        </div>
-                                        <span class="text-green-600 font-medium">Marcar Entrada</span>
-                                    </button>
-                                </form>
-                            @else
-                                <div class="flex items-center gap-4">
-                                    <div class="bg-green-100 rounded-full p-0">
-                                        <img src="{{ asset('images/comprobado.png') }}" alt="Entrada marcada" class="w-6 h-6" style="width: 90px;">
+                                    <div class="d-flex justify-content-center gap-3 mb-4">
+                                        <button onclick="markAttendance('check-in')" class="btn btn-primary px-4" id="checkInBtn">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Entrada
+                                        </button>
+                                        <button onclick="markAttendance('break-start')" class="btn btn-info px-4" id="breakStartBtn">
+                                            <i class="fas fa-coffee me-2"></i>Almuerzo
+                                        </button>
+                                        <button onclick="markAttendance('break-end')" class="btn btn-warning px-4" id="breakEndBtn">
+                                            <i class="fas fa-utensils me-2"></i>Fin Almuerzo
+                                        </button>
+                                        <button onclick="markAttendance('check-out')" class="btn btn-danger px-4" id="checkOutBtn">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Salida
+                                        </button>
                                     </div>
-                                    <span class="text-green-600 font-medium">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->venezuelaFormat() }}</span>
-                                </div>
-                            @endif
-                        </div>
 
-                        <!-- Salida -->
-                        <div class="flex items-center">
-                            @if($todayAttendance && !$todayAttendance->check_out_time)
-                                <form onsubmit="return handleAttendance(event, 'check-out')" class="flex items-center">
-                                    @csrf
-                                    <button type="submit" class="flex items-center gap-4 bg-white hover:bg-red-50 rounded-lg p-2">
-                                        <div class="bg-red-100 rounded-full p-0">
-                                            <img src="{{ asset('images/boton.png') }}" alt="Botón de salida" class="w-6 h-6" style="width: 90px;">
+                                    <!-- Estado de Asistencia -->
+                                    <div class="attendance-status">
+                                        <div class="d-flex justify-content-center gap-4">
+                                            <div class="text-center">
+                                                <p class="text-muted mb-1">Entrada</p>
+                                                <p class="h5" id="checkInTime">--:--</p>
+                                            </div>
+                                            <div class="text-center">
+                                                <p class="text-muted mb-1">Almuerzo</p>
+                                                <p class="h5" id="breakStartTime">--:--</p>
+                                            </div>
+                                            <div class="text-center">
+                                                <p class="text-muted mb-1">Fin Almuerzo</p>
+                                                <p class="h5" id="breakEndTime">--:--</p>
+                                            </div>
+                                            <div class="text-center">
+                                                <p class="text-muted mb-1">Salida</p>
+                                                <p class="h5" id="checkOutTime">--:--</p>
+                                            </div>
                                         </div>
-                                        <span class="text-red-600 font-medium">Marcar Salida</span>
-                                    </button>
-                                </form>
-
-                                <!-- Almuerzo -->
-                                @if(!$todayAttendance->break_start)
-                                <form onsubmit="return handleBreak(event, 'start')" class="flex items-center">
-                                    @csrf
-                                    <button type="submit" class="flex items-center gap-4 bg-white hover:bg-indigo-50 rounded-lg p-2">
-                                        <div class="bg-indigo-100 rounded-full p-0">
-                                            <img src="{{ asset('images/boton.png') }}" alt="Botón de almuerzo" class="w-6 h-6" style="width: 90px;">
-                                        </div>
-                                        <span class="text-indigo-600 font-medium">Iniciar Almuerzo</span>
-                                    </button>
-                                </form>
-                                @elseif(!$todayAttendance->break_end)
-                                <form onsubmit="return handleBreak(event, 'end')" class="flex items-center">
-                                    @csrf
-                                    <button type="submit" class="flex items-center gap-4 bg-white hover:bg-indigo-50 rounded-lg p-2">
-                                        <div class="bg-indigo-100 rounded-full p-0">
-                                            <img src="{{ asset('images/boton.png') }}" alt="Botón de almuerzo" class="w-6 h-6" style="width: 90px;">
-                                        </div>
-                                        <span class="text-indigo-600 font-medium">Finalizar Almuerzo</span>
-                                    </button>
-                                </form>
-                                @else
-                                <div class="flex items-center gap-4">
-                                    <div class="bg-indigo-100 rounded-full p-0">
-                                        <img src="{{ asset('images/comprobado.png') }}" alt="Almuerzo completado" class="w-6 h-6" style="width: 90px;">
                                     </div>
-                                    <span class="text-indigo-600 font-medium">Almuerzo Completado</span>
                                 </div>
-                                @endif
-                            @elseif($todayAttendance && $todayAttendance->check_out_time)
-                                <div class="flex items-center gap-4">
-                                    <div class="bg-red-100 rounded-full p-0">
-                                        <img src="{{ asset('images/comprobado.png') }}" alt="Salida marcada" class="w-6 h-6" style="width: 90px;">
-                                    </div>
-                                    <span class="text-red-600 font-medium">{{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->venezuelaFormat() }}</span>
-                                </div>
-                            @endif
-                        </div>
-
-                        <!-- Historial -->
-                        <a href="{{ route('attendance.list') }}" class="flex items-center gap-2 text-blue-600 hover:text-blue-700">
-                            <span class="font-medium">Historial</span>
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
-
-                    <script>
-                        function handleAttendance(event, type) {
-                            event.preventDefault();
-                            const route = type === 'check-in' ? '{{ route("attendance.check-in") }}' : '{{ route("attendance.check-out") }}';
-                            const token = document.querySelector('input[name="_token"]').value;
-
-                            fetch(route, {
-                                method: 'POST',
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': token
-                                },
-                                body: JSON.stringify({
-                                    device: navigator.userAgent
-                                })
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                alert(data.message);
-                                if (data.success) {
-                                    location.reload();
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('Hubo un error al procesar tu solicitud');
-                            });
-
-                            return false;
-                        }
-
-                        function handleBreak(event, type) {
-                            event.preventDefault();
-                            const route = type === 'start' ? '{{ route("attendance.break-start") }}' : '{{ route("attendance.break-end") }}';
-                            const token = document.querySelector('input[name="_token"]').value;
-
-                            fetch(route, {
-                                method: 'POST',
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': token
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                alert(data.message);
-                                if (data.success) {
-                                    location.reload();
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('Hubo un error al procesar tu solicitud');
-                            });
-
-                            return false;
-                        }
-                    </script>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                        <!-- Hora de Entrada -->
-                        <div class="bg-white rounded-lg shadow-sm p-4">
-                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Hora de Entrada</h3>
-                            <p class="text-2xl font-bold text-gray-900">
-                                {{ $todayAttendance && $todayAttendance->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->venezuelaFormat() : '-- : --' }}
-                            </p>
-                        </div>
-
-                        <!-- Tiempo de Almuerzo -->
-                        <div class="bg-white rounded-lg shadow-sm p-4">
-                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Tiempo de Almuerzo</h3>
-                            <div class="space-y-1">
-                                <p class="text-sm text-gray-600">
-                                    <span class="font-medium">Inicio:</span>
-                                    {{ $todayAttendance && $todayAttendance->break_start ? \Carbon\Carbon::parse($todayAttendance->break_start)->venezuelaFormat() : '-- : --' }}
-                                </p>
-                                <p class="text-sm text-gray-600">
-                                    <span class="font-medium">Fin:</span>
-                                    {{ $todayAttendance && $todayAttendance->break_end ? \Carbon\Carbon::parse($todayAttendance->break_end)->venezuelaFormat() : '-- : --' }}
-                                </p>
-                                @if($todayAttendance && $todayAttendance->break_start && $todayAttendance->break_end)
-                                    <p class="text-sm text-gray-600">
-                                        <span class="font-medium">Duración:</span>
-                                        {{ number_format(\Carbon\Carbon::parse($todayAttendance->break_start)->diffInMinutes($todayAttendance->break_end), 2) }} min
-                                    </p>
-                                @endif
                             </div>
                         </div>
 
-                        <!-- Hora de Salida -->
-                        <div class="bg-white rounded-lg shadow-sm p-4">
-                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Hora de Salida</h3>
-                            <p class="text-2xl font-bold text-gray-900">
-                                {{ $todayAttendance && $todayAttendance->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->venezuelaFormat() : '-- : --' }}
-                            </p>
+                        <!-- Mensajes informativos - se ajustan al ancho completo debajo del contenido principal -->
+                        <div class="p-4 bg-light rounded-bottom">
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-lg-10">
+                                    <div class="card shadow-sm">
+                                        <div class="card-body text-center">
+                                            <p class="text-gray-600 mb-3">
+                                                <i class="fas fa-info-circle text-primary me-2"></i>
+                                                <span class="font-medium"><strong>Nota:</strong></span> 
+                                                Este sistema de asistencia es una herramienta diseñada para apoyar la organización del equipo y facilitar nuestra dinámica de trabajo. 
+                                                Su objetivo es ayudarnos a mantener una comunicación fluida y asegurar que todos estemos alineados. 😊
+                                            </p>
+                                            <p class="text-gray-600 mb-0">
+                                                <i class="fas fa-lightbulb text-warning me-2"></i>
+                                                <span class="font-medium"><strong>Tip:</strong></span> 
+                                                <strong>Recuerda marcar tu entrada y salida cada día.</strong> 
+                                                ¡Tu participación es clave para que todo funcione mejor!
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="mt-4 text-center text-sm text-gray-600">
-                        <span class="font-medium"><strong>Tip:</strong></span><strong> Recuerda marcar tu entrada y salida diariamente </strong>
-                    </div>
                 </div>
-            </div>
-        @endif
+            @endif
+        </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+function markAttendance(type) {
+    const button = document.querySelector(`button[onclick="markAttendance('${type}')"]`);
+    const originalText = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    fetch(`/attendance/${type}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateAttendanceDisplay(data.attendance);
+            showSuccessMessage(data.message);
+        } else {
+            showErrorMessage(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showErrorMessage('Error al marcar la asistencia');
+    })
+    .finally(() => {
+        button.disabled = false;
+        button.innerHTML = originalText;
+    });
+}
+
+function updateAttendanceDisplay(attendance) {
+    document.getElementById('checkInTime').textContent = attendance.check_in || '--:--';
+    document.getElementById('breakStartTime').textContent = attendance.break_start || '--:--';
+    document.getElementById('breakEndTime').textContent = attendance.break_end || '--:--';
+    document.getElementById('checkOutTime').textContent = attendance.check_out || '--:--';
+}
+
+function showSuccessMessage(message) {
+    Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: message,
+        timer: 2000,
+        showConfirmButton: false
+    });
+}
+
+function showErrorMessage(message) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: message
+    });
+}
+
+// Cargar estado inicial de asistencia
+fetch('/attendance/status')
+    .then(response => response.json())
+    .then(data => {
+        if (data.attendance) {
+            updateAttendanceDisplay(data.attendance);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+</script>
+@endpush
