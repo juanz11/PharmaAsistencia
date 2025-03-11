@@ -125,10 +125,10 @@
                                 <form onsubmit="return handleAttendance(event, 'check-in')" class="flex items-center">
                                     @csrf
                                     <button type="submit" class="flex items-center gap-2 bg-white hover:bg-green-50 rounded-lg p-2">
-                                        <div class="bg-green-100 rounded-full p-2">
-                                            <svg class="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                            </svg>
+                                        <div class="bg-green-100 rounded-full p-1">
+                                            <img src="{{ asset('images/boton.png') }}" alt="Botón de entrada" class="w-6 h-6" style="
+    width: 90px;
+">
                                         </div>
                                         <span class="text-green-600 font-medium">Marcar Entrada</span>
                                     </button>
