@@ -7,8 +7,16 @@
             <h1 class="mb-4">Estadísticas de Asistencia</h1>
             
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Rankings de Asistencia</h3>
+                    <div class="btn-group">
+                        <button id="downloadPdf" class="btn btn-danger" disabled>
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button id="downloadExcel" class="btn btn-success ms-2" disabled>
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
@@ -113,13 +121,49 @@ document.addEventListener('DOMContentLoaded', function() {
     ['year', 'month', 'day', 'type'].forEach(id => {
         document.getElementById(id).addEventListener('change', loadRankings);
     });
+
+    // Event listeners para botones de descarga
+    document.getElementById('downloadPdf').addEventListener('click', () => downloadReport('pdf'));
+    document.getElementById('downloadExcel').addEventListener('click', () => downloadReport('excel'));
 });
+
+function downloadReport(format) {
+    const year = document.getElementById('year').value;
+    const month = document.getElementById('month').value;
+    const day = document.getElementById('day').value;
+    const type = document.getElementById('type').value;
+
+    // Calcular fechas
+    let startDate, endDate;
+    if (day === 'all') {
+        startDate = new Date(year, month - 1, 1);
+        endDate = new Date(year, month, 0);
+    } else {
+        startDate = new Date(year, month - 1, day);
+        endDate = new Date(year, month - 1, day, 23, 59, 59);
+    }
+
+    // Formatear fechas
+    const formatDate = (date) => {
+        return date.toISOString().split('T')[0];
+    };
+
+    // Construir URL
+    const url = `/admin/statistics/download?format=${format}&start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}&type=${type}`;
+    
+    // Descargar archivo
+    window.location.href = url;
+}
 
 function loadRankings() {
     const year = document.getElementById('year').value;
     const month = document.getElementById('month').value;
     const day = document.getElementById('day').value;
     const type = document.getElementById('type').value;
+
+    // Deshabilitar botones durante la carga
+    document.getElementById('downloadPdf').disabled = true;
+    document.getElementById('downloadExcel').disabled = true;
 
     // Mostrar mensaje de carga
     document.getElementById('rankings-body').innerHTML = `
@@ -169,6 +213,10 @@ function loadRankings() {
                     </tr>`;
                 return;
             }
+
+            // Habilitar botones si hay datos
+            document.getElementById('downloadPdf').disabled = false;
+            document.getElementById('downloadExcel').disabled = false;
 
             data.forEach((item, index) => {
                 const percentage = ((item.on_time_days / item.total_days) * 100).toFixed(1);
