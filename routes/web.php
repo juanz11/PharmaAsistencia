@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\AttendanceManagementController;
+use App\Http\Controllers\Admin\LunchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,10 +73,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('/attendance/{id}', [AttendanceManagementController::class, 'destroy'])->name('attendance.destroy');
 
         // Rutas de estadísticas
-        Route::get('/statistics', [\App\Http\Controllers\Admin\StatisticsController::class, 'index'])->name('statistics');
-        Route::get('/statistics/data', [\App\Http\Controllers\Admin\StatisticsController::class, 'getAttendanceData'])->name('statistics.data');
-        Route::get('/statistics/rankings', [\App\Http\Controllers\Admin\StatisticsController::class, 'getRankings'])->name('statistics.rankings');
-        Route::get('/statistics/download', [\App\Http\Controllers\Admin\StatisticsController::class, 'download'])->name('statistics.download');
+        Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
+        Route::get('/statistics/data', [StatisticsController::class, 'getAttendanceData'])->name('statistics.data');
+        Route::get('/statistics/rankings', [StatisticsController::class, 'getRankings'])->name('statistics.rankings');
+        Route::get('/statistics/download', [StatisticsController::class, 'download'])->name('statistics.download');
+
+        // Control de Almuerzos
+        Route::get('/lunch', [LunchController::class, 'index'])->name('lunch.index');
+        Route::put('/lunch/{id}', [LunchController::class, 'updateLunchTime'])->name('lunch.update');
 
         // Rutas de usuarios
         Route::resource('users', UserController::class);

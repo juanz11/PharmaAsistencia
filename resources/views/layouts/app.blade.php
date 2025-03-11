@@ -41,10 +41,13 @@
                                     <a class="nav-link" href="{{ route('admin.users.index') }}">{{ __('Usuarios') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('admin.attendance.index') }}">{{ __('Control de Asistencia') }}</a>
+                                    <a class="nav-link" href="{{ route('admin.attendance.index') }}">{{ __('Asistencias') }}</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin.statistics') }}">{{ __('Estadísticas') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.lunch.index') }}">{{ __('Control de Almuerzos') }}</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin.reports.index') }}">{{ __('Reportes') }}</a>
