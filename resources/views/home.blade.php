@@ -14,8 +14,83 @@
                 <div class="card">
                     <div class="card-header">{{ __('Dashboard') }}</div>
 
-                    <div class="card-body">
-                        {{ __('¡Bienvenido Administrador!') }}
+                    <div class="card-body p-4">
+                        <!-- Contenedor principal con espaciado responsive -->
+                        <div class="space-y-4 md:space-y-6">
+                            <!-- Encabezado con efecto de gradiente -->
+                            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-4 md:p-6 relative overflow-hidden" style="
+    display: inline-block;
+">
+                                <div class="absolute inset-0 bg-grid-white/[0.05]"></div>
+                                <div class="relative flex flex-col md:flex-row items-center justify-between gap-4">
+                                    <div class="text-center md:text-left">
+                                        <h2 class="text-xl md:text-2xl font-bold  mb-2">Panel de Administración</h2>
+                                        <p class="text-blue-100 text-sm md:text-base">Gestión y control de asistencia del personal</p>
+                                    </div>
+                                    <img src="https://sncpharma.com/wp-content/uploads/2024/11/lightbulb-1.png" alt="Logo" class="h-10 md:h-12 w-auto">
+                                </div>
+                            </div>
+
+                            <!-- Sección de Gestión -->
+                            
+
+                            <!-- Cards de navegación -->
+                            <div class="flex flex-col md:flex-row justify-center gap-4 md:gap-6" style="
+    display: inline-block;
+">
+                                <!-- Card de Empleados -->
+                                <a href="/admin/users" class="transform transition-all duration-200 hover:scale-[1.02] flex-1" style="
+    width: 286px!important;!importan;!importa;!import;!impor;!impo;!imp;!im;!i;!;
+">
+                                    <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md">
+                                        <div class="flex flex-col items-center space-y-3" style="
+    width: 229px;
+">
+                                            <div class="bg-blue-100 rounded-lg p-4 w-full flex justify-center" style="
+    width: 200px;
+">
+                                                <svg class="w-[300px] h-[300px] text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="
+    width: 200px;
+">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-center">
+                                                <h3 class="text-lg font-semibold text-gray-900">Empleados</h3>
+                                                <p class="text-sm md:text-base text-gray-600">Gestionar personal</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <!-- Card de Asistencias -->
+                                <a href="/admin/reports" class="transform transition-all duration-200 hover:scale-[1.02] flex-1" style="
+    width: 286px;
+">
+                                    <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md" style="
+    width: 286px;
+">
+                                        <div class="flex flex-col items-center space-y-3" style="
+    width: 200px;
+">
+                                            <div class="bg-indigo-100 rounded-lg p-4 w-full flex justify-center" style="
+    width: 200px;
+">
+                                                <svg class="w-[300px] h-[300px] text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="
+    width: 200px;
+">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-center">
+                                                <h3 class="text-lg font-semibold text-gray-900">Asistencias</h3>
+                                                <p class="text-sm md:text-base text-gray-600">Control de marcaciones</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @else
@@ -25,7 +100,7 @@
                         <div class="d-flex flex-column flex-md-row align-items-center">
                             <!-- Columna de la imagen - ajusta automáticamente su tamaño -->
                             <div class="col-12 col-md-6 p-4">
-                                <img src="{{ asset('img/logo.png') }}" alt="Logo" class="img-fluid rounded-3 shadow-sm" style="max-width: 100%; height: auto;">
+                                <img src="{{ asset('images/logo/logo.png') }}" alt="Logo" class="img-fluid rounded-3 shadow-sm" style="max-width: 100%; height: auto;">
                             </div>
 
                             <!-- Columna del contenido - se ajusta al espacio restante -->
@@ -145,11 +220,6 @@ setInterval(updateClock, 1000);
 updateClock();
 
 function markAttendance(type) {
-    const button = document.querySelector(`button[onclick="markAttendance('${type}')"]`);
-    const originalText = button.innerHTML;
-    button.disabled = true;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
     fetch(`/attendance/${type}`, {
         method: 'POST',
         headers: {
@@ -160,19 +230,8 @@ function markAttendance(type) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            updateAttendanceDisplay(data.attendance);
-            showSuccessMessage(data.message);
-        } else {
-            showErrorMessage(data.message);
+            window.location.reload();
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showErrorMessage('Error al marcar la asistencia');
-    })
-    .finally(() => {
-        button.disabled = false;
-        button.innerHTML = originalText;
     });
 }
 
