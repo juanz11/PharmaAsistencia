@@ -56,19 +56,43 @@
                                         <div class="d-flex justify-content-center gap-4">
                                             <div class="text-center">
                                                 <p class="text-muted mb-1">Entrada</p>
-                                                <p class="h5" id="checkInTime">--:--</p>
+                                                <p class="h5" id="checkInTime">
+                                                    @if(isset($todayAttendance) && $todayAttendance->check_in)
+                                                        {{ \Carbon\Carbon::parse($todayAttendance->check_in)->format('h:i A') }}
+                                                    @else
+                                                        --:--
+                                                    @endif
+                                                </p>
                                             </div>
                                             <div class="text-center">
                                                 <p class="text-muted mb-1">Almuerzo</p>
-                                                <p class="h5" id="breakStartTime">--:--</p>
+                                                <p class="h5" id="breakStartTime">
+                                                    @if(isset($todayAttendance) && $todayAttendance->break_start)
+                                                        {{ \Carbon\Carbon::parse($todayAttendance->break_start)->format('h:i A') }}
+                                                    @else
+                                                        --:--
+                                                    @endif
+                                                </p>
                                             </div>
                                             <div class="text-center">
                                                 <p class="text-muted mb-1">Fin Almuerzo</p>
-                                                <p class="h5" id="breakEndTime">--:--</p>
+                                                <p class="h5" id="breakEndTime">
+                                                    @if(isset($todayAttendance) && $todayAttendance->break_end)
+                                                        {{ \Carbon\Carbon::parse($todayAttendance->break_end)->format('h:i A') }}
+                                                    @else
+                                                        --:--
+                                                    @endif
+                                                </p>
                                             </div>
                                             <div class="text-center">
                                                 <p class="text-muted mb-1">Salida</p>
-                                                <p class="h5" id="checkOutTime">--:--</p>
+                                                <p class="h5" id="checkOutTime">
+                                                    @if(isset($todayAttendance) && $todayAttendance->check_out)
+                                                        {{ \Carbon\Carbon::parse($todayAttendance->check_out)->format('h:i A') }}
+                                                    @else
+                                                        --:--
+                                                    @endif
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -153,10 +177,18 @@ function markAttendance(type) {
 }
 
 function updateAttendanceDisplay(attendance) {
-    document.getElementById('checkInTime').textContent = attendance.check_in || '--:--';
-    document.getElementById('breakStartTime').textContent = attendance.break_start || '--:--';
-    document.getElementById('breakEndTime').textContent = attendance.break_end || '--:--';
-    document.getElementById('checkOutTime').textContent = attendance.check_out || '--:--';
+    // Función para formatear la hora
+    function formatTime(time) {
+        if (!time) return '--:--';
+        const date = new Date(time);
+        return date.toLocaleTimeString('es-VE', { hour: '2-digit', minute: '2-digit', hour12: true });
+    }
+
+    // Actualizar cada campo con el formato correcto
+    document.getElementById('checkInTime').textContent = formatTime(attendance.check_in);
+    document.getElementById('breakStartTime').textContent = formatTime(attendance.break_start);
+    document.getElementById('breakEndTime').textContent = formatTime(attendance.break_end);
+    document.getElementById('checkOutTime').textContent = formatTime(attendance.check_out);
 }
 
 function showSuccessMessage(message) {
@@ -178,13 +210,15 @@ function showErrorMessage(message) {
 }
 
 // Cargar estado inicial de asistencia
-fetch('/attendance/status')
-    .then(response => response.json())
-    .then(data => {
-        if (data.attendance) {
-            updateAttendanceDisplay(data.attendance);
-        }
-    })
-    .catch(error => console.error('Error:', error));
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/attendance/status')
+        .then(response => response.json())
+        .then(data => {
+            if (data.attendance) {
+                updateAttendanceDisplay(data.attendance);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+});
 </script>
 @endpush
