@@ -7,10 +7,50 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h3 class="m-0 text-primary">Control de Almuerzos</h3>
-                    <div class="text-muted">{{ now()->format('d/m/Y') }}</div>
+                    <div class="d-flex gap-3">
+                        <input type="date" id="startDate" class="form-control form-control-sm" value="{{ now()->format('Y-m-d') }}">
+                        <input type="date" id="endDate" class="form-control form-control-sm" value="{{ now()->format('Y-m-d') }}">
+                        <button class="btn btn-primary btn-sm" onclick="filterData()">Filtrar</button>
+                    </div>
                 </div>
 
                 <div class="card-body">
+                    <!-- Estadísticas -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Promedio de Duración</h6>
+                                    <h3 class="text-primary mb-0" id="averageDuration">--:--</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Almuerzos Completados</h6>
+                                    <h3 class="text-success mb-0" id="completedCount">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Tiempo Excedido</h6>
+                                    <h3 class="text-danger mb-0" id="exceededCount">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Tiempo Corto</h6>
+                                    <h3 class="text-warning mb-0" id="shortCount">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Cuadro de Tiempos -->
                     <div class="bg-light p-3 rounded mb-4">
                         <div class="row text-center">
@@ -41,16 +81,18 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Empleado</th>
+                                    <th>Fecha</th>
                                     <th>Inicio</th>
                                     <th>Fin</th>
                                     <th>Duración</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="lunchTableBody">
                                 @foreach($lunchData as $lunch)
                                 <tr>
                                     <td>{{ $lunch['user'] }}</td>
+                                    <td>{{ $lunch['date'] }}</td>
                                     <td>{{ $lunch['start'] }}</td>
                                     <td>{{ $lunch['end'] }}</td>
                                     <td>{{ $lunch['duration'] }}</td>
@@ -74,9 +116,50 @@
 
 @push('scripts')
 <script>
+function filterData() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    fetch(`/admin/lunch/data?start=${startDate}&end=${endDate}`)
+        .then(response => response.json())
+        .then(data => {
+            updateTable(data.records);
+            updateStats(data.stats);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function updateTable(records) {
+    const tbody = document.getElementById('lunchTableBody');
+    tbody.innerHTML = '';
+
+    records.forEach(lunch => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${lunch.user}</td>
+                <td>${lunch.date}</td>
+                <td>${lunch.start}</td>
+                <td>${lunch.end}</td>
+                <td>${lunch.duration}</td>
+                <td><span class="${lunch.statusClass}">${lunch.status}</span></td>
+            </tr>
+        `;
+    });
+}
+
+function updateStats(stats) {
+    document.getElementById('averageDuration').textContent = stats.averageDuration;
+    document.getElementById('completedCount').textContent = stats.completedCount;
+    document.getElementById('exceededCount').textContent = stats.exceededCount;
+    document.getElementById('shortCount').textContent = stats.shortCount;
+}
+
 // Actualizar la página cada minuto para mantener las duraciones actualizadas
 setInterval(function() {
-    location.reload();
+    filterData();
 }, 60000);
+
+// Cargar datos iniciales
+document.addEventListener('DOMContentLoaded', filterData);
 </script>
 @endpush
