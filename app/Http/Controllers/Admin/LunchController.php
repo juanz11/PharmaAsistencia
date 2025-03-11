@@ -66,21 +66,4 @@ class LunchController extends Controller
         $remainingMinutes = $minutes % 60;
         return sprintf("%02d:%02d", $hours, $remainingMinutes);
     }
-
-    public function updateLunchTime(Request $request, $id)
-    {
-        $attendance = Attendance::findOrFail($id);
-        
-        if ($request->has('break_start')) {
-            $attendance->break_start = $request->break_start;
-        }
-        
-        if ($request->has('break_end')) {
-            $attendance->break_end = $request->break_end;
-        }
-        
-        $attendance->save();
-        
-        return response()->json(['success' => true]);
-    }
 }

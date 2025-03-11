@@ -80,7 +80,6 @@ Route::middleware('auth')->group(function () {
 
         // Control de Almuerzos
         Route::get('/lunch', [LunchController::class, 'index'])->name('lunch.index');
-        Route::put('/lunch/{id}', [LunchController::class, 'updateLunchTime'])->name('lunch.update');
 
         // Rutas de usuarios
         Route::resource('users', UserController::class);
