@@ -109,7 +109,8 @@ class StatisticsController extends Controller
                             $checkInTime = Carbon::parse($attendance->check_in);
                             $timeFormatted = $checkInTime->format('g:i A');
                             
-                            if ($checkInTime->format('H:i:s') <= '08:00:00') {
+                            // Hora límite de entrada: 8:40 AM
+                            if ($checkInTime->format('H:i:s') <= '08:40:00') {
                                 $onTimeDays++;
                             }
 
@@ -125,7 +126,8 @@ class StatisticsController extends Controller
                             $checkOutTime = Carbon::parse($attendance->check_out);
                             $timeFormatted = $checkOutTime->format('g:i A');
                             
-                            if ($checkOutTime->format('H:i:s') >= '17:00:00') {
+                            // Hora de salida: 4:55 PM - 5:00 PM se considera a tiempo
+                            if ($checkOutTime->format('H:i:s') >= '16:55:00') {
                                 $onTimeDays++;
                             }
 
