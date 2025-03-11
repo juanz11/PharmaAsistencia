@@ -76,7 +76,7 @@
                                     <th>Posición</th>
                                     <th>Nombre</th>
                                     <th>Mejor Tiempo</th>
-                                    <th>Tiempo Promedio</th>
+                                    <th>Dispositivo</th>
                                     <th>Días a Tiempo</th>
                                     <th>Total de Días</th>
                                     <th>Porcentaje</th>
@@ -172,12 +172,13 @@ function loadRankings() {
 
             data.forEach((item, index) => {
                 const percentage = ((item.on_time_days / item.total_days) * 100).toFixed(1);
+                const deviceClass = item.is_unusual_device ? 'text-danger' : '';
                 const row = `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${item.name}</td>
                         <td>${item.best_time}</td>
-                        <td>${item.average_time}</td>
+                        <td class="${deviceClass}">${item.device}</td>
                         <td>${item.on_time_days}</td>
                         <td>${item.total_days}</td>
                         <td>${percentage}%</td>

@@ -141,31 +141,35 @@ class StatisticsController extends Controller
                     }
 
                     if ($bestTimeFormatted !== null && $attendanceDays > 0) {
-                        $averageTime = $totalMinutes / $attendanceDays;
-                        $averageHour = floor($averageTime / 60);
-                        $averageMinute = $averageTime % 60;
+                        // Obtener el dispositivo más común para este usuario
+                        $commonDevice = Attendance::where('user_id', $user->id)
+                            ->whereNotNull($type === 'entrada' ? 'check_in' : 'check_out')
+                            ->select('device', DB::raw('count(*) as count'))
+                            ->groupBy('device')
+                            ->orderByDesc('count')
+                            ->first();
 
-                        if ($type === 'entrada') {
-                            $baseTime = Carbon::parse('08:00:00');
-                            $averageTimeFormatted = $baseTime->copy()->addMinutes($averageTime)->format('g:i A');
-                        } else {
-                            $baseTime = Carbon::parse('17:00:00');
-                            $averageTimeFormatted = $baseTime->copy()->addMinutes($averageTime)->format('g:i A');
-                        }
+                        // Obtener el dispositivo actual
+                        $currentDevice = $attendances->last()->device;
+                        
+                        // Verificar si el dispositivo actual es diferente al común
+                        $isUnusualDevice = $commonDevice && $currentDevice !== $commonDevice->device;
 
                         Log::info('Procesando usuario para rankings', [
                             'user' => $user->name,
                             'type' => $type,
                             'best_time' => $bestTimeFormatted,
-                            'average_time' => $averageTimeFormatted,
+                            'device' => $currentDevice,
+                            'is_unusual_device' => $isUnusualDevice,
                             'on_time_days' => $onTimeDays,
                             'total_days' => $attendanceDays
                         ]);
 
                         $rankings[] = [
                             'name' => $user->name,
-                            'average_time' => $averageTimeFormatted,
                             'best_time' => $bestTimeFormatted,
+                            'device' => $currentDevice,
+                            'is_unusual_device' => $isUnusualDevice,
                             'on_time_days' => $onTimeDays,
                             'total_days' => $attendanceDays
                         ];
