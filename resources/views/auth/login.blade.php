@@ -15,7 +15,7 @@
             <!-- Logo y Título -->
             <div class="text-center mb-8">
                 <div class="flex justify-center">
-                    <img class="w-16" src="/images/logo/logo-white-250.png" alt="SncPharma Logo">
+                    <img class="w-16" src="https://sncpharma.com/wp-content/uploads/2024/09/logo-white-250.svg" alt="SncPharma Logo">
                 </div>
                 <h2 class="mt-6 text-2xl font-bold text-white">
                     Bienvenido de nuevo

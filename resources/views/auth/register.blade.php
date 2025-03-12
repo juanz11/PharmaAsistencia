@@ -44,7 +44,7 @@
         <div class="max-w-md w-full space-y-8">
             <!-- Logo y Título -->
             <div class="text-center">
-                <img src="/images/logo/logo-white-250.png" alt="SncPharma Logo" class="mx-auto h-20 w-auto mb-6">
+                <img src="https://sncpharma.com/wp-content/uploads/2024/09/logo-white-250.svg" alt="SncPharma Logo" class="mx-auto h-20 w-auto mb-6">
                 <h2 class="text-3xl font-bold text-white">
                     Registro de Usuario
                 </h2>

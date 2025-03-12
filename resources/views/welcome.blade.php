@@ -47,7 +47,7 @@
         <div class="max-w-6xl w-full px-6">
             <!-- Logo y Título -->
             <div class="text-center mb-16">
-                <img src="/images/logo/logo-white-250.png" alt="SncPharma Logo" class="mx-auto mb-8 max-w-xs">
+                <img src="https://sncpharma.com/wp-content/uploads/2024/09/logo-white-250.svg" alt="SncPharma Logo" class="mx-auto mb-8 max-w-xs">
                 <h1 class="text-5xl font-bold text-white mb-4 tracking-tight">SncPharma Asistencia</h1>
                 <p class="text-xl text-gray-300 tracking-wide">Sistema Integral de Control de Asistencia</p>
             </div>
