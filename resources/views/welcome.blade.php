@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         .bg-custom {
-            background-image: url('/images/background/login-bg.jpg');
+            background-image: url('https://muestras.sncpharma.com//images/background/login-bg.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
