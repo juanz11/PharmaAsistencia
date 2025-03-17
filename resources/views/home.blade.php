@@ -100,7 +100,7 @@
                         <div class="d-flex flex-column flex-md-row align-items-center">
                             <!-- Columna de la imagen - ajusta automáticamente su tamaño -->
                             <div class="col-12 col-md-6 p-4">
-                                <img src="{{ asset('images/logo/logo.png') }}" alt="Logo" class="img-fluid rounded-3 shadow-sm" style="max-width: 100%; height: auto;">
+                                <img src="https://muestras.sncpharma.com/images/logo/logo.png" alt="Logo" class="img-fluid rounded-3 shadow-sm" style="max-width: 100%; height: auto;">
                             </div>
 
                             <!-- Columna del contenido - se ajusta al espacio restante -->
