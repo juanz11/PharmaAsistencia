@@ -81,13 +81,13 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Posición</th>
+                                    <th>#</th>
                                     <th>Nombre</th>
                                     <th>Mejor Tiempo</th>
                                     <th>Dispositivo</th>
                                     <th>Días a Tiempo</th>
                                     <th>Total de Días Laborados</th>
-                                    <th>Porcentaje</th>
+                               
                                 </tr>
                             </thead>
                             <tbody id="rankings-body">
@@ -229,7 +229,7 @@ function loadRankings() {
                         <td class="${deviceClass}">${item.device}</td>
                         <td>${item.on_time_days}</td>
                         <td>${item.total_days}</td>
-                        <td>${percentage}%</td>
+                 
                     </tr>`;
                 tbody.innerHTML += row;
             });

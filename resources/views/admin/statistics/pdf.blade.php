@@ -106,13 +106,13 @@
     <table>
         <thead>
             <tr>
-                <th width="8%">Posición</th>
+                <th width="8%">#</th>
                 <th width="25%">Nombre</th>
                 <th width="15%">Mejor Tiempo</th>
                 <th width="20%">Dispositivo</th>
                 <th width="10%">Días a Tiempo</th>
                 <th width="10%">Total Días</th>
-                <th width="12%">Porcentaje</th>
+               
             </tr>
         </thead>
         <tbody>
@@ -126,9 +126,7 @@
                     </td>
                     <td>{{ $ranking['on_time_days'] }}</td>
                     <td>{{ $ranking['total_days'] }}</td>
-                    <td class="percentage {{ $ranking['percentage'] >= 80 ? 'good-percentage' : ($ranking['percentage'] < 60 ? 'bad-percentage' : '') }}">
-                        {{ $ranking['percentage'] }}%
-                    </td>
+                   
                 </tr>
             @endforeach
         </tbody>

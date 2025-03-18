@@ -38,13 +38,12 @@ class RankingsExport implements FromCollection, WithHeadings, WithTitle, WithSty
     public function headings(): array
     {
         return [
-            'Posición',
+            '#',
             'Nombre',
             'Mejor Tiempo',
             'Dispositivo',
             'Días a Tiempo',
             'Total de Días',
-            'Porcentaje'
         ];
     }
 
@@ -57,7 +56,6 @@ class RankingsExport implements FromCollection, WithHeadings, WithTitle, WithSty
             $ranking['device'],
             $ranking['on_time_days'],
             $ranking['total_days'],
-            $ranking['percentage'] . '%'
         ];
     }
 
