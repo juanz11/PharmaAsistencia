@@ -89,81 +89,79 @@ class StatisticsController extends Controller
 
                     $attendances = $query->get();
 
-                    if ($attendances->isEmpty()) {
-                        continue;
-                    }
-
                     $onTimeDays = 0;
                     $totalMinutes = 0;
                     $attendanceDays = 0;
                     $bestTimeValue = null;
                     $bestTimeFormatted = null;
 
-                    foreach ($attendances as $attendance) {
-                        $currentDate = Carbon::parse($attendance->created_at);
-                        
-                        if ($currentDate->isAfter($now)) {
-                            continue;
-                        }
-
-                        $attendanceDays++;
-
-                        if ($type === 'entrada') {
-                            $checkInTime = Carbon::parse($attendance->check_in);
-                            $timeFormatted = $checkInTime->format('g:i A');
+                    if ($attendances->count() > 0) {
+                        foreach ($attendances as $attendance) {
+                            $currentDate = Carbon::parse($attendance->created_at);
                             
-                            // Hora límite de entrada: 8:40 AM
-                            if ($checkInTime->format('H:i:s') <= '08:40:00') {
-                                $onTimeDays++;
+                            if ($currentDate->isAfter($now)) {
+                                continue;
                             }
 
-                            if (!$bestTimeValue || $checkInTime->format('H:i:s') < $bestTimeValue->format('H:i:s')) {
-                                $bestTimeValue = $checkInTime;
-                                $bestTimeFormatted = $timeFormatted;
+                            $attendanceDays++;
+
+                            if ($type === 'entrada') {
+                                $checkInTime = Carbon::parse($attendance->check_in);
+                                $timeFormatted = $checkInTime->format('g:i A');
+                                
+                                // Hora límite de entrada: 8:40 AM
+                                if ($checkInTime->format('H:i:s') <= '08:40:00') {
+                                    $onTimeDays++;
+                                }
+
+                                if (!$bestTimeValue || $checkInTime->format('H:i:s') < $bestTimeValue->format('H:i:s')) {
+                                    $bestTimeValue = $checkInTime;
+                                    $bestTimeFormatted = $timeFormatted;
+                                }
+
+                                $totalMinutes += $checkInTime->diffInMinutes(Carbon::parse($checkInTime->format('Y-m-d') . ' 08:00:00'));
+                            } else {
+                                if (!$attendance->check_out) continue;
+                                
+                                $checkOutTime = Carbon::parse($attendance->check_out);
+                                $timeFormatted = $checkOutTime->format('g:i A');
+                                
+                                // Hora de salida: 4:55 PM - 5:00 PM se considera a tiempo
+                                if ($checkOutTime->format('H:i:s') >= '16:55:00') {
+                                    $onTimeDays++;
+                                }
+
+                                if (!$bestTimeValue || $checkOutTime->format('H:i:s') > $bestTimeValue->format('H:i:s')) {
+                                    $bestTimeValue = $checkOutTime;
+                                    $bestTimeFormatted = $timeFormatted;
+                                }
+
+                                $totalMinutes += $checkOutTime->diffInMinutes(Carbon::parse($checkOutTime->format('Y-m-d') . ' 17:00:00'));
                             }
 
-                            $totalMinutes += $checkInTime->diffInMinutes(Carbon::parse($checkInTime->format('Y-m-d') . ' 08:00:00'));
-                        } else {
-                            if (!$attendance->check_out) continue;
-                            
-                            $checkOutTime = Carbon::parse($attendance->check_out);
-                            $timeFormatted = $checkOutTime->format('g:i A');
-                            
-                            // Hora de salida: 4:55 PM - 5:00 PM se considera a tiempo
-                            if ($checkOutTime->format('H:i:s') >= '16:55:00') {
-                                $onTimeDays++;
+                            // Calcular horas trabajadas si tenemos check_in y check_out
+                            if ($attendance->check_in && $attendance->check_out) {
+                                $checkInTime = Carbon::parse($attendance->check_in);
+                                $checkOutTime = Carbon::parse($attendance->check_out);
+                                
+                                // Obtener la duración del almuerzo
+                                $lunchDuration = 60; // Por defecto 1 hora
+                                if ($attendance->break_start && $attendance->break_end) {
+                                    $lunchDuration = Carbon::parse($attendance->break_start)
+                                        ->diffInMinutes(Carbon::parse($attendance->break_end));
+                                }
+                                
+                                // Calcular tiempo total trabajado (usando abs para asegurar valor positivo)
+                                $totalWorkedMinutes = abs($checkOutTime->diffInMinutes($checkInTime));
+                                $workedMinutes = floor($totalWorkedMinutes - $lunchDuration);
+                                
+                                // Agregar a las horas trabajadas totales
+                                $attendance->working_minutes = $workedMinutes;
                             }
-
-                            if (!$bestTimeValue || $checkOutTime->format('H:i:s') > $bestTimeValue->format('H:i:s')) {
-                                $bestTimeValue = $checkOutTime;
-                                $bestTimeFormatted = $timeFormatted;
-                            }
-
-                            $totalMinutes += $checkOutTime->diffInMinutes(Carbon::parse($checkOutTime->format('Y-m-d') . ' 17:00:00'));
-                        }
-
-                        // Calcular horas trabajadas si tenemos check_in y check_out
-                        if ($attendance->check_in && $attendance->check_out) {
-                            $checkInTime = Carbon::parse($attendance->check_in);
-                            $checkOutTime = Carbon::parse($attendance->check_out);
-                            
-                            // Obtener la duración del almuerzo
-                            $lunchDuration = 60; // Por defecto 1 hora
-                            if ($attendance->break_start && $attendance->break_end) {
-                                $lunchDuration = Carbon::parse($attendance->break_start)
-                                    ->diffInMinutes(Carbon::parse($attendance->break_end));
-                            }
-                            
-                            // Calcular tiempo total trabajado (usando abs para asegurar valor positivo)
-                            $totalWorkedMinutes = abs($checkOutTime->diffInMinutes($checkInTime));
-                            $workedMinutes = floor($totalWorkedMinutes - $lunchDuration);
-                            
-                            // Agregar a las horas trabajadas totales
-                            $attendance->working_minutes = $workedMinutes;
                         }
                     }
 
-                    if ($bestTimeFormatted !== null && $attendanceDays > 0) {
+                    if ($bestTimeFormatted !== null || $attendanceDays > 0) {
                         // Calcular promedio de minutos trabajados
                         $totalWorkingMinutes = $attendances->sum('working_minutes');
                         $averageWorkingMinutes = $attendanceDays > 0 ? floor($totalWorkingMinutes / $attendanceDays) : 0;
@@ -182,8 +180,8 @@ class StatisticsController extends Controller
                             ->first();
 
                         // Obtener el dispositivo actual, excluyendo info del navegador
-                        $currentDeviceFull = $attendances->last()->device;
-                        $currentDevice = explode(' - ', $currentDeviceFull)[0];
+                        $currentDeviceFull = $attendances->last()->device ?? null;
+                        $currentDevice = explode(' - ', $currentDeviceFull)[0] ?? null;
                         
                         // Verificar si el equipo actual es diferente al común
                         $isUnusualDevice = $commonDevice && $currentDevice !== $commonDevice->base_device;
@@ -211,6 +209,18 @@ class StatisticsController extends Controller
                             'on_time_days' => $onTimeDays,
                             'total_days' => $attendanceDays
                         ];
+                    } else {
+                        $rankings[] = [
+                            'name' => $user->name,
+                            'department' => $user->department,
+                            'best_time' => null,
+                            'device' => null,
+                            'is_unusual_device' => false,
+                            'working_hours' => null,
+                            'working_minutes' => 0, // Para comparación en frontend
+                            'on_time_days' => 0,
+                            'total_days' => 0
+                        ];
                     }
                 } catch (Exception $e) {
                     Log::error('Error procesando usuario', [
@@ -223,16 +233,17 @@ class StatisticsController extends Controller
 
             if (!empty($rankings)) {
                 usort($rankings, function($a, $b) use ($type) {
+                    // Si uno tiene best_time y el otro no, el que tiene va primero
+                    if ($a['best_time'] === null && $b['best_time'] !== null) return 1;
+                    if ($a['best_time'] !== null && $b['best_time'] === null) return -1;
+                    if ($a['best_time'] === null && $b['best_time'] === null) return 0;
+
                     $timeA = Carbon::createFromFormat('g:i A', $a['best_time'])->timestamp;
                     $timeB = Carbon::createFromFormat('g:i A', $b['best_time'])->timestamp;
                     
                     // Para entrada, el mejor tiempo es el más temprano
                     // Para salida, el mejor tiempo es el más tardío
-                    if ($type === 'entrada') {
-                        return $timeA - $timeB;
-                    } else {
-                        return $timeB - $timeA;
-                    }
+                    return $type === 'entrada' ? $timeA - $timeB : $timeB - $timeA;
                 });
 
                 Log::info('Rankings ordenados', [
@@ -327,60 +338,58 @@ class StatisticsController extends Controller
 
             $attendances = $query->get();
 
-            if ($attendances->isEmpty()) {
-                continue;
-            }
-
             $onTimeDays = 0;
             $totalDays = 0;
             $bestTimeValue = null;
             $bestTimeFormatted = null;
 
-            foreach ($attendances as $attendance) {
-                $totalDays++;
+            if ($attendances->count() > 0) {
+                foreach ($attendances as $attendance) {
+                    $totalDays++;
 
-                if ($type === 'entrada') {
-                    $checkTime = Carbon::parse($attendance->check_in);
-                    if ($checkTime->format('H:i:s') <= '08:40:00') {
-                        $onTimeDays++;
+                    if ($type === 'entrada') {
+                        $checkTime = Carbon::parse($attendance->check_in);
+                        if ($checkTime->format('H:i:s') <= '08:40:00') {
+                            $onTimeDays++;
+                        }
+                        if (!$bestTimeValue || $checkTime->format('H:i:s') < $bestTimeValue->format('H:i:s')) {
+                            $bestTimeValue = $checkTime;
+                            $bestTimeFormatted = $checkTime->format('g:i A');
+                        }
+                    } else {
+                        $checkTime = Carbon::parse($attendance->check_out);
+                        if ($checkTime->format('H:i:s') >= '16:55:00') {
+                            $onTimeDays++;
+                        }
+                        if (!$bestTimeValue || $checkTime->format('H:i:s') > $bestTimeValue->format('H:i:s')) {
+                            $bestTimeValue = $checkTime;
+                            $bestTimeFormatted = $checkTime->format('g:i A');
+                        }
                     }
-                    if (!$bestTimeValue || $checkTime->format('H:i:s') < $bestTimeValue->format('H:i:s')) {
-                        $bestTimeValue = $checkTime;
-                        $bestTimeFormatted = $checkTime->format('g:i A');
-                    }
-                } else {
-                    $checkTime = Carbon::parse($attendance->check_out);
-                    if ($checkTime->format('H:i:s') >= '16:55:00') {
-                        $onTimeDays++;
-                    }
-                    if (!$bestTimeValue || $checkTime->format('H:i:s') > $bestTimeValue->format('H:i:s')) {
-                        $bestTimeValue = $checkTime;
-                        $bestTimeFormatted = $checkTime->format('g:i A');
-                    }
-                }
 
-                // Calcular horas trabajadas si tenemos check_in y check_out
-                if ($attendance->check_in && $attendance->check_out) {
-                    $checkInTime = Carbon::parse($attendance->check_in);
-                    $checkOutTime = Carbon::parse($attendance->check_out);
-                    
-                    // Obtener la duración del almuerzo
-                    $lunchDuration = 60; // Por defecto 1 hora
-                    if ($attendance->break_start && $attendance->break_end) {
-                        $lunchDuration = Carbon::parse($attendance->break_start)
-                            ->diffInMinutes(Carbon::parse($attendance->break_end));
+                    // Calcular horas trabajadas si tenemos check_in y check_out
+                    if ($attendance->check_in && $attendance->check_out) {
+                        $checkInTime = Carbon::parse($attendance->check_in);
+                        $checkOutTime = Carbon::parse($attendance->check_out);
+                        
+                        // Obtener la duración del almuerzo
+                        $lunchDuration = 60; // Por defecto 1 hora
+                        if ($attendance->break_start && $attendance->break_end) {
+                            $lunchDuration = Carbon::parse($attendance->break_start)
+                                ->diffInMinutes(Carbon::parse($attendance->break_end));
+                        }
+                        
+                        // Calcular tiempo total trabajado (usando abs para asegurar valor positivo)
+                        $totalWorkedMinutes = abs($checkOutTime->diffInMinutes($checkInTime));
+                        $workedMinutes = floor($totalWorkedMinutes - $lunchDuration);
+                        
+                        // Agregar a las horas trabajadas totales
+                        $attendance->working_minutes = $workedMinutes;
                     }
-                    
-                    // Calcular tiempo total trabajado (usando abs para asegurar valor positivo)
-                    $totalWorkedMinutes = abs($checkOutTime->diffInMinutes($checkInTime));
-                    $workedMinutes = floor($totalWorkedMinutes - $lunchDuration);
-                    
-                    // Agregar a las horas trabajadas totales
-                    $attendance->working_minutes = $workedMinutes;
                 }
             }
 
-            if ($bestTimeFormatted !== null) {
+            if ($bestTimeFormatted !== null || $totalDays > 0) {
                 // Calcular promedio de minutos trabajados
                 $totalWorkingMinutes = $attendances->sum('working_minutes');
                 $averageWorkingMinutes = $totalDays > 0 ? floor($totalWorkingMinutes / $totalDays) : 0;
@@ -398,7 +407,7 @@ class StatisticsController extends Controller
                     ->orderByDesc('count')
                     ->first();
 
-                $currentDevice = $attendances->last()->device;
+                $currentDevice = $attendances->last()->device ?? null;
                 $isUnusualDevice = $commonDevice && $currentDevice !== $commonDevice->device;
 
                 $rankings[] = [
@@ -413,11 +422,29 @@ class StatisticsController extends Controller
                     'total_days' => $totalDays,
                     'percentage' => number_format(($onTimeDays / $totalDays) * 100, 1)
                 ];
+            } else {
+                $rankings[] = [
+                    'name' => $user->name,
+                    'department' => $user->department,
+                    'best_time' => null,
+                    'device' => null,
+                    'is_unusual_device' => false,
+                    'working_hours' => null,
+                    'working_minutes' => 0, // Para comparación en frontend
+                    'on_time_days' => 0,
+                    'total_days' => 0,
+                    'percentage' => 0
+                ];
             }
         }
 
         // Ordenar rankings
         usort($rankings, function($a, $b) use ($type) {
+            // Si uno tiene best_time y el otro no, el que tiene va primero
+            if ($a['best_time'] === null && $b['best_time'] !== null) return 1;
+            if ($a['best_time'] !== null && $b['best_time'] === null) return -1;
+            if ($a['best_time'] === null && $b['best_time'] === null) return 0;
+
             $timeA = Carbon::createFromFormat('g:i A', $a['best_time'])->timestamp;
             $timeB = Carbon::createFromFormat('g:i A', $b['best_time'])->timestamp;
             

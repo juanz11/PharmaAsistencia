@@ -228,17 +228,17 @@ function loadRankings() {
                 
                 const hours = Math.floor(item.working_minutes / 60);
                 const minutes = item.working_minutes % 60;
-                const workingHours = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                const workingHours = item.working_minutes ? `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}` : 'No marcó';
                 
                 const row = `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${item.name}</td>
-                        <td>${item.best_time}</td>
-                        <td class="${deviceClass}">${item.device}</td>
+                        <td>${item.best_time || 'No marcó'}</td>
+                        <td class="${deviceClass}">${item.device || 'No marcó'}</td>
                         <td class="${workingHoursClass}">${workingHours}</td>
-                        <td>${item.on_time_days}</td>
-                        <td>${item.total_days}</td>
+                        <td>${item.on_time_days || 0}</td>
+                        <td>${item.total_days || 0}</td>
                     </tr>`;
                 tbody.innerHTML += row;
             });
