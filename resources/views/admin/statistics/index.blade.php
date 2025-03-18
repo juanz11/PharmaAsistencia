@@ -83,7 +83,6 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nombre</th>
-                                    <th>Departamento</th>
                                     <th>Mejor Tiempo</th>
                                     <th>Dispositivo</th>
                                     <th>Horas Trabajadas</th>
@@ -235,7 +234,6 @@ function loadRankings() {
                     <tr>
                         <td>${index + 1}</td>
                         <td>${item.name}</td>
-                        <td>${item.department || 'No asignado'}</td>
                         <td>${item.best_time}</td>
                         <td class="${deviceClass}">${item.device}</td>
                         <td class="${workingHoursClass}">${workingHours}</td>
