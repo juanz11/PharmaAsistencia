@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'location',
         'role',
+        'department',
         'identification',
         'join_date',
         'phone',

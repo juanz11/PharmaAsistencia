@@ -29,6 +29,8 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'identification' => ['required', 'string', 'max:20', 'unique:users'],
             'join_date' => ['required', 'date'],
+            'department' => ['nullable', 'string', 'max:50'],
+            'location' => ['required', 'string', 'max:255'],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -52,6 +54,8 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'identification' => ['required', 'string', 'max:20', Rule::unique('users')->ignore($user->id)],
             'join_date' => ['required', 'date'],
+            'department' => ['nullable', 'string', 'max:50'],
+            'location' => ['required', 'string', 'max:255'],
         ]);
 
         $user->update($validated);

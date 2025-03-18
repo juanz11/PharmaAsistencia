@@ -73,6 +73,28 @@
             </div>
 
             <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="department">
+                    Departamento
+                </label>
+                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                    id="department" 
+                    name="department">
+                    <option value="">Seleccionar departamento</option>
+                    <option value="RECURSOS HUMANOS" {{ old('department', $user->department) == 'RECURSOS HUMANOS' ? 'selected' : '' }}>RECURSOS HUMANOS</option>
+                    <option value="PRESIDENCIA" {{ old('department', $user->department) == 'PRESIDENCIA' ? 'selected' : '' }}>PRESIDENCIA</option>
+                    <option value="ADMINISTRACION" {{ old('department', $user->department) == 'ADMINISTRACION' ? 'selected' : '' }}>ADMINISTRACION</option>
+                    <option value="COMERCIAL" {{ old('department', $user->department) == 'COMERCIAL' ? 'selected' : '' }}>COMERCIAL</option>
+                    <option value="MERCADEO" {{ old('department', $user->department) == 'MERCADEO' ? 'selected' : '' }}>MERCADEO</option>
+                    <option value="CONSULTORIA JURIDICA" {{ old('department', $user->department) == 'CONSULTORIA JURIDICA' ? 'selected' : '' }}>CONSULTORIA JURIDICA</option>
+                    <option value="LOGISTICA Y ALMACEN" {{ old('department', $user->department) == 'LOGISTICA Y ALMACEN' ? 'selected' : '' }}>LOGISTICA Y ALMACEN</option>
+                    <option value="SERVICIOS GENERALES" {{ old('department', $user->department) == 'SERVICIOS GENERALES' ? 'selected' : '' }}>SERVICIOS GENERALES</option>
+                    <option value="MENTE Y SALUD" {{ old('department', $user->department) == 'MENTE Y SALUD' ? 'selected' : '' }}>MENTE Y SALUD</option>
+                    <option value="TECNOLOGIA DE LA INFORMACION" {{ old('department', $user->department) == 'TECNOLOGIA DE LA INFORMACION' ? 'selected' : '' }}>TECNOLOGIA DE LA INFORMACION</option>
+                    <option value="FINANZAS" {{ old('department', $user->department) == 'FINANZAS' ? 'selected' : '' }}>FINANZAS</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="join_date">
                     Fecha de Ingreso
                 </label>

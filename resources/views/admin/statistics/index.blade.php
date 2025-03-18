@@ -83,16 +83,17 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nombre</th>
+                                    <th>Departamento</th>
                                     <th>Mejor Tiempo</th>
                                     <th>Dispositivo</th>
+                                    <th>Horas Trabajadas</th>
                                     <th>Días a Tiempo</th>
                                     <th>Total de Días Laborados</th>
-                               
                                 </tr>
                             </thead>
                             <tbody id="rankings-body">
                                 <tr>
-                                    <td colspan="7" class="text-center">
+                                    <td colspan="8" class="text-center">
                                         <i class="fas fa-spinner fa-spin"></i> Cargando datos...
                                     </td>
                                 </tr>
@@ -168,7 +169,7 @@ function loadRankings() {
     // Mostrar mensaje de carga
     document.getElementById('rankings-body').innerHTML = `
         <tr>
-            <td colspan="7" class="text-center">
+            <td colspan="8" class="text-center">
                 <i class="fas fa-spinner fa-spin"></i> Cargando...
             </td>
         </tr>
@@ -207,7 +208,7 @@ function loadRankings() {
             if (data.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="text-center">
+                        <td colspan="8" class="text-center">
                             <i class="fas fa-info-circle"></i> No hay datos disponibles para el período seleccionado
                         </td>
                     </tr>`;
@@ -221,15 +222,25 @@ function loadRankings() {
             data.forEach((item, index) => {
                 const percentage = ((item.on_time_days / item.total_days) * 100).toFixed(1);
                 const deviceClass = item.is_unusual_device ? 'text-danger' : '';
+                
+                // 7 horas y 20 minutos = 440 minutos
+                const workingHoursClass = item.working_minutes >= 440 ? 'text-success' : 
+                                        item.working_minutes < 440 ? 'text-warning' : '';
+                
+                const hours = Math.floor(item.working_minutes / 60);
+                const minutes = item.working_minutes % 60;
+                const workingHours = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                
                 const row = `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${item.name}</td>
+                        <td>${item.department || 'No asignado'}</td>
                         <td>${item.best_time}</td>
                         <td class="${deviceClass}">${item.device}</td>
+                        <td class="${workingHoursClass}">${workingHours}</td>
                         <td>${item.on_time_days}</td>
                         <td>${item.total_days}</td>
-                 
                     </tr>`;
                 tbody.innerHTML += row;
             });
@@ -238,7 +249,7 @@ function loadRankings() {
             console.error('Error:', error);
             document.getElementById('rankings-body').innerHTML = `
                 <tr>
-                    <td colspan="7" class="text-center text-danger">
+                    <td colspan="8" class="text-center text-danger">
                         <i class="fas fa-exclamation-circle"></i> Error al cargar los datos: ${error.message}
                     </td>
                 </tr>`;

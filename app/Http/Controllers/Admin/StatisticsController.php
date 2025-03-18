@@ -141,9 +141,38 @@ class StatisticsController extends Controller
 
                             $totalMinutes += $checkOutTime->diffInMinutes(Carbon::parse($checkOutTime->format('Y-m-d') . ' 17:00:00'));
                         }
+
+                        // Calcular horas trabajadas si tenemos check_in y check_out
+                        if ($attendance->check_in && $attendance->check_out) {
+                            $checkInTime = Carbon::parse($attendance->check_in);
+                            $checkOutTime = Carbon::parse($attendance->check_out);
+                            
+                            // Obtener la duración del almuerzo
+                            $lunchDuration = 60; // Por defecto 1 hora
+                            if ($attendance->break_start && $attendance->break_end) {
+                                $lunchDuration = Carbon::parse($attendance->break_start)
+                                    ->diffInMinutes(Carbon::parse($attendance->break_end));
+                            }
+                            
+                            // Calcular tiempo total trabajado (usando abs para asegurar valor positivo)
+                            $totalWorkedMinutes = abs($checkOutTime->diffInMinutes($checkInTime));
+                            $workedMinutes = floor($totalWorkedMinutes - $lunchDuration);
+                            
+                            // Agregar a las horas trabajadas totales
+                            $attendance->working_minutes = $workedMinutes;
+                        }
                     }
 
                     if ($bestTimeFormatted !== null && $attendanceDays > 0) {
+                        // Calcular promedio de minutos trabajados
+                        $totalWorkingMinutes = $attendances->sum('working_minutes');
+                        $averageWorkingMinutes = $attendanceDays > 0 ? floor($totalWorkingMinutes / $attendanceDays) : 0;
+
+                        // Formatear a HH:MM
+                        $hours = floor($averageWorkingMinutes / 60);
+                        $minutes = $averageWorkingMinutes % 60;
+                        $formattedWorkingHours = sprintf('%02d:%02d', $hours, $minutes);
+
                         // Obtener el dispositivo más común para este usuario, excluyendo info del navegador
                         $commonDevice = Attendance::where('user_id', $user->id)
                             ->whereNotNull($type === 'entrada' ? 'check_in' : 'check_out')
@@ -173,9 +202,12 @@ class StatisticsController extends Controller
 
                         $rankings[] = [
                             'name' => $user->name,
+                            'department' => $user->department,
                             'best_time' => $bestTimeFormatted,
                             'device' => $currentDeviceFull,
                             'is_unusual_device' => $isUnusualDevice,
+                            'working_hours' => $formattedWorkingHours,
+                            'working_minutes' => $averageWorkingMinutes, // Para comparación en frontend
                             'on_time_days' => $onTimeDays,
                             'total_days' => $attendanceDays
                         ];
@@ -326,25 +358,57 @@ class StatisticsController extends Controller
                         $bestTimeFormatted = $checkTime->format('g:i A');
                     }
                 }
+
+                // Calcular horas trabajadas si tenemos check_in y check_out
+                if ($attendance->check_in && $attendance->check_out) {
+                    $checkInTime = Carbon::parse($attendance->check_in);
+                    $checkOutTime = Carbon::parse($attendance->check_out);
+                    
+                    // Obtener la duración del almuerzo
+                    $lunchDuration = 60; // Por defecto 1 hora
+                    if ($attendance->break_start && $attendance->break_end) {
+                        $lunchDuration = Carbon::parse($attendance->break_start)
+                            ->diffInMinutes(Carbon::parse($attendance->break_end));
+                    }
+                    
+                    // Calcular tiempo total trabajado (usando abs para asegurar valor positivo)
+                    $totalWorkedMinutes = abs($checkOutTime->diffInMinutes($checkInTime));
+                    $workedMinutes = floor($totalWorkedMinutes - $lunchDuration);
+                    
+                    // Agregar a las horas trabajadas totales
+                    $attendance->working_minutes = $workedMinutes;
+                }
             }
 
-            // Obtener el dispositivo más común
-            $commonDevice = Attendance::where('user_id', $user->id)
-                ->whereNotNull($type === 'entrada' ? 'check_in' : 'check_out')
-                ->select('device', DB::raw('count(*) as count'))
-                ->groupBy('device')
-                ->orderByDesc('count')
-                ->first();
-
-            $currentDevice = $attendances->last()->device;
-            $isUnusualDevice = $commonDevice && $currentDevice !== $commonDevice->device;
-
             if ($bestTimeFormatted !== null) {
+                // Calcular promedio de minutos trabajados
+                $totalWorkingMinutes = $attendances->sum('working_minutes');
+                $averageWorkingMinutes = $totalDays > 0 ? floor($totalWorkingMinutes / $totalDays) : 0;
+
+                // Formatear a HH:MM
+                $hours = floor($averageWorkingMinutes / 60);
+                $minutes = $averageWorkingMinutes % 60;
+                $formattedWorkingHours = sprintf('%02d:%02d', $hours, $minutes);
+
+                // Obtener el dispositivo más común
+                $commonDevice = Attendance::where('user_id', $user->id)
+                    ->whereNotNull($type === 'entrada' ? 'check_in' : 'check_out')
+                    ->select('device', DB::raw('count(*) as count'))
+                    ->groupBy('device')
+                    ->orderByDesc('count')
+                    ->first();
+
+                $currentDevice = $attendances->last()->device;
+                $isUnusualDevice = $commonDevice && $currentDevice !== $commonDevice->device;
+
                 $rankings[] = [
                     'name' => $user->name,
+                    'department' => $user->department,
                     'best_time' => $bestTimeFormatted,
                     'device' => $currentDevice,
                     'is_unusual_device' => $isUnusualDevice,
+                    'working_hours' => $formattedWorkingHours,
+                    'working_minutes' => $averageWorkingMinutes, // Para comparación en frontend
                     'on_time_days' => $onTimeDays,
                     'total_days' => $totalDays,
                     'percentage' => number_format(($onTimeDays / $totalDays) * 100, 1)
