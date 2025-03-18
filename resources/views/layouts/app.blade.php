@@ -44,7 +44,7 @@
                                     <a class="nav-link" href="{{ route('admin.attendance.index') }}">{{ __('Asistencias') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('admin.statistics') }}">{{ __('Estadísticas') }}</a>
+                                    <a class="nav-link" href="{{ route('admin.statistics') }}">{{ __('Estadisticas') }}</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin.lunch.index') }}">{{ __('Control de Almuerzos') }}</a>
@@ -87,13 +87,13 @@
                                     </a>
                                     
                                     <a class="dropdown-item" href="{{ route('user.edit') }}">
-                                        {{ __('Actualizar Información') }}
+                                        {{ __('Actualizar Informacion') }}
                                     </a>
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Cerrar Sesión') }}
+                                        {{ __('Cerrar Sesion') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

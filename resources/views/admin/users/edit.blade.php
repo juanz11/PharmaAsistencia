@@ -50,7 +50,7 @@
 
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="identification">
-                    Identificación
+                    Identificacion
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id="identification" 
@@ -62,7 +62,7 @@
 
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="location">
-                    Ubicación
+                    Ubicacion
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                     id="location" 
