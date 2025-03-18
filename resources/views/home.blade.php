@@ -97,7 +97,9 @@
                 <div class="card shadow-sm">
                     <div class="card-body p-0">
                         <!-- Contenedor principal con flexbox -->
-                        <div class="d-flex flex-column flex-md-row align-items-center">
+                        <div class="d-flex flex-column flex-md-row align-items-center" style="
+    width: 80%;
+">
                             <!-- Columna de la imagen - ajusta automáticamente su tamaño -->
                             <div class="col-12 col-md-6 p-4">
                                 <img src="https://muestras.sncpharma.com/images/logo/logo.png" alt="Logo" class="img-fluid rounded-3 shadow-sm" style="max-width: 100%; height: auto;">
@@ -183,13 +185,16 @@
                                         <div class="card-body text-center">
                                             <p class="text-gray-600 mb-3">
                                                 <i class="fas fa-info-circle text-primary me-2"></i>
-                                                <span class="font-medium"><strong>Nota:</strong></span> 
                                                 Este sistema de asistencia es una herramienta diseñada para apoyar la organización del equipo y facilitar nuestra dinámica de trabajo. 
-                                                Su objetivo es ayudarnos a mantener una comunicación fluida y asegurar que todos estemos alineados. 😊
+                                                Su objetivo es dar cumplimiento a las políticas de la empresa y garantizar el compromiso y sentido de responsabilidad de los trabajadores respecto a su horario de trabajo.
+                                            </p>
+                                            <p class="text-gray-600 mb-3">
+                                                <i class="fas fa-lightbulb text-warning me-2"></i>
+                                                De acuerdo al Art. 167 de la LOTTT se entiende por jornada de trabajo, el tiempo durante el cual el trabajador o la trabajadora está a
+                                                    disposición para cumplir con las responsabilidades y tareas a su cargo.
                                             </p>
                                             <p class="text-gray-600 mb-0">
                                                 <i class="fas fa-lightbulb text-warning me-2"></i>
-                                                <span class="font-medium"><strong>Tip:</strong></span> 
                                                 <strong>Recuerda marcar tu entrada y salida cada día.</strong> 
                                                 ¡Tu participación es clave para que todo funcione mejor!
                                             </p>

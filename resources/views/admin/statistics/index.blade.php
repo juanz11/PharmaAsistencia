@@ -86,7 +86,7 @@
                                     <th>Mejor Tiempo</th>
                                     <th>Dispositivo</th>
                                     <th>Días a Tiempo</th>
-                                    <th>Total de Días</th>
+                                    <th>Total de Días Laborados</th>
                                     <th>Porcentaje</th>
                                 </tr>
                             </thead>

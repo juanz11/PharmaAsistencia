@@ -66,7 +66,7 @@
 
                 <div class="feature-card rounded-xl p-8">
                     <h2 class="feature-title text-2xl mb-4">Gestión de Personal</h2>
-                    <p class="feature-text">Administra la información de empleados y horarios de forma centralizada, con control total y seguridad.</p>
+                    <p class="feature-text">Administra la información general y horarios de forma centralizada, con control total y seguridad.</p>
                 </div>
             </div>
 
