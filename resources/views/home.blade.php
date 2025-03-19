@@ -213,6 +213,23 @@
 
 @push('scripts')
 <script>
+const userDepartment = "{{ auth()->user()->department }}";
+
+function isMobileDevice() {
+    // Detecta si es realmente un dispositivo móvil y no solo una vista móvil
+    const isRealMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+        && ('ontouchstart' in window) 
+        && !window.matchMedia('(pointer: fine)').matches 
+        && !window.matchMedia('(hover: hover)').matches;
+
+    // Detecta si es una vista de dispositivo en las herramientas de desarrollo
+    const isDevTools = window.outerWidth !== window.innerWidth 
+        && /Mobile|Android|iPhone/i.test(navigator.userAgent);
+
+    // Solo retorna true si es un dispositivo móvil real y no las herramientas de desarrollo
+    return isRealMobile && !isDevTools;
+}
+
 function updateClock() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -225,6 +242,17 @@ setInterval(updateClock, 1000);
 updateClock();
 
 function markAttendance(type) {
+    if (isMobileDevice() && userDepartment !== 'COMERCIAL') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Acceso Denegado',
+            text: 'No puedes marcar fuera de las instalaciones. Por favor, utiliza una computadora registrada.',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6'
+        });
+        return;
+    }
+
     fetch(`/attendance/${type}`, {
         method: 'POST',
         headers: {
@@ -232,11 +260,31 @@ function markAttendance(type) {
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => Promise.reject(err));
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             window.location.reload();
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message,
+                confirmButtonText: 'Aceptar'
+            });
         }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'No se pudo procesar la solicitud',
+            confirmButtonText: 'Aceptar'
+        });
     });
 }
 
