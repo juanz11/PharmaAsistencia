@@ -25,6 +25,14 @@ class AttendanceController extends Controller
 
     public function checkIn(Request $request)
     {
+        // Verificar si es un dispositivo móvil
+        if ($this->isMobileDevice($request)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
+            ], 403);
+        }
+
         $today = now();
         $user = auth()->user();
 
@@ -61,6 +69,14 @@ class AttendanceController extends Controller
 
     public function checkOut(Request $request)
     {
+        // Verificar si es un dispositivo móvil
+        if ($this->isMobileDevice($request)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
+            ], 403);
+        }
+
         $today = Carbon::today();
         $attendance = Attendance::where('user_id', auth()->id())
             ->whereDate('created_at', $today)
@@ -168,6 +184,14 @@ class AttendanceController extends Controller
 
     public function breakStart(Request $request)
     {
+        // Verificar si es un dispositivo móvil
+        if ($this->isMobileDevice($request)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
+            ], 403);
+        }
+
         $today = Carbon::today();
         $attendance = Attendance::where('user_id', auth()->id())
             ->whereDate('created_at', $today)
@@ -198,6 +222,14 @@ class AttendanceController extends Controller
 
     public function breakEnd(Request $request)
     {
+        // Verificar si es un dispositivo móvil
+        if ($this->isMobileDevice($request)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
+            ], 403);
+        }
+
         $today = Carbon::today();
         $attendance = Attendance::where('user_id', auth()->id())
             ->whereDate('created_at', $today)
@@ -224,5 +256,36 @@ class AttendanceController extends Controller
             'success' => true,
             'message' => 'Almuerzo finalizado correctamente'
         ]);
+    }
+
+    /**
+     * Determina si la solicitud proviene de un dispositivo móvil y si debe ser bloqueada
+     */
+    private function isMobileDevice(Request $request)
+    {
+        $userAgent = $request->header('User-Agent');
+        $mobileKeywords = ['Mobile', 'Android', 'iPhone', 'iPad', 'Windows Phone', 'webOS', 'BlackBerry', 'Opera Mini'];
+        $isMobile = false;
+        
+        foreach ($mobileKeywords as $keyword) {
+            if (stripos($userAgent, $keyword) !== false) {
+                $isMobile = true;
+                break;
+            }
+        }
+
+        // Si no es móvil, permitir acceso
+        if (!$isMobile) {
+            return false;
+        }
+
+        // Si es móvil, verificar si el usuario es del departamento comercial
+        $user = auth()->user();
+        if ($user && $user->department === 'COMERCIAL') {
+            return false;
+        }
+
+        // Para cualquier otro caso, bloquear acceso móvil
+        return true;
     }
 }
