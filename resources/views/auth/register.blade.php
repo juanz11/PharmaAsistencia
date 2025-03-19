@@ -121,6 +121,50 @@
                         </div>
                     </div>
 
+                    <!-- Fecha de Ingreso -->
+                    <div>
+                        <label for="join_date" class="block text-sm font-medium text-white">
+                            Fecha de Ingreso
+                        </label>
+                        <div class="mt-1">
+                            <input id="join_date" name="join_date" type="date" required
+                                class="form-input w-full px-3 py-2 rounded-md @error('join_date') border-red-500 @enderror"
+                                value="{{ old('join_date') }}">
+                            @error('join_date')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Departamento -->
+                    <div>
+                        <label for="department" class="block text-sm font-medium text-white">
+                            Departamento
+                        </label>
+                        <div class="mt-1">
+                            <select id="department" name="department" required
+                                class="form-input w-full px-3 py-2 rounded-md text-gray-900 @error('department') border-red-500 @enderror" style="
+    color: black;
+">
+                                <option value="">Seleccionar departamento</option>
+                                <option value="RECURSOS HUMANOS" {{ old('department') == 'RECURSOS HUMANOS' ? 'selected' : '' }}>RECURSOS HUMANOS</option>
+                                <option value="PRESIDENCIA" {{ old('department') == 'PRESIDENCIA' ? 'selected' : '' }}>PRESIDENCIA</option>
+                                <option value="ADMINISTRACIÓN" {{ old('department') == 'ADMINISTRACIÓN' ? 'selected' : '' }}>ADMINISTRACIÓN</option>
+                                <option value="COMERCIAL" {{ old('department') == 'COMERCIAL' ? 'selected' : '' }}>COMERCIAL</option>
+                                <option value="MERCADEO" {{ old('department') == 'MERCADEO' ? 'selected' : '' }}>MERCADEO</option>
+                                <option value="CONSULTORÍA JURÍDICA" {{ old('department') == 'CONSULTORÍA JURÍDICA' ? 'selected' : '' }}>CONSULTORÍA JURÍDICA</option>
+                                <option value="LOGÍSTICA Y ALMACÉN" {{ old('department') == 'LOGÍSTICA Y ALMACÉN' ? 'selected' : '' }}>LOGÍSTICA Y ALMACÉN</option>
+                                <option value="SERVICIOS GENERALES" {{ old('department') == 'SERVICIOS GENERALES' ? 'selected' : '' }}>SERVICIOS GENERALES</option>
+                                <option value="MENTE Y SALUD" {{ old('department') == 'MENTE Y SALUD' ? 'selected' : '' }}>MENTE Y SALUD</option>
+                                <option value="TECNOLOGÍA DE LA INFORMACIÓN" {{ old('department') == 'TECNOLOGÍA DE LA INFORMACIÓN' ? 'selected' : '' }}>TECNOLOGÍA DE LA INFORMACIÓN</option>
+                                <option value="FINANZAS" {{ old('department') == 'FINANZAS' ? 'selected' : '' }}>FINANZAS</option>
+                            </select>
+                            @error('department')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
                     <!-- Contraseña -->
                     <div>
                         <label for="password" class="block text-sm font-medium text-white">
