@@ -246,7 +246,7 @@ function markAttendance(type) {
         Swal.fire({
             icon: 'error',
             title: 'Acceso Denegado',
-            text: 'No puedes marcar fuera de las instalaciones. Por favor, utiliza una computadora registrada.',
+            text: 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.',
             confirmButtonText: 'Aceptar',
             confirmButtonColor: '#3085d6'
         });
@@ -261,6 +261,18 @@ function markAttendance(type) {
         }
     })
     .then(response => {
+        if (response.status === 403) {
+            return response.json().then(data => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Acceso Denegado',
+                    text: data.message || 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#3085d6'
+                });
+                throw new Error(data.message);
+            });
+        }
         if (!response.ok) {
             return response.json().then(err => Promise.reject(err));
         }
@@ -268,7 +280,15 @@ function markAttendance(type) {
     })
     .then(data => {
         if (data.success) {
-            window.location.reload();
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: data.message,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.reload();
+            });
         } else {
             Swal.fire({
                 icon: 'error',
@@ -279,12 +299,14 @@ function markAttendance(type) {
         }
     })
     .catch(error => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.message || 'No se pudo procesar la solicitud',
-            confirmButtonText: 'Aceptar'
-        });
+        if (!error.message.includes('Tienes que marcar dentro de las instalaciones')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message || 'No se pudo procesar la solicitud',
+                confirmButtonText: 'Aceptar'
+            });
+        }
     });
 }
 

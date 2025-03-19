@@ -29,7 +29,7 @@ class AttendanceController extends Controller
         if ($this->isMobileDevice($request)) {
             return response()->json([
                 'success' => false,
-                'message' => 'No puedes marcar fuera de las instalaciones. Por favor, utiliza una computadora registrada.'
+                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
             ], 403);
         }
 
@@ -73,7 +73,7 @@ class AttendanceController extends Controller
         if ($this->isMobileDevice($request)) {
             return response()->json([
                 'success' => false,
-                'message' => 'No puedes marcar fuera de las instalaciones. Por favor, utiliza una computadora registrada.'
+                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
             ], 403);
         }
 
@@ -188,7 +188,7 @@ class AttendanceController extends Controller
         if ($this->isMobileDevice($request)) {
             return response()->json([
                 'success' => false,
-                'message' => 'No puedes marcar fuera de las instalaciones. Por favor, utiliza una computadora registrada.'
+                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
             ], 403);
         }
 
@@ -226,7 +226,7 @@ class AttendanceController extends Controller
         if ($this->isMobileDevice($request)) {
             return response()->json([
                 'success' => false,
-                'message' => 'No puedes marcar fuera de las instalaciones. Por favor, utiliza una computadora registrada.'
+                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
             ], 403);
         }
 
