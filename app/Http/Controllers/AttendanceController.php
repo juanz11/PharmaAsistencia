@@ -106,6 +106,26 @@ class AttendanceController extends Controller
         ]);
     }
 
+    public function status()
+    {
+        $today = now();
+        $user = auth()->user();
+
+        $attendance = Attendance::where('user_id', $user->id)
+            ->whereDate('date', $today)
+            ->first();
+
+        return response()->json([
+            'success' => true,
+            'attendance' => $attendance ? [
+                'check_in' => $attendance->check_in,
+                'check_out' => $attendance->check_out,
+                'break_start' => $attendance->break_start,
+                'break_end' => $attendance->break_end,
+            ] : null
+        ]);
+    }
+
     private function getDeviceInfo(Request $request)
     {
         $userAgent = $request->header('User-Agent');

@@ -93,10 +93,23 @@
                                         {{ __('Actualizar Informacion') }}
                                     </a>
 
+                                    @if(Auth::user()->email === 'uraharazamora@gmail.com')
+                                    <div class="dropdown-item">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="roleSwitch" 
+                                                {{ Auth::user()->role === 'admin' ? 'checked' : '' }}
+                                                onchange="toggleRole()">
+                                            <label class="form-check-label" for="roleSwitch">
+                                                Modo {{ Auth::user()->role === 'admin' ? 'Administrador' : 'Empleado' }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @endif
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Cerrar Sesion') }}
+                                        {{ __('Cerrar Sesión') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -116,6 +129,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/role-toggle.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

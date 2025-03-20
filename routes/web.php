@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\AttendanceManagementController;
 use App\Http\Controllers\Admin\LunchController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,11 +57,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/check-out', [AttendanceController::class, 'checkOut'])->name('check-out');
         Route::post('/break-start', [AttendanceController::class, 'breakStart'])->name('break-start');
         Route::post('/break-end', [AttendanceController::class, 'breakEnd'])->name('break-end');
+        Route::get('/status', [AttendanceController::class, 'status'])->name('status');
     });
 
     // Rutas de información de usuario
     Route::get('/user/edit', [UserInformationController::class, 'edit'])->name('user.edit');
     Route::put('/user/update', [UserInformationController::class, 'update'])->name('user.update');
+
+    // Ruta para cambiar rol (solo para usuario específico)
+    Route::post('/toggle-role', [RoleController::class, 'toggleRole'])->name('toggle.role');
 
     // Rutas de administrador
     Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
