@@ -29,7 +29,7 @@ class AttendanceController extends Controller
         if ($this->isMobileDevice($request)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
+                'message' => 'Este sistema sólo se encuentra habilitado para equipos de la organización.'
             ], 403);
         }
 
@@ -188,7 +188,7 @@ class AttendanceController extends Controller
         if ($this->isMobileDevice($request)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
+                'message' => 'Este sistema sólo se encuentra habilitado para equipos de la organización.'
             ], 403);
         }
 
@@ -226,7 +226,7 @@ class AttendanceController extends Controller
         if ($this->isMobileDevice($request)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.'
+                'message' => 'Este sistema sólo se encuentra habilitado para equipos de la organización.'
             ], 403);
         }
 

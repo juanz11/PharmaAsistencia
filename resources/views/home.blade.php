@@ -246,7 +246,7 @@ function markAttendance(type) {
         Swal.fire({
             icon: 'error',
             title: 'Acceso Denegado',
-            text: 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.',
+            text: 'Este sistema sólo se encuentra habilitado para equipos de la organización.',
             confirmButtonText: 'Aceptar',
             confirmButtonColor: '#3085d6'
         });
@@ -266,7 +266,7 @@ function markAttendance(type) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Acceso Denegado',
-                    text: data.message || 'Tienes que marcar dentro de las instalaciones. Por favor, utiliza una computadora registrada.',
+                    text: data.message || 'Este sistema sólo se encuentra habilitado para equipos de la organización.',
                     confirmButtonText: 'Aceptar',
                     confirmButtonColor: '#3085d6'
                 });
@@ -299,7 +299,7 @@ function markAttendance(type) {
         }
     })
     .catch(error => {
-        if (!error.message.includes('Tienes que marcar dentro de las instalaciones')) {
+        if (!error.message.includes('Este sistema sólo se encuentra habilitado para equipos de la organización')) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
