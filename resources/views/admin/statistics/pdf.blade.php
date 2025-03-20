@@ -107,12 +107,12 @@
         <thead>
             <tr>
                 <th width="8%">#</th>
-                <th width="25%">Nombre</th>
-                <th width="15%">Mejor Tiempo</th>
-                <th width="20%">Dispositivo</th>
+                <th width="20%">Nombre</th>
+                <th width="12%">Mejor Tiempo</th>
+                <th width="15%">Dispositivo</th>
                 <th width="10%">Días a Tiempo</th>
                 <th width="10%">Total Días</th>
-               
+                <th width="15%">Horas Trabajadas</th>
             </tr>
         </thead>
         <tbody>
@@ -126,7 +126,12 @@
                     </td>
                     <td>{{ $ranking['on_time_days'] }}</td>
                     <td>{{ $ranking['total_days'] }}</td>
-                   
+                    <td>@php
+                        $minutes = $ranking['working_minutes'] ?? 0;
+                        $hours = floor($minutes / 60);
+                        $remainingMinutes = $minutes % 60;
+                        echo sprintf('%02d:%02d', $hours, $remainingMinutes);
+                    @endphp</td>
                 </tr>
             @endforeach
         </tbody>

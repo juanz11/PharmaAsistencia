@@ -42,6 +42,7 @@ class RankingsExport implements FromCollection, WithHeadings, WithTitle, WithSty
             'Nombre',
             'Mejor Tiempo',
             'Dispositivo',
+            'Horas Trabajadas',
             'Días a Tiempo',
             'Total de Días',
         ];
@@ -54,6 +55,7 @@ class RankingsExport implements FromCollection, WithHeadings, WithTitle, WithSty
             $ranking['name'],
             $ranking['best_time'],
             $ranking['device'],
+            $ranking['working_hours'] ?? '--:--',
             $ranking['on_time_days'],
             $ranking['total_days'],
         ];
@@ -76,9 +78,9 @@ class RankingsExport implements FromCollection, WithHeadings, WithTitle, WithSty
             'B' => 30,  // Nombre
             'C' => 15,  // Mejor Tiempo
             'D' => 25,  // Dispositivo
-            'E' => 15,  // Días a Tiempo
-            'F' => 15,  // Total de Días
-            'G' => 12,  // Porcentaje
+            'E' => 18,  // Horas Trabajadas
+            'F' => 15,  // Días a Tiempo
+            'G' => 15,  // Total de Días
         ];
     }
 
@@ -173,16 +175,16 @@ class RankingsExport implements FromCollection, WithHeadings, WithTitle, WithSty
             }
 
             // Colorear porcentajes
-            $percentage = floatval($ranking['percentage']);
-            if ($percentage >= 80) {
-                $sheet->getStyle('G' . $row)
-                    ->getFont()
-                    ->setColor(new Color('27AE60'));
-            } elseif ($percentage < 60) {
-                $sheet->getStyle('G' . $row)
-                    ->getFont()
-                    ->setColor(new Color('C0392B'));
-            }
+            // $percentage = floatval($ranking['percentage']);
+            // if ($percentage >= 80) {
+            //     $sheet->getStyle('G' . $row)
+            //         ->getFont()
+            //         ->setColor(new Color('27AE60'));
+            // } elseif ($percentage < 60) {
+            //     $sheet->getStyle('G' . $row)
+            //         ->getFont()
+            //         ->setColor(new Color('C0392B'));
+            // }
 
             $row++;
         }
