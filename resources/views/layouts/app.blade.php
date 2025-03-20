@@ -129,7 +129,30 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/role-toggle.js') }}"></script>
+    <script>
+    function toggleRole() {
+        fetch('{{ route("toggle.role") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Recargar la página para actualizar los menús
+                window.location.reload();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cambiar el rol');
+        });
+    }
+    </script>
     @stack('scripts')
 </body>
 </html>
