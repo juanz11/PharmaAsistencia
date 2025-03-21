@@ -117,12 +117,14 @@
                                         <button onclick="markAttendance('check-in')" class="btn btn-primary px-4" id="checkInBtn">
                                             <i class="fas fa-sign-in-alt me-2"></i>Entrada
                                         </button>
+                                        @if(auth()->user()->department !== 'COMERCIAL')
                                         <button onclick="markAttendance('break-start')" class="btn btn-info px-4" id="breakStartBtn">
                                             <i class="fas fa-coffee me-2"></i>Almuerzo
                                         </button>
                                         <button onclick="markAttendance('break-end')" class="btn btn-warning px-4" id="breakEndBtn">
                                             <i class="fas fa-utensils me-2"></i>Fin Almuerzo
                                         </button>
+                                        @endif
                                         <button onclick="markAttendance('check-out')" class="btn btn-danger px-4" id="checkOutBtn">
                                             <i class="fas fa-sign-out-alt me-2"></i>Salida
                                         </button>
@@ -141,6 +143,7 @@
                                                     @endif
                                                 </p>
                                             </div>
+                                            @if(auth()->user()->department !== 'COMERCIAL')
                                             <div class="text-center">
                                                 <p class="text-muted mb-1">Almuerzo</p>
                                                 <p class="h5" id="breakStartTime">
@@ -161,6 +164,7 @@
                                                     @endif
                                                 </p>
                                             </div>
+                                            @endif
                                             <div class="text-center">
                                                 <p class="text-muted mb-1">Salida</p>
                                                 <p class="h5" id="checkOutTime">
