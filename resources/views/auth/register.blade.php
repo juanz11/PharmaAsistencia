@@ -113,7 +113,7 @@
                         <div class="mt-1">
                             <input id="location" name="location" type="text" required
                                 class="form-input w-full px-3 py-2 rounded-md @error('location') border-red-500 @enderror"
-                                placeholder="Ciudad, País"
+                                placeholder="Ciudad, Estado"
                                 value="{{ old('location') }}">
                             @error('location')
                                 <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
