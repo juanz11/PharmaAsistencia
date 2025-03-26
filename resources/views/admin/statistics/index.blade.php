@@ -139,8 +139,8 @@ function downloadReport(format) {
         startDate = new Date(year, month - 1, 1);
         endDate = new Date(year, month, 0);
     } else {
-        startDate = new Date(year, month - 1, day);
-        endDate = new Date(year, month - 1, day, 23, 59, 59);
+        startDate = new Date(year, month - 1, parseInt(day));
+        endDate = new Date(year, month - 1, parseInt(day), 23, 59, 59);
     }
 
     // Formatear fechas
@@ -180,13 +180,16 @@ function loadRankings() {
         startDate = new Date(year, month - 1, 1);
         endDate = new Date(year, month, 0); // Último día del mes
     } else {
-        startDate = new Date(year, month - 1, day);
-        endDate = new Date(year, month - 1, day, 23, 59, 59);
+        startDate = new Date(year, month - 1, parseInt(day));
+        endDate = new Date(year, month - 1, parseInt(day));
     }
 
-    // Formatear fechas para la API
+    // Formatear fechas para la API asegurando que use la fecha local
     const formatDate = (date) => {
-        return date.toISOString().split('T')[0];
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
 
     fetch(`/admin/statistics/rankings?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}&type=${type}`)

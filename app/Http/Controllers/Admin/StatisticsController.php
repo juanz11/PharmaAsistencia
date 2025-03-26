@@ -16,6 +16,12 @@ use App\Exports\MultipleRankingsExport;
 
 class StatisticsController extends Controller
 {
+    public function __construct()
+    {
+        // Configurar zona horaria por defecto
+        date_default_timezone_set('America/Caracas');
+    }
+
     public function index()
     {
         return view('admin.statistics.index');
@@ -39,12 +45,13 @@ class StatisticsController extends Controller
             $startDate = Carbon::parse($request->start_date)->startOfDay();
             $endDate = Carbon::parse($request->end_date)->endOfDay();
             $type = $request->type;
-            $now = now();
+            $now = Carbon::now('America/Caracas');
 
             Log::info('Fechas procesadas', [
                 'start_date' => $startDate->toDateTimeString(),
                 'end_date' => $endDate->toDateTimeString(),
                 'now' => $now->toDateTimeString(),
+                'timezone' => date_default_timezone_get(),
                 'type' => $type
             ]);
 
