@@ -127,6 +127,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('downloadExcel').addEventListener('click', () => downloadReport('excel'));
 });
 
+// Función común para formatear fechas
+function formatDateForAPI(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
 function downloadReport(format) {
     const year = document.getElementById('year').value;
     const month = document.getElementById('month').value;
@@ -140,16 +148,11 @@ function downloadReport(format) {
         endDate = new Date(year, month, 0);
     } else {
         startDate = new Date(year, month - 1, parseInt(day));
-        endDate = new Date(year, month - 1, parseInt(day), 23, 59, 59);
+        endDate = new Date(year, month - 1, parseInt(day));
     }
 
-    // Formatear fechas
-    const formatDate = (date) => {
-        return date.toISOString().split('T')[0];
-    };
-
-    // Construir URL
-    const url = `/admin/statistics/download?format=${format}&start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}&type=${type}`;
+    // Construir URL usando la función común
+    const url = `/admin/statistics/download?format=${format}&start_date=${formatDateForAPI(startDate)}&end_date=${formatDateForAPI(endDate)}&type=${type}`;
     
     // Descargar archivo
     window.location.href = url;
@@ -184,15 +187,7 @@ function loadRankings() {
         endDate = new Date(year, month - 1, parseInt(day));
     }
 
-    // Formatear fechas para la API asegurando que use la fecha local
-    const formatDate = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-
-    fetch(`/admin/statistics/rankings?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}&type=${type}`)
+    fetch(`/admin/statistics/rankings?start_date=${formatDateForAPI(startDate)}&end_date=${formatDateForAPI(endDate)}&type=${type}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error en la respuesta del servidor');
