@@ -86,59 +86,98 @@
         .type-info strong {
             color: #34495e;
         }
+        .page-break {
+            page-break-after: always;
+        }
     </style>
 </head>
 <body>
+    <!-- Página de Entradas -->
     <div class="header">
-        <h1>{{ $title }}</h1>
+        <h1>Ranking de Entrada - {{ $startDate }} - {{ $endDate }}</h1>
     </div>
 
     <div class="type-info">
-        <strong>Tipo de Registro:</strong> {{ ucfirst($type) }}<br>
-        <strong>Horario Esperado:</strong> 
-        @if($type === 'entrada')
-            8:40 AM
-        @else
-            4:55 PM
-        @endif
+        <strong>Tipo de Registro:</strong> Entrada<br>
+        <strong>Horario Esperado:</strong> 8:40 AM
     </div>
 
     <table>
         <thead>
             <tr>
-                <th width="8%">#</th>
-                <th width="20%">Nombre</th>
-                <th width="12%">Mejor Tiempo</th>
-                <th width="15%">Dispositivo</th>
-                <th width="10%">Días a Tiempo</th>
-                <th width="10%">Total Días</th>
-                <th width="15%">Horas Trabajadas</th>
+                <th>#</th>
+                <th>NOMBRE</th>
+                <th>MEJOR TIEMPO</th>
+                <th>DISPOSITIVO</th>
+                <th>DÍAS A TIEMPO</th>
+                <th>TOTAL DÍAS</th>
+                <th>HORAS TRABAJADAS</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($rankings as $ranking)
+            @foreach($rankingsEntrada as $index => $entry)
                 <tr>
-                    <td class="position">{{ $ranking['position'] }}</td>
-                    <td class="name">{{ $ranking['name'] }}</td>
-                    <td>{{ $ranking['best_time'] }}</td>
-                    <td class="{{ $ranking['is_unusual_device'] ? 'unusual-device' : '' }}">
-                        {{ $ranking['device'] }}
+                    <td class="position">{{ $index + 1 }}</td>
+                    <td class="name">{{ $entry['name'] }}</td>
+                    <td>{{ $entry['best_time'] ?? '-' }}</td>
+                    <td class="{{ $entry['is_unusual_device'] ? 'unusual-device' : '' }}">
+                        {{ $entry['device'] ? explode(' - ', $entry['device'])[0] : '-' }}
                     </td>
-                    <td>{{ $ranking['on_time_days'] }}</td>
-                    <td>{{ $ranking['total_days'] }}</td>
-                    <td>@php
-                        $minutes = $ranking['working_minutes'] ?? 0;
-                        $hours = floor($minutes / 60);
-                        $remainingMinutes = $minutes % 60;
-                        echo sprintf('%02d:%02d', $hours, $remainingMinutes);
-                    @endphp</td>
+                    <td class="{{ ($entry['on_time_days'] / ($entry['total_days'] ?: 1)) >= 0.8 ? 'good-percentage' : 'bad-percentage' }}">
+                        {{ $entry['on_time_days'] }}
+                    </td>
+                    <td>{{ $entry['total_days'] }}</td>
+                    <td>{{ $entry['working_hours'] ?? '-' }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- Página de Salidas -->
+    <div class="header">
+        <h1>Ranking de Salida - {{ $startDate }} - {{ $endDate }}</h1>
+    </div>
+
+    <div class="type-info">
+        <strong>Tipo de Registro:</strong> Salida<br>
+        <strong>Horario Esperado:</strong> 5:00 PM
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>NOMBRE</th>
+                <th>MEJOR TIEMPO</th>
+                <th>DISPOSITIVO</th>
+                <th>DÍAS A TIEMPO</th>
+                <th>TOTAL DÍAS</th>
+                <th>HORAS TRABAJADAS</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($rankingsSalida as $index => $entry)
+                <tr>
+                    <td class="position">{{ $index + 1 }}</td>
+                    <td class="name">{{ $entry['name'] }}</td>
+                    <td>{{ $entry['best_time'] ?? '-' }}</td>
+                    <td class="{{ $entry['is_unusual_device'] ? 'unusual-device' : '' }}">
+                        {{ $entry['device'] ? explode(' - ', $entry['device'])[0] : '-' }}
+                    </td>
+                    <td class="{{ ($entry['on_time_days'] / ($entry['total_days'] ?: 1)) >= 0.8 ? 'good-percentage' : 'bad-percentage' }}">
+                        {{ $entry['on_time_days'] }}
+                    </td>
+                    <td>{{ $entry['total_days'] }}</td>
+                    <td>{{ $entry['working_hours'] ?? '-' }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
     <div class="footer">
-        Reporte generado el {{ now()->format('d/m/Y H:i:s') }}
+        Generado el {{ now()->format('d/m/Y H:i:s') }}
     </div>
 </body>
 </html>

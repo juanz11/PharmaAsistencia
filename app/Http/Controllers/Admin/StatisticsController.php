@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\RankingsExport;
+use App\Exports\MultipleRankingsExport;
 
 class StatisticsController extends Controller
 {
@@ -275,40 +275,42 @@ class StatisticsController extends Controller
     public function download(Request $request)
     {
         try {
-            if (!$request->has(['start_date', 'end_date', 'type', 'format'])) {
+            if (!$request->has(['start_date', 'end_date', 'format'])) {
                 return response()->json(['error' => 'Parámetros incompletos'], 400);
             }
 
             $startDate = Carbon::parse($request->start_date)->startOfDay();
             $endDate = Carbon::parse($request->end_date)->endOfDay();
-            $type = $request->type;
             $format = $request->format;
 
-            // Obtener los datos del ranking
-            $rankings = $this->getRankingsData($startDate, $endDate, $type);
+            // Obtener los datos de ambos rankings
+            $rankingsEntrada = $this->getRankingsData($startDate, $endDate, 'entrada');
+            $rankingsSalida = $this->getRankingsData($startDate, $endDate, 'salida');
 
-            if (empty($rankings)) {
+            if (empty($rankingsEntrada) && empty($rankingsSalida)) {
                 return response()->json(['error' => 'No hay datos para exportar'], 404);
             }
 
             // Preparar el título del reporte
-            $reportTitle = "Ranking de " . ucfirst($type) . " - ";
+            $reportTitle = "Ranking de Asistencias - ";
             $reportTitle .= $startDate->format('d/m/Y') === $endDate->format('d/m/Y') 
                 ? $startDate->format('d/m/Y')
                 : $startDate->format('d/m/Y') . " - " . $endDate->format('d/m/Y');
 
             if ($format === 'pdf') {
                 $pdf = Pdf::loadView('admin.statistics.pdf', [
-                    'rankings' => $rankings,
+                    'rankingsEntrada' => $rankingsEntrada,
+                    'rankingsSalida' => $rankingsSalida,
                     'title' => $reportTitle,
-                    'type' => $type
+                    'startDate' => $startDate->format('d/m/Y'),
+                    'endDate' => $endDate->format('d/m/Y')
                 ]);
                 
-                return $pdf->download("ranking_{$type}_{$startDate->format('Y-m-d')}.pdf");
+                return $pdf->download("ranking_asistencias_{$startDate->format('Y-m-d')}.pdf");
             } else {
                 return Excel::download(
-                    new RankingsExport($rankings, $reportTitle, $type),
-                    "ranking_{$type}_{$startDate->format('Y-m-d')}.xlsx"
+                    new MultipleRankingsExport($rankingsEntrada, $rankingsSalida, $reportTitle),
+                    "ranking_asistencias_{$startDate->format('Y-m-d')}.xlsx"
                 );
             }
         } catch (Exception $e) {
