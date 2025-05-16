@@ -33,12 +33,22 @@
                     @endforeach
                 </select>
             </div>
-            <button type="submit" class="bg-[#1F4591]  px-4 py-2 rounded-md hover:bg-[#163670] flex items-center">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-                </svg>
-                Filtrar
-            </button>
+            <div class="flex space-x-2">
+                <button type="submit" class="bg-[#1F4591] px-4 py-2 rounded-md hover:bg-[#163670] flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                    </svg>
+                    Filtrar
+                </button>
+
+                <a href="{{ route('admin.reports.export', request()->all()) }}" 
+                   class="bg-green-600 px-4 py-2 rounded-md hover:bg-green-700 flex items-center text-white">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Exportar Excel
+                </a>
+            </div>
         </form>
     </div>
 
@@ -46,17 +56,17 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         @foreach($attendanceStats as $stat)
         <div class="bg-white rounded-lg shadow-sm p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $stat->user->name }}</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $stat->name }}</h3>
             <div class="space-y-2">
                 <p class="text-sm text-gray-600">
                     <span class="font-medium">Total Días:</span> {{ $stat->total_days }}
                 </p>
                 <p class="text-sm text-gray-600">
-                    <span class="font-medium">Días Presentes:</span> {{ $stat->present_days }}
+                    <span class="font-medium">Horas Trabajadas:</span> {{ $stat->total_hours }}
                 </p>
                 <p class="text-sm text-gray-600">
-                    <span class="font-medium">Promedio Hora Entrada:</span>
-                    {{ date('g:i A', $stat->avg_check_in_seconds) }}
+                    <span class="font-medium">Dispositivo más usado:</span>
+                    {{ $stat->device }}
                 </p>
             </div>
         </div>

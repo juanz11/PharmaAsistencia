@@ -94,6 +94,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/attendances', [AdminAttendanceController::class, 'index'])->name('attendances.index');
         
         // Rutas de reportes
-        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports', [\App\Http\Controllers\Admin\ReportsController::class, 'index'])->name('reports.index');
+        Route::get('/reports/export', [\App\Http\Controllers\Admin\ReportsController::class, 'export'])->name('reports.export');
     });
 });
