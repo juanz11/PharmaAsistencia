@@ -23,7 +23,7 @@ class ReportsController extends Controller
             return (object) [
                 'name' => $stat->employee_name,
                 'device' => $stat->most_used_device ?? 'No registrado',
-                'total_hours' => round($stat->total_minutes_worked / 60, 2),
+                'total_hours' => floor(($stat->total_minutes_worked - 60) / 60) . ':' . str_pad(($stat->total_minutes_worked - 60) % 60, 2, '0', STR_PAD_LEFT),
                 'total_days' => $stat->total_days
             ];
         });
@@ -142,7 +142,7 @@ class ReportsController extends Controller
             return (object) [
                 'name' => $stat->employee_name,
                 'device' => $stat->most_used_device ?? 'No registrado',
-                'total_hours' => round($stat->total_minutes_worked / 60, 2),
+                'total_hours' => floor(($stat->total_minutes_worked - 60) / 60) . ':' . str_pad(($stat->total_minutes_worked - 60) % 60, 2, '0', STR_PAD_LEFT),
                 'total_days' => $stat->total_days
             ];
         });
