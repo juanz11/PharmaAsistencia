@@ -15,7 +15,7 @@
                         <label class="text-sm font-medium text-gray-600">Hasta:</label>
                         <input type="date" name="end_date" class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                     </div>
-                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center gap-2">
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center gap-2" style="background-color: #1a4175">
                         <i class="fas fa-file-excel"></i>
                         Exportar Excel
                     </button>
