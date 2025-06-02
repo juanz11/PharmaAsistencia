@@ -28,27 +28,29 @@ class AttendanceRangeExport implements FromCollection, WithHeadings, WithMapping
         $data = collect();
 
         foreach ($users as $user) {
-            // Get user's attendances within date range
-            $attendances = Attendance::where('user_id', $user->id)
-                ->whereBetween('date', [$this->startDate, $this->endDate])
-                ->get();
+            $currentDate = $this->startDate->copy();
+            
+            // Iterar por cada día en el rango
+            while ($currentDate->lte($this->endDate)) {
+                // Saltar sábados y domingos
+                if ($currentDate->isWeekend()) {
+                    $currentDate->addDay();
+                    continue;
+                }
 
-            if ($attendances->isEmpty()) {
-                // If no attendance records, add a "No marcó" record
+                // Buscar asistencia para este día
+                $attendance = Attendance::where('user_id', $user->id)
+                    ->whereDate('date', $currentDate->format('Y-m-d'))
+                    ->first();
+
+                // Agregar registro con o sin asistencia
                 $data->push([
                     'user' => $user,
-                    'attendance' => null,
-                    'date' => $this->startDate->copy()
+                    'attendance' => $attendance,
+                    'date' => $currentDate->copy()
                 ]);
-            } else {
-                // Add each attendance record
-                foreach ($attendances as $attendance) {
-                    $data->push([
-                        'user' => $user,
-                        'attendance' => $attendance,
-                        'date' => Carbon::parse($attendance->date)
-                    ]);
-                }
+
+                $currentDate->addDay();
             }
         }
 
