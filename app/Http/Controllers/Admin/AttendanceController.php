@@ -31,6 +31,6 @@ class AttendanceController extends Controller
         // Obtener todos los empleados para el filtro
         $users = User::where('role', 'employee')->orderBy('name')->get();
 
-        return view('admin.attendances.index', compact('attendances', 'users'));
+        return view('admin.attendance.index', compact('attendances', 'users'));
     }
 }

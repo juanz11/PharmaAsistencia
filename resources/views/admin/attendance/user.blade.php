@@ -8,9 +8,14 @@
                 <h2 class="text-2xl font-bold text-gray-800">Control de Asistencia - {{ $user->name }}</h2>
                 <p class="text-gray-600">{{ $user->email }} - {{ $user->location }}</p>
             </div>
-            <a href="{{ route('admin.attendance.index') }}" class="bg-gray-500  px-4 py-2 rounded-md hover:bg-gray-600">
-                Volver
-            </a>
+            <div class="flex gap-2">
+                <a href="{{ route('admin.attendance.export', $user->id) }}" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    <i class="fas fa-file-excel mr-1"></i> Exportar Excel
+                </a>
+                <a href="{{ route('admin.attendance.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                    Volver
+                </a>
+            </div>
         </div>
 
         @if(session('success'))

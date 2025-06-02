@@ -72,7 +72,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
         
         // Control de Asistencia
-        Route::get('/attendance', [AttendanceManagementController::class, 'index'])->name('attendance.index');
+        Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('attendance.index');
+        Route::get('/attendance/{user}/export', [AttendanceManagementController::class, 'export'])->name('attendance.export');
+        Route::get('/attendance/export-range', [AttendanceManagementController::class, 'exportRange'])->name('attendance.export-range');
         Route::get('/attendance/user/{id}', [AttendanceManagementController::class, 'userAttendance'])->name('attendance.user');
         Route::put('/attendance/{id}', [AttendanceManagementController::class, 'update'])->name('attendance.update');
         Route::delete('/attendance/{id}', [AttendanceManagementController::class, 'destroy'])->name('attendance.destroy');
@@ -89,9 +91,6 @@ Route::middleware('auth')->group(function () {
 
         // Rutas de usuarios
         Route::resource('users', UserController::class);
-        
-        // Rutas de asistencias
-        Route::get('/attendances', [AdminAttendanceController::class, 'index'])->name('attendances.index');
         
         // Rutas de reportes
         Route::get('/reports', [\App\Http\Controllers\Admin\ReportsController::class, 'index'])->name('reports.index');

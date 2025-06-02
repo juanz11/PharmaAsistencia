@@ -11,7 +11,7 @@
 
         <!-- Panel de Filtros -->
         <div class="bg-gray-800 p-6 border-b border-gray-700">
-            <form action="{{ route('admin.attendances.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <form action="{{ route('admin.attendance.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Fecha Inicio</label>
                     <input type="date" name="start_date" value="{{ request('start_date') }}" 

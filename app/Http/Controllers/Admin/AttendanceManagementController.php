@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UserAttendanceExport;
+use App\Exports\AttendanceRangeExport;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Attendance;
@@ -10,6 +13,23 @@ use Carbon\Carbon;
 
 class AttendanceManagementController extends Controller
 {
+    public function exportRange(Request $request)
+    {
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
+        
+        return Excel::download(
+            new AttendanceRangeExport($startDate, $endDate),
+            'asistencias_' . ($startDate ?? 'total') . '_a_' . ($endDate ?? 'actual') . '.xlsx'
+        );
+    }
+    public function export($userId)
+    {
+        $user = User::findOrFail($userId);
+        $attendances = $user->attendances()->orderBy('date', 'desc')->get();
+        
+        return Excel::download(new UserAttendanceExport($attendances), "asistencias_{$user->name}.xlsx");
+    }
     public function index()
     {
         $users = User::where('role', 'employee')->get();

@@ -5,6 +5,22 @@
     <div class="  rounded-lg shadow-lg p-6">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Control de Asistencia</h2>
+            <div class="flex items-center gap-4">
+                <form action="{{ route('admin.attendance.export-range') }}" method="GET" class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-medium text-gray-600">Desde:</label>
+                        <input type="date" name="start_date" class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-medium text-gray-600">Hasta:</label>
+                        <input type="date" name="end_date" class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                    </div>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors flex items-center gap-2">
+                        <i class="fas fa-file-excel"></i>
+                        Exportar Excel
+                    </button>
+                </form>
+            </div>
         </div>
 
         <div class="overflow-x-auto">

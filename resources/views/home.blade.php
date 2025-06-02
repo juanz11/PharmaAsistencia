@@ -32,6 +32,26 @@
                             </div>
 
                             <!-- Sección de Gestión -->
+                            <div class="bg-white rounded-xl p-6 shadow-lg">
+                                <h3 class="text-lg font-semibold mb-4">Exportar Asistencias</h3>
+                                <form action="{{ route('admin.attendance.export-range') }}" method="GET" class="space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha Inicio</label>
+                                            <input type="date" name="start_date" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha Fin</label>
+                                            <input type="date" name="end_date" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                            <i class="fas fa-file-excel mr-2"></i>Exportar Excel
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                             
 
                             <!-- Cards de navegación -->
