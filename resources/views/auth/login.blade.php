@@ -38,7 +38,9 @@
                         <input id="email" name="email" type="email" required
                             class="w-full px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             value="{{ old('email') }}"
-                            placeholder="ejemplo@correo.com">
+                            placeholder="ejemplo@correo.com" style="
+    color: black;
+">
                     </div>
                     @error('email')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
@@ -53,7 +55,9 @@
                     <div class="mt-1">
                         <input id="password" name="password" type="password" required
                             class="w-full px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="••••••••">
+                            placeholder="••••••••" style="
+    color: black;
+">
                     </div>
                     @error('password')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
@@ -72,7 +76,7 @@
 
                     @if (Route::has('password.request'))
                         <div class="text-sm">
-                            <a href="{{ route('password.request') }}" 
+                            <a href="{{ route('password.request') }}"
                                class="text-blue-400 hover:text-blue-300 transition-colors">
                                 ¿Olvidaste tu contraseña?
                             </a>
@@ -93,7 +97,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-400">
                     ¿No tienes una cuenta?
-                    <a href="{{ route('register') }}" 
+                    <a href="{{ route('register') }}"
                        class="font-medium text-blue-400 hover:text-blue-300 transition-colors">
                         Regístrate aquí
                     </a>
